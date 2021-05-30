@@ -47,7 +47,7 @@ The available text sensors are:
 
 
 
-The available text sensors are:
+Install:
 copy folder `victron` in `custom_components` folder to `~/config/esphome/custom_components/victron`
 
 Full example in victron.yaml 
