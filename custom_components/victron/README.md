@@ -35,6 +35,7 @@ The available numeric sensors are:
 - `charger_status`
 - `error_code`
 - `tracker_operation`
+- `load_current`
 
 The available text sensors are:
 - `charger_text`
