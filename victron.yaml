@@ -10,6 +10,7 @@ substitutions:
     devicename: "SmartSolar_150_35" 
     config_version: "v2021.05.30"
     wifi_fast_connect: "false"
+   # wifi_reboot_timeout: 0s
     accuracy: "2"
   
 wifi:
@@ -68,6 +69,9 @@ sensor:
     battery_current:
       name: "Battery current" 
       id: bc
+    load_current:
+      name: "Load current" 
+      id: load_current
     max_power_yesterday:  
       name: "Max power yesterday" 
       id: max_power_yesterday

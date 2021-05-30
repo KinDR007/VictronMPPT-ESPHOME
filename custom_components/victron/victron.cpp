@@ -17,6 +17,7 @@ void VictronComponent::dump_config() {
   LOG_SENSOR("  ", "Panel Power", panel_power_sensor_);
   LOG_SENSOR("  ", "Battery Voltage", battery_voltage_sensor_);
   LOG_SENSOR("  ", "Battery Current", battery_current_sensor_);
+  LOG_SENSOR("  ", "Load Current", load_current_sensor_);
   LOG_SENSOR("  ", "Day Number", day_number_sensor_);
   LOG_SENSOR("  ", "Charger Status", charger_status_sensor_);
   LOG_SENSOR("  ", "Error Code", error_code_sensor_);
@@ -249,7 +250,10 @@ void VictronComponent::handle_value_() {
       battery_voltage_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);
   } else if (label_ == "I") {
     if (battery_current_sensor_ != nullptr)
-      battery_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);
+      battery_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);      
+  } else if (label_ == "IL") {
+    if (load_current_sensor_ != nullptr)
+      load_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0); 
   } else if (label_ == "HSDS") {
     if (day_number_sensor_ != nullptr)
       day_number_sensor_->publish_state(atoi(value_.c_str()));

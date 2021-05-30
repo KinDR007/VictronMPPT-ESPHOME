@@ -20,6 +20,7 @@ CONF_DAY_NUMBER = "day_number"
 CONF_CHARGER_STATUS = "charger_status"
 CONF_ERROR_CODE = "error_code"
 CONF_TRACKER_OPERATION = "tracker_operation"
+CONF_LOAD_CURRENT = "load_current"
 
 # text sensors
 CONF_CHARGER_TEXT = "charger_text"
@@ -43,6 +44,7 @@ CONFIG_SCHEMA = cv.Schema({
     cv.Optional(CONF_CHARGER_STATUS): sensor.sensor_schema(UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY),
     cv.Optional(CONF_ERROR_CODE): sensor.sensor_schema(UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY),
     cv.Optional(CONF_TRACKER_OPERATION): sensor.sensor_schema(UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY),
+    cv.Optional(CONF_LOAD_CURRENT): sensor.sensor_schema(UNIT_AMPERE, ICON_CURRENT_AC, 3, DEVICE_CLASS_CURRENT),
     cv.Optional(CONF_CHARGER_TEXT): text_sensor.TEXT_SENSOR_SCHEMA.extend({cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}),
     cv.Optional(CONF_ERROR_TEXT): text_sensor.TEXT_SENSOR_SCHEMA.extend({cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}),
     cv.Optional(CONF_TRACKER_TEXT): text_sensor.TEXT_SENSOR_SCHEMA.extend({cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}),
@@ -88,6 +90,10 @@ def to_code(config):
     if CONF_BATTERY_CURRENT in config:
         sens = yield sensor.new_sensor(config[CONF_BATTERY_CURRENT])
         cg.add(victron.set_battery_current_sensor(sens))
+
+    if CONF_LOAD_CURRENT in config:
+        sens = yield sensor.new_sensor(config[CONF_LOAD_CURRENT])
+        cg.add(victron.set_load_current_sensor(sens))    
 
     if CONF_DAY_NUMBER in config:
         sens = yield sensor.new_sensor(config[CONF_DAY_NUMBER])
