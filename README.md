@@ -44,10 +44,14 @@ The available text sensors are:
 - `tracker_text`
 - `fw_version`
 - `pid`
-```
 
 
 
-
+The available text sensors are:
+copy folder `victron` in `custom_components` folder to `~/config/esphome/custom_components/victron`
 
 Full example in victron.yaml 
+
+`Big thanks for help to ssieb`
+
+```
