@@ -176,7 +176,7 @@ sensor:
   - platform: template   # FVE percent
     name: "FVE percent"  # 500Wp max power of my FVE grid
     lambda: |-
-        if (((((id(panel_power).state) / 500) *100) >=110) && ((((id(panel_power).state) / 500) *100)<= 0)){
+        if (((((id(panel_power).state) / 500) *100) >=120) && ((((id(panel_power).state) / 500) *100)< 0)){
         return NAN; }
         else {
           return (((id(panel_power).state) / 500) *100);  
