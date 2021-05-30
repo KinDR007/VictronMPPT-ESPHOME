@@ -1,0 +1,252 @@
+esphome:
+    name: "${lower_devicename}"
+    platform: ESP8266
+    board:  d1_mini #nodemcuv2
+    includes:
+      - victron/victron_esphome.h
+  
+substitutions:
+    lower_devicename: "victron"
+    devicename: "SmartSolar_150_35" 
+    config_version: "v2021.05.30"
+    wifi_fast_connect: "false"
+    accuracy: "2"
+  
+wifi:
+    ssid: "Wifi_Name" #change SSID
+    password: "wifipass" # change password
+   # reboot_timeout: $wifi_reboot_timeout
+    power_save_mode: none
+    fast_connect: $wifi_fast_connect
+  
+    # Enable fallback hotspot (captive portal) in case wifi connection fails
+    ap:
+      ssid: "${devicename} Hotspot"
+      password: "pass"
+  
+captive_portal:
+logger:
+    baud_rate: 0 
+    # level: VERY_VERBOSE
+    esp8266_store_log_strings_in_flash: False
+  
+  # Enable Home Assistant API
+api:
+    password: "pass"
+    reboot_timeout: 0s 
+ota:  
+    password: "pass"
+  
+web_server:
+    port: 80
+
+  
+time:
+    - platform: homeassistant
+  
+uart:
+  id: uart_bus
+  tx_pin: D8 # not connected !! 
+  rx_pin: D7 # use olny this pin and GND to MPPT chrager
+  baud_rate: 19200 
+  stop_bits: 1
+  data_bits: 8
+  parity: NONE
+  rx_buffer_size: 256
+      
+victron:
+  uart_id: uart_bus
+        
+sensor:
+  - platform: victron
+    panel_voltage:
+      name: "Panel voltage" 
+      id: pv
+    battery_voltage:
+      name: "Battery voltage"  
+      id: bv
+    battery_current:
+      name: "Battery current" 
+      id: bc
+    max_power_yesterday:  
+      name: "Max power yesterday" 
+      id: max_power_yesterday
+    max_power_today:  
+      name: "Max power today" 
+      id: max_power_today
+      accuracy_decimals: ${accuracy}
+    yield_total:
+      name: "Yield total"   
+      id: yield_total
+      filters:
+        # Multiplication factor from W to kW is 0.001
+        - multiply: 0.001
+      unit_of_measurement: kWh
+      accuracy_decimals: ${accuracy}
+    yield_yesterday:
+      name: "Yield yesterday"  
+      id: yield_yesterday
+      filters:
+        # Multiplication factor from W to kW is 0.001
+        - multiply: 0.001
+      unit_of_measurement: kWh
+      accuracy_decimals: ${accuracy}
+    yield_today:
+      name: "Yield today"  
+      id: yt
+      filters:
+        # Multiplication factor from W to kW is 0.001
+        - multiply: 0.001
+      unit_of_measurement: kWh
+      accuracy_decimals: ${accuracy}
+    panel_power:
+      name: "Panel power"  
+      id: panel_power
+    day_number:
+      name: "Day sequence number"  
+      id: day_number
+      icon: "mdi:calendar-today"
+    charger_text:
+      name: "Charger state"
+      id: ct
+    error_text:
+      name: "Error code"  
+      id: et
+    tracker_text:
+      name: "Tracker operation"  
+      id: tt
+    fw_version:
+      name: "Fw version"  
+      id: fw
+    pid:
+      name: "PID"  
+      id: pid  
+  - platform: wifi_signal
+    name: "${devicename} WiFi Signal Sensor"
+    id: rssi_sensor
+    update_interval: 15s
+  - platform: template
+    name: "Wifi Quality"
+    unit_of_measurement: "%"
+    accuracy_decimals: 0
+    icon: "mdi:wifi"
+    update_interval: 15s
+    lambda: |-
+        int quality;
+        const int rssi = id(rssi_sensor).state;
+          if (rssi <= -100) { quality = 0;}
+          else if (rssi >= -50)
+          {  quality = 100; }
+          else
+          {  quality = 2 * (rssi + 100); }
+          return quality;    
+
+  - platform: uptime
+    name: "${devicename} Uptime"
+    id: uptime_s
+    update_interval: 5s
+
+  - platform: template # for 1 cell of battery 
+    name: "Bat S1 " # 7S pack 
+    lambda: |-
+      if ((((id(bv).state) / 7) > 4.22) && (((id(bv).state) / 7) < 3.2)){
+      return NAN; }
+      else {
+        return ((id(bv).state) / 7);
+      } 
+        
+    update_interval: 10s
+    icon: "mdi:battery"
+    unit_of_measurement: V
+    device_class: "voltage"
+    accuracy_decimals: ${accuracy}
+  - platform: template           # Battery working percent 
+    name: "Bat working percent"  # cycle batt between 3,7v - 4.17v 
+    lambda: |-
+      if (((((((((id(bv).state) / 7 ))-3.700) / (4.170 - 3.700)  )*100)) >= 115) && ((((((((id(bv).state) / 7 ))-3.700) / (4.170 - 3.700)  )*100)) <= -25))
+        { return NAN ;}
+        else 
+        { return ((((((id(bv).state) / 7 ))-3.700) / (4.170 - 3.700)  )*100);  }
+    update_interval: 15s
+    icon: "mdi:battery"
+    unit_of_measurement: "%"
+    device_class: "voltage"
+    accuracy_decimals: ${accuracy}     
+
+  - platform: template   # FVE percent
+    name: "FVE percent"  # 500Wp max power of my FVE grid
+    lambda: |-
+        if (((((id(panel_power).state) / 500) *100) >=110) && ((((id(panel_power).state) / 500) *100)<= 0)){
+        return NAN; }
+        else {
+          return (((id(panel_power).state) / 500) *100);  
+        } 
+    icon: "mdi:gauge"
+    unit_of_measurement: "%"
+    device_class: "power"
+    accuracy_decimals: ${accuracy}  
+    update_interval: 15s    
+
+  - platform: template   # median generated day energy
+    name: "Day median generated "  # 500Wp max power of my FVE grid
+    lambda: |-
+        return (id(yield_total).state) / (id(day_number).state);  
+    update_interval: 15s
+    icon: "mdi:gauge"
+    unit_of_measurement: "kWh"
+    device_class: "power"
+    accuracy_decimals: 3   
+text_sensor:
+  - platform: template
+    name: "${devicename} Config Version"
+    icon: mdi:information-outline
+    lambda: |-
+      return {"${config_version}"};
+  - platform: version
+    name: "${devicename} Esphome Version"
+    icon: mdi:information-outline
+  - platform: wifi_info
+    ip_address:
+      name: "${devicename} IP Address"
+      icon: mdi:ip
+    ssid:
+      name: "${devicename} Connected SSID"
+      icon: mdi:wifi
+    bssid:
+      name: "${devicename} Connected BSSID"
+    mac_address:
+      name: "${devicename} Mac Wifi Address"
+  - platform: template
+    name: "${devicename} Uptime (formatted)"
+    lambda: |-
+          uint32_t dur = id(uptime_s).state;
+          int dys = 0;
+          int hrs = 0;
+          int mnts = 0;
+          if (dur > 86399) {
+            dys = trunc(dur / 86400);
+            dur = dur - (dys * 86400);
+          }
+          if (dur > 3599) {
+            hrs = trunc(dur / 3600);
+            dur = dur - (hrs * 3600);
+          }
+          if (dur > 59) {
+            mnts = trunc(dur / 60);
+            dur = dur - (mnts * 60);
+          }
+          char buffer[17];
+          sprintf(buffer, "%ud %02uh %02um %02us", dys, hrs, mnts, dur);
+          return {buffer};
+    icon: mdi:clock-start
+    update_interval: 5s
+        
+        
+  
+        
+  
+  
+switch:
+    - platform: restart
+      icon: mdi:reload-alert
+      name: "${devicename} Restart"      
