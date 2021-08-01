@@ -3,7 +3,7 @@ esphome:
     platform: ESP8266
     board:  d1_mini #nodemcuv2
     includes:
-      - victron/victron_esphome.h
+      - victron/victron.h
   
 substitutions:
     lower_devicename: "victron"
