@@ -34,7 +34,7 @@ jobs:
         run: git clone https://github.com/esphome/esphome.git
       - name: 💣 Copy component into the esphome project
         run: |
-          cp -r ../custom_components/* esphome/components/
+          cp -r ../components/* esphome/components/
           git config user.name "ci"
           git config user.email "ci@github.com"
           git add .
@@ -67,7 +67,7 @@ jobs:
         run: git clone https://github.com/esphome/esphome.git
       - name: 💣 Copy component into the esphome project
         run: |
-          cp -r ../custom_components/* esphome/components/
+          cp -r ../components/* esphome/components/
           git config user.name "ci"
           git config user.email "ci@github.com"
           git add .
@@ -115,7 +115,7 @@ jobs:
         run: git clone https://github.com/esphome/esphome.git
       - name: 💣Copy component into the esphome project
         run: |
-          cp -r ../custom_components/* esphome/components/
+          cp -r ../components/* esphome/components/
           git config user.name "ci"
           git config user.email "ci@github.com"
           git add .
@@ -158,7 +158,7 @@ jobs:
         shell: bash
         run: 'echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > secrets.yaml'
       - run: |
-          # sed -i 's#source: github://syssi/esphome-jk-bms@main#source: components#' victron.yaml
+          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' victron.yaml
           esphome config victron.yaml
 
   esphome-compile:
@@ -197,5 +197,5 @@ jobs:
         shell: bash
         run: 'echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > secrets.yaml'
       - run: |
-          # sed -i 's#source: github://syssi/esphome-jk-bms@main#source: components#' victron.yaml
+          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' victron.yaml
           esphome compile victron.yaml
