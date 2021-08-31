@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import sensor, text_sensor, uart
+from esphome.components import sensor, text_sensor
 from esphome.const import (
     CONF_ID,
     CONF_BATTERY_VOLTAGE,
@@ -11,7 +11,6 @@ from esphome.const import (
     UNIT_WATT_HOURS,
     ICON_POWER,
     ICON_CURRENT_AC,
-    ICON_COUNTER,
     UNIT_EMPTY,
     ICON_EMPTY,
     DEVICE_CLASS_POWER,
@@ -19,7 +18,7 @@ from esphome.const import (
     DEVICE_CLASS_VOLTAGE,
     DEVICE_CLASS_EMPTY,
 )
-from . import victron_ns, VictronComponent, CONF_VICTRON_ID
+from . import VictronComponent, CONF_VICTRON_ID
 
 # sensors
 CONF_MAX_POWER_YESTERDAY = "max_power_yesterday"

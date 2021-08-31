@@ -4,7 +4,7 @@
 namespace esphome {
 namespace victron {
 
-static const char *TAG = "victron";
+static const char *const TAG = "victron";
 
 void VictronComponent::dump_config() {
   ESP_LOGCONFIG(TAG, "Victron:");
@@ -344,51 +344,51 @@ void VictronComponent::handle_value_() {
 
   if (label_ == "H23") {
     if (max_power_yesterday_sensor_ != nullptr)
-      max_power_yesterday_sensor_->publish_state(atoi(value_.c_str()));
+      max_power_yesterday_sensor_->publish_state(atoi(value_.c_str()));  // NOLINT(cert-err34-c)
   } else if (label_ == "H21") {
     if (max_power_today_sensor_ != nullptr)
-      max_power_today_sensor_->publish_state(atoi(value_.c_str()));
+      max_power_today_sensor_->publish_state(atoi(value_.c_str()));  // NOLINT(cert-err34-c)
   } else if (label_ == "H19") {
     if (yield_total_sensor_ != nullptr)
-      yield_total_sensor_->publish_state(atoi(value_.c_str()) * 10);
+      yield_total_sensor_->publish_state(atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
   } else if (label_ == "H22") {
     if (yield_yesterday_sensor_ != nullptr)
-      yield_yesterday_sensor_->publish_state(atoi(value_.c_str()) * 10);
+      yield_yesterday_sensor_->publish_state(atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
   } else if (label_ == "H20") {
     if (yield_today_sensor_ != nullptr)
-      yield_today_sensor_->publish_state(atoi(value_.c_str()) * 10);
+      yield_today_sensor_->publish_state(atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
   } else if (label_ == "VPV") {
     if (panel_voltage_sensor_ != nullptr)
-      panel_voltage_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);
+      panel_voltage_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
   } else if (label_ == "PPV") {
     if (panel_power_sensor_ != nullptr)
-      panel_power_sensor_->publish_state(atoi(value_.c_str()));
+      panel_power_sensor_->publish_state(atoi(value_.c_str()));  // NOLINT(cert-err34-c)
   } else if (label_ == "V") {
     if (battery_voltage_sensor_ != nullptr)
-      battery_voltage_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);
+      battery_voltage_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
   } else if (label_ == "I") {
     if (battery_current_sensor_ != nullptr)
-      battery_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);
+      battery_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
   } else if (label_ == "IL") {
     if (load_current_sensor_ != nullptr)
-      load_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);
+      load_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
   } else if (label_ == "HSDS") {
     if (day_number_sensor_ != nullptr)
-      day_number_sensor_->publish_state(atoi(value_.c_str()));
+      day_number_sensor_->publish_state(atoi(value_.c_str()));  // NOLINT(cert-err34-c)
   } else if (label_ == "CS") {
-    value = atoi(value_.c_str());
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     if (charger_status_sensor_ != nullptr)
       charger_status_sensor_->publish_state(value);
     if (charger_text_sensor_ != nullptr)
       charger_text_sensor_->publish_state(flash_to_string(charger_status_text(value)));
   } else if (label_ == "ERR") {
-    value = atoi(value_.c_str());
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     if (error_code_sensor_ != nullptr)
       error_code_sensor_->publish_state(value);
     if (error_text_sensor_ != nullptr)
       error_text_sensor_->publish_state(flash_to_string(error_code_text(value)));
   } else if (label_ == "MPPT") {
-    value = atoi(value_.c_str());
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     if (tracker_operation_sensor_ != nullptr)
       tracker_operation_sensor_->publish_state(value);
     if (tracker_text_sensor_ != nullptr)
