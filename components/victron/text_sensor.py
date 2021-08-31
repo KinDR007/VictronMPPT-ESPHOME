@@ -3,6 +3,8 @@ import esphome.config_validation as cv
 from esphome.components import sensor, uart
 from esphome.const import (
     CONF_ID,
+    CONF_BATTERY_LEVEL,
+    CONF_BATTERY_VOLTAGE,
     UNIT_VOLT,
     ICON_FLASH,
     UNIT_AMPERE,
@@ -27,7 +29,6 @@ ESmart3Component = esmart3_ns.class_(
 
 CONF_CHARGE_MODE = "charge_mode"
 CONF_INPUT_VOLTAGE = "input_voltage"
-CONF_BATTERY_VOLTAGE = "battery_voltage"
 CONF_CHARGING_CURRENT = "charging_current"
 CONF_LOAD_VOLTAGE = "load_voltage"
 CONF_LOAD_CURRENT = "load_current"
@@ -35,7 +36,6 @@ CONF_CHARGING_POWER = "charging_power"
 CONF_LOAD_POWER = "load_power"
 CONF_BATTERY_TEMP = "battery_temp"
 CONF_INTERNAL_TEMP = "internal_temp"
-CONF_BATTERY_LEVEL = "battery_level"
 
 CONFIG_SCHEMA = uart.UART_DEVICE_SCHEMA.extend(
     {
