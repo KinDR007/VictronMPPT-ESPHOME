@@ -1,27 +1,79 @@
 # VictronMPPT-ESPHOME
-# Victron Mppt charger ve.direct to esphome node
 
+ESPHome component to monitor a Victron MPPT Charger via ve.direct / UART TTL
 
-A configured uart component is required.
+## Supported devices
 
-Example:
+All Victron MPPT Chargers providing a ve.direct port.
+
+## Tested devices
+
+  * Victron SmartSolar MPPT 100/20
+  * Victron SmartSolar MPPT 150/35
+
+## Requirements
+
+* [ESPHome 1.18.0 or higher](https://github.com/esphome/esphome/releases).
+* Generic ESP32 or ESP8266 board
+
+## Schematics
+
+```
+                UART-TTL
+┌────────────────┐                ┌──────────────────┐
+│           GND o│<-------------->│o GND             │
+│ Victron    TX o│--------------->│o D7   ESP32/     │
+│ Charger    RX o│                │       ESP8266    │<-- GND
+│            5V o│                │                  │<-- 3.3V
+└────────────────┘                └──────────────────┘
+
+# UART-TTL jack (JST-PH 2.0mm pinch)
+┌─── ─────── ────┐
+│                │
+│ O   O   O   O  │
+│GND  RX  TX VCC │
+└────────────────┘
+```
+
+If you are unsure about to pin order please measure the voltage between GND and VCC (5V). If you measure a positive voltage you know the position of VCC and GND!
+
+### JST-PH jack
+
+| Pin     | Purpose      | ESP pin        |
+| :-----: | :----------- | :------------- |
+|  **1**  | **GND**      | GND            |
+|    2    | RX           |                |
+|  **3**  | **TX**       | D7 (RX)        |
+|    4    | 5V           |                |
+
+## Installation
+
+You can install this component with [ESPHome external components feature](https://esphome.io/components/external_components.html) like this:
 ```yaml
+external_components:
+  - source: github://KinDR007/VictronMPPT-ESPHOME@main
+
+uart:
+  id: uart0
+  tx_pin: D8  # Not used! The communication is read-only
+  rx_pin: D7
+  baud_rate: 19200
+  rx_buffer_size: 256
+
 victron:
-  uart_id: the_uart
+  uart_id: uart0
 
 sensor:
   - platform: victron
     panel_voltage:
-      id: pv
+      name: "Panel voltage"
     battery_voltage:
-      id: bv
+      name: "Battery voltage"
     battery_current:
-      id: bc
+      name: "Battery current"
 ```
 
-The `uart_id` is optional.
-
-All sensors are optional.
+or just use the `victron.yaml` as proof of concept. The `uart_id` is optional if you use a single UART only. All sensors are optional.
 
 The available numeric sensors are:
 - `max_power_yesterday`
@@ -45,13 +97,4 @@ The available text sensors are:
 - `fw_version`
 - `pid`
 
-
-
-Install:
-copy folder `victron` in `custom_components` folder to `~/config/esphome/custom_components/victron`
-
-Full example in victron.yaml 
-
-`Big thanks for help to ssieb`
-
-```
+Big thanks for help to ssieb for the support!
