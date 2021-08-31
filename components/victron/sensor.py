@@ -3,6 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import sensor, text_sensor, uart
 from esphome.const import (
     CONF_ID,
+    CONF_BATTERY_VOLTAGE,
     UNIT_VOLT,
     ICON_FLASH,
     UNIT_AMPERE,
@@ -28,7 +29,6 @@ CONF_YIELD_YESTERDAY = "yield_yesterday"
 CONF_YIELD_TODAY = "yield_today"
 CONF_PANEL_VOLTAGE = "panel_voltage"
 CONF_PANEL_POWER = "panel_power"
-CONF_BATTERY_VOLTAGE = "battery_voltage"
 CONF_BATTERY_CURRENT = "battery_current"
 CONF_DAY_NUMBER = "day_number"
 CONF_CHARGER_STATUS = "charger_status"

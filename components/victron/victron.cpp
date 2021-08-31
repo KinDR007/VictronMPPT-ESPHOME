@@ -400,7 +400,7 @@ void VictronComponent::handle_value_() {
     // value = atoi(value_.c_str());
 
     // ESP_LOGD(TAG, "received PID: '%s'", value_.c_str());
-    value = strtol(value_.c_str(), NULL, 0);
+    value = strtol(value_.c_str(), nullptr, 0);
     // ESP_LOGD(TAG, "received PID: '%04x'", value);
     if ((pid_sensor_ != nullptr) && !pid_sensor_->has_state()) {
       const __FlashStringHelper *flash = pid_text(value);

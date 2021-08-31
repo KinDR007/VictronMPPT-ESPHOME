@@ -3,8 +3,10 @@ esphome:
   platform: ESP8266
   board: d1_mini
   # board: nodemcuv2
-  includes:
-    - victron/victron.h
+
+external_components:
+  - source: github://KinDR007/VictronMPPT-ESPHOME@main
+    refresh: 0s
 
 substitutions:
   lower_devicename: "victron"
@@ -24,7 +26,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "${devicename} Hotspot"
-    password: "pass"
+    password: !secret wifi_password
 
 captive_portal:
 logger:
