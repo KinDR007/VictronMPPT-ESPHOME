@@ -26,7 +26,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "${devicename} Hotspot"
-    password: "pass"
+    password: !secret wifi_password
 
 captive_portal:
 logger:
