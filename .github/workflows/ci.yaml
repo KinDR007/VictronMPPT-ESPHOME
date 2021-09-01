@@ -158,8 +158,11 @@ jobs:
         shell: bash
         run: 'echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > secrets.yaml'
       - run: |
-          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' victron.yaml
-          esphome config victron.yaml
+          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example.yaml
+          esphome config esp8266-example.yaml
+      - run: |
+          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example-advanced.yaml
+          esphome config esp8266-example-advanced.yaml
 
   esphome-compile:
     runs-on: ubuntu-latest
@@ -197,5 +200,8 @@ jobs:
         shell: bash
         run: 'echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > secrets.yaml'
       - run: |
-          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' victron.yaml
-          esphome compile victron.yaml
+          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example.yaml
+          esphome compile esp8266-example.yaml
+      - run: |
+          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example-advanced.yaml
+          esphome compile esp8266-example-advanced.yaml

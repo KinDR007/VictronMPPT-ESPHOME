@@ -3,8 +3,13 @@ import esphome.config_validation as cv
 from esphome.components import uart
 from esphome.const import CONF_ID
 
-DEPENDENCIES = ["uart"]
 AUTO_LOAD = ["sensor", "text_sensor"]
+
+DEPENDENCIES = ["uart"]
+
+CODEOWNERS = ["@KinDR007"]
+
+MULTI_CONF = True
 
 victron_ns = cg.esphome_ns.namespace("victron")
 VictronComponent = victron_ns.class_("VictronComponent", uart.UARTDevice, cg.Component)

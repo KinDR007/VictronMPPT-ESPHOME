@@ -19,13 +19,14 @@ void VictronComponent::dump_config() {
   LOG_SENSOR("  ", "Battery Current", battery_current_sensor_);
   LOG_SENSOR("  ", "Load Current", load_current_sensor_);
   LOG_SENSOR("  ", "Day Number", day_number_sensor_);
-  LOG_SENSOR("  ", "Charger Status", charger_status_sensor_);
+  LOG_SENSOR("  ", "Charging Mode ID", charging_mode_id_sensor_);
   LOG_SENSOR("  ", "Error Code", error_code_sensor_);
-  LOG_TEXT_SENSOR("  ", "Charger Text", charger_text_sensor_);
+  LOG_SENSOR("  ", "Tracking Mode ID", tracking_mode_id_sensor_);
+  LOG_TEXT_SENSOR("  ", "Charging Mode", charging_mode_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Error Text", error_text_sensor_);
-  LOG_TEXT_SENSOR("  ", "Tracker Operation", tracker_operation_sensor_);
-  LOG_TEXT_SENSOR("  ", "FW Version", fw_version_sensor_);
-  LOG_TEXT_SENSOR("  ", "PID", pid_sensor_);
+  LOG_TEXT_SENSOR("  ", "Tracking Mode", tracking_mode_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Firmware Version", firmware_version_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Device Type", device_type_text_sensor_);
   check_uart_settings(19200);
 }
 
@@ -73,7 +74,7 @@ void VictronComponent::loop() {
   }
 }
 
-static const __FlashStringHelper *charger_status_text(int value) {
+static const __FlashStringHelper *charging_mode_text(int value) {
   switch (value) {
     case 0:
       return F("Off");
@@ -145,7 +146,7 @@ static const __FlashStringHelper *error_code_text(int value) {
   }
 }
 
-static const std::string tracker_op_text(int value) {
+static const std::string tracking_mode_text(int value) {
   switch (value) {
     case 0:
       return "Off";
@@ -158,7 +159,7 @@ static const std::string tracker_op_text(int value) {
   }
 }
 
-static const __FlashStringHelper *pid_text(int value) {
+static const __FlashStringHelper *device_type_text(int value) {
   switch (value) {
     case 0x203:
       return F("BMV-700");
@@ -377,10 +378,10 @@ void VictronComponent::handle_value_() {
       day_number_sensor_->publish_state(atoi(value_.c_str()));  // NOLINT(cert-err34-c)
   } else if (label_ == "CS") {
     value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
-    if (charger_status_sensor_ != nullptr)
-      charger_status_sensor_->publish_state(value);
-    if (charger_text_sensor_ != nullptr)
-      charger_text_sensor_->publish_state(flash_to_string(charger_status_text(value)));
+    if (charging_mode_id_sensor_ != nullptr)
+      charging_mode_id_sensor_->publish_state((float) value);
+    if (charging_mode_text_sensor_ != nullptr)
+      charging_mode_text_sensor_->publish_state(flash_to_string(charging_mode_text(value)));
   } else if (label_ == "ERR") {
     value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     if (error_code_sensor_ != nullptr)
@@ -389,27 +390,27 @@ void VictronComponent::handle_value_() {
       error_text_sensor_->publish_state(flash_to_string(error_code_text(value)));
   } else if (label_ == "MPPT") {
     value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
-    if (tracker_operation_sensor_ != nullptr)
-      tracker_operation_sensor_->publish_state(value);
-    if (tracker_text_sensor_ != nullptr)
-      tracker_text_sensor_->publish_state(tracker_op_text(value));
+    if (tracking_mode_id_sensor_ != nullptr)
+      tracking_mode_id_sensor_->publish_state((float) value);
+    if (tracking_mode_text_sensor_ != nullptr)
+      tracking_mode_text_sensor_->publish_state(tracking_mode_text(value));
   } else if (label_ == "FW") {
-    if ((fw_version_sensor_ != nullptr) && !fw_version_sensor_->has_state())
-      fw_version_sensor_->publish_state(value_.insert(value_.size() - 2, "."));
+    if ((firmware_version_text_sensor_ != nullptr) && !firmware_version_text_sensor_->has_state())
+      firmware_version_text_sensor_->publish_state(value_.insert(value_.size() - 2, "."));
   } else if (label_ == "PID") {
     // value = atoi(value_.c_str());
 
     // ESP_LOGD(TAG, "received PID: '%s'", value_.c_str());
     value = strtol(value_.c_str(), nullptr, 0);
     // ESP_LOGD(TAG, "received PID: '%04x'", value);
-    if ((pid_sensor_ != nullptr) && !pid_sensor_->has_state()) {
-      const __FlashStringHelper *flash = pid_text(value);
+    if ((device_type_text_sensor_ != nullptr) && !device_type_text_sensor_->has_state()) {
+      const __FlashStringHelper *flash = device_type_text(value);
       if (flash != nullptr) {
-        pid_sensor_->publish_state(flash_to_string(flash));
+        device_type_text_sensor_->publish_state(flash_to_string(flash));
       }  // else {
          // char s[30];
          // snprintf(s, 30, "Unknown device (%04x)", value);
-         // pid_sensor_->publish_state(s);
+         // device_type_text_sensor_->publish_state(s);
       //}
     }
   }

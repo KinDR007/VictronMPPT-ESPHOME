@@ -61,10 +61,12 @@ uart:
   rx_buffer_size: 256
 
 victron:
+  id: victron0
   uart_id: uart0
 
 sensor:
   - platform: victron
+    victron_id: victron0
     panel_voltage:
       name: "Panel voltage"
     battery_voltage:
@@ -73,7 +75,7 @@ sensor:
       name: "Battery current"
 ```
 
-or just use the `victron.yaml` as proof of concept. The `uart_id` is optional if you use a single UART only. All sensors are optional.
+or just use the `esp8266-example.yaml` or `esp8266-example-advanced.yaml` as proof of concept. The `uart_id` and `victron_id` is optional if you use a single UART / victron device. All sensors are optional.
 
 The available numeric sensors are:
 - `max_power_yesterday`
