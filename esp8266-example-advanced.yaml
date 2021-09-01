@@ -59,10 +59,12 @@ uart:
   rx_buffer_size: 256
 
 victron:
+  id: victron0
   uart_id: uart_bus
 
 sensor:
   - platform: victron
+    victron_id: victron0
     panel_voltage:
       name: "Panel voltage"
       id: pv
@@ -113,25 +115,18 @@ sensor:
       name: "Day sequence number"
       id: day_number
       icon: "mdi:calendar-today"
-    charger_text:
-      name: "Charger state"
-      id: ct
-    error_text:
+    charging_mode_id:
+      name: "Charger mode id"
+    error_code:
       name: "Error code"
-      id: et
-    tracker_text:
-      name: "Tracker operation"
-      id: tt
-    fw_version:
-      name: "Fw version"
-      id: fw
-    pid:
-      name: "PID"
-      id: pid
+    tracking_mode_id:
+      name: "Tracker mode id"
+
   - platform: wifi_signal
     name: "${devicename} WiFi Signal Sensor"
     id: rssi_sensor
     update_interval: 15s
+
   - platform: template
     name: "Wifi Quality"
     unit_of_measurement: "%"
@@ -204,7 +199,21 @@ sensor:
     unit_of_measurement: "kWh"
     device_class: "power"
     accuracy_decimals: 3
+
 text_sensor:
+  - platform: victron
+    victron_id: victron0
+    charging_mode:
+      name: "Charging Mode"
+    error:
+      name: "Error"
+    tracking_mode:
+      name: "Tracking Mode"
+    firmware_version:
+      name: "Firmware Version"
+    device_type:
+      name: "Device Type"
+
   - platform: template
     name: "${devicename} Config Version"
     icon: mdi:information-outline

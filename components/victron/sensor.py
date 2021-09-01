@@ -1,8 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import sensor, text_sensor
+from esphome.components import sensor
 from esphome.const import (
-    CONF_ID,
     CONF_BATTERY_VOLTAGE,
     UNIT_VOLT,
     ICON_FLASH,
@@ -20,7 +19,10 @@ from esphome.const import (
 )
 from . import VictronComponent, CONF_VICTRON_ID
 
-# sensors
+DEPENDENCIES = ["victron"]
+
+CODEOWNERS = ["@KinDR007"]
+
 CONF_MAX_POWER_YESTERDAY = "max_power_yesterday"
 CONF_MAX_POWER_TODAY = "max_power_today"
 CONF_YIELD_TOTAL = "yield_total"
@@ -30,17 +32,27 @@ CONF_PANEL_VOLTAGE = "panel_voltage"
 CONF_PANEL_POWER = "panel_power"
 CONF_BATTERY_CURRENT = "battery_current"
 CONF_DAY_NUMBER = "day_number"
-CONF_CHARGER_STATUS = "charger_status"
+CONF_CHARGING_MODE_ID = "charging_mode_id"
 CONF_ERROR_CODE = "error_code"
-CONF_TRACKER_OPERATION = "tracker_operation"
+CONF_TRACKING_MODE_ID = "tracking_mode_id"
 CONF_LOAD_CURRENT = "load_current"
 
-# text sensors
-CONF_CHARGER_TEXT = "charger_text"
-CONF_ERROR_TEXT = "error_text"
-CONF_TRACKER_TEXT = "tracker_text"
-CONF_FW_VERSION = "fw_version"
-CONF_PID = "pid"
+SENSORS = [
+    CONF_BATTERY_VOLTAGE,
+    CONF_MAX_POWER_YESTERDAY,
+    CONF_MAX_POWER_TODAY,
+    CONF_YIELD_TOTAL,
+    CONF_YIELD_YESTERDAY,
+    CONF_YIELD_TODAY,
+    CONF_PANEL_VOLTAGE,
+    CONF_PANEL_POWER,
+    CONF_BATTERY_CURRENT,
+    CONF_DAY_NUMBER,
+    CONF_CHARGING_MODE_ID,
+    CONF_ERROR_CODE,
+    CONF_TRACKING_MODE_ID,
+    CONF_LOAD_CURRENT,
+]
 
 CONFIG_SCHEMA = cv.Schema(
     {
@@ -75,122 +87,26 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_DAY_NUMBER): sensor.sensor_schema(
             UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
         ),
-        cv.Optional(CONF_CHARGER_STATUS): sensor.sensor_schema(
+        cv.Optional(CONF_CHARGING_MODE_ID): sensor.sensor_schema(
             UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
         ),
         cv.Optional(CONF_ERROR_CODE): sensor.sensor_schema(
             UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
         ),
-        cv.Optional(CONF_TRACKER_OPERATION): sensor.sensor_schema(
+        cv.Optional(CONF_TRACKING_MODE_ID): sensor.sensor_schema(
             UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
         ),
         cv.Optional(CONF_LOAD_CURRENT): sensor.sensor_schema(
             UNIT_AMPERE, ICON_CURRENT_AC, 3, DEVICE_CLASS_CURRENT
-        ),
-        cv.Optional(CONF_CHARGER_TEXT): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
-        ),
-        cv.Optional(CONF_ERROR_TEXT): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
-        ),
-        cv.Optional(CONF_TRACKER_TEXT): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
-        ),
-        cv.Optional(CONF_FW_VERSION): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
-        ),
-        cv.Optional(CONF_PID): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
     }
 )
 
 
 def to_code(config):
-    victron = yield cg.get_variable(config[CONF_VICTRON_ID])
-
-    if CONF_MAX_POWER_YESTERDAY in config:
-        sens = yield sensor.new_sensor(config[CONF_MAX_POWER_YESTERDAY])
-        cg.add(victron.set_max_power_yesterday_sensor(sens))
-
-    if CONF_MAX_POWER_TODAY in config:
-        sens = yield sensor.new_sensor(config[CONF_MAX_POWER_TODAY])
-        cg.add(victron.set_max_power_today_sensor(sens))
-
-    if CONF_YIELD_TOTAL in config:
-        sens = yield sensor.new_sensor(config[CONF_YIELD_TOTAL])
-        cg.add(victron.set_yield_total_sensor(sens))
-
-    if CONF_YIELD_YESTERDAY in config:
-        sens = yield sensor.new_sensor(config[CONF_YIELD_YESTERDAY])
-        cg.add(victron.set_yield_yesterday_sensor(sens))
-
-    if CONF_YIELD_TODAY in config:
-        sens = yield sensor.new_sensor(config[CONF_YIELD_TODAY])
-        cg.add(victron.set_yield_today_sensor(sens))
-
-    if CONF_PANEL_VOLTAGE in config:
-        sens = yield sensor.new_sensor(config[CONF_PANEL_VOLTAGE])
-        cg.add(victron.set_panel_voltage_sensor(sens))
-
-    if CONF_PANEL_POWER in config:
-        sens = yield sensor.new_sensor(config[CONF_PANEL_POWER])
-        cg.add(victron.set_panel_power_sensor(sens))
-
-    if CONF_BATTERY_VOLTAGE in config:
-        sens = yield sensor.new_sensor(config[CONF_BATTERY_VOLTAGE])
-        cg.add(victron.set_battery_voltage_sensor(sens))
-
-    if CONF_BATTERY_CURRENT in config:
-        sens = yield sensor.new_sensor(config[CONF_BATTERY_CURRENT])
-        cg.add(victron.set_battery_current_sensor(sens))
-
-    if CONF_LOAD_CURRENT in config:
-        sens = yield sensor.new_sensor(config[CONF_LOAD_CURRENT])
-        cg.add(victron.set_load_current_sensor(sens))
-
-    if CONF_DAY_NUMBER in config:
-        sens = yield sensor.new_sensor(config[CONF_DAY_NUMBER])
-        cg.add(victron.set_day_number_sensor(sens))
-
-    if CONF_CHARGER_STATUS in config:
-        sens = yield sensor.new_sensor(config[CONF_CHARGER_STATUS])
-        cg.add(victron.set_charger_status_sensor(sens))
-
-    if CONF_ERROR_CODE in config:
-        sens = yield sensor.new_sensor(config[CONF_ERROR_CODE])
-        cg.add(victron.set_error_code_sensor(sens))
-
-    if CONF_TRACKER_OPERATION in config:
-        sens = yield sensor.new_sensor(config[CONF_TRACKER_OPERATION])
-        cg.add(victron.set_tracker_operation_sensor(sens))
-
-    if CONF_CHARGER_TEXT in config:
-        conf = config[CONF_CHARGER_TEXT]
-        sens = cg.new_Pvariable(conf[CONF_ID])
-        yield text_sensor.register_text_sensor(sens, conf)
-        cg.add(victron.set_charger_text_sensor(sens))
-
-    if CONF_ERROR_TEXT in config:
-        conf = config[CONF_ERROR_TEXT]
-        sens = cg.new_Pvariable(conf[CONF_ID])
-        yield text_sensor.register_text_sensor(sens, conf)
-        cg.add(victron.set_error_text_sensor(sens))
-
-    if CONF_TRACKER_TEXT in config:
-        conf = config[CONF_TRACKER_TEXT]
-        sens = cg.new_Pvariable(conf[CONF_ID])
-        yield text_sensor.register_text_sensor(sens, conf)
-        cg.add(victron.set_tracker_text_sensor(sens))
-
-    if CONF_FW_VERSION in config:
-        conf = config[CONF_FW_VERSION]
-        sens = cg.new_Pvariable(conf[CONF_ID])
-        yield text_sensor.register_text_sensor(sens, conf)
-        cg.add(victron.set_fw_version_sensor(sens))
-
-    if CONF_PID in config:
-        conf = config[CONF_PID]
-        sens = cg.new_Pvariable(conf[CONF_ID])
-        yield text_sensor.register_text_sensor(sens, conf)
-        cg.add(victron.set_pid_sensor(sens))
+    hub = yield cg.get_variable(config[CONF_VICTRON_ID])
+    for key in SENSORS:
+        if key in config:
+            conf = config[key]
+            sens = yield sensor.new_sensor(conf)
+            cg.add(getattr(hub, f"set_{key}_sensor")(sens))
