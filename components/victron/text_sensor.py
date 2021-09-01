@@ -11,7 +11,6 @@ from esphome.const import (
     UNIT_WATT,
     ICON_POWER,
     ICON_CURRENT_AC,
-    CONF_TEMPERATURE,
     ICON_THERMOMETER,
     UNIT_CELSIUS,
     UNIT_PERCENT,
