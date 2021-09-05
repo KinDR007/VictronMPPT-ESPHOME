@@ -103,7 +103,6 @@ esphome run esp8266-example.yaml
 The `uart_id` and `victron_id` is optional if you use a single UART / victron device. All sensors are optional.
 
 The available numeric sensors are:
-
 - `max_power_yesterday`
 - `max_power_today`
 - `yield_total`
