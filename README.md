@@ -10,6 +10,7 @@ All Victron MPPT Chargers providing a ve.direct port.
 
   * Victron SmartSolar MPPT 100/20
   * Victron SmartSolar MPPT 150/35
+  * Victron SmartSolar MPPT 250/70
 
 ## Requirements
 
