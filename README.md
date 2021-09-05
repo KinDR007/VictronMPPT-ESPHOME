@@ -75,9 +75,35 @@ sensor:
       name: "Battery current"
 ```
 
-or just use the `esp8266-example.yaml` or `esp8266-example-advanced.yaml` as proof of concept. The `uart_id` and `victron_id` is optional if you use a single UART / victron device. All sensors are optional.
+or just use the `esp8266-example.yaml` as proof of concept:
+
+```bash
+# Install esphome
+pip3 install esphome
+
+# Clone this external component
+git clone https://github.com/KinDR007/VictronMPPT-ESPHOME.git
+cd VictronMPPT-ESPHOME
+
+# Create a secret.yaml containing some setup specific secrets
+cat > secrets.yaml <<EOF
+mqtt_host: MY_MQTT_HOST
+mqtt_username: MY_MQTT_USERNAME
+mqtt_password: MY_MQTT_PASSWORD
+
+wifi_ssid: MY_WIFI_SSID
+wifi_password: MY_WIFI_PASSWORD
+EOF
+
+# Validate the configuration, create a binary, upload it, and start logs
+esphome run esp8266-example.yaml
+
+```
+
+The `uart_id` and `victron_id` is optional if you use a single UART / victron device. All sensors are optional.
 
 The available numeric sensors are:
+
 - `max_power_yesterday`
 - `max_power_today`
 - `yield_total`
@@ -85,18 +111,18 @@ The available numeric sensors are:
 - `yield_today`
 - `panel_voltage`
 - `panel_power`
-- `battery_voltage`
 - `battery_current`
 - `day_number`
-- `charger_status`
+- `charging_mode_id`
 - `error_code`
-- `tracker_operation`
+- `tracking_mode_id`
+- `load_current`
 
 The available text sensors are:
-- `charger_text`
-- `error_text`
-- `tracker_text`
-- `fw_version`
-- `pid`
+- `charging_mode`
+- `error`
+- `tracking_mode`
+- `firmware_version`
+- `device_type`
 
 Big thanks for help to ssieb for the support!
