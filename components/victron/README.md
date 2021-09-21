@@ -21,7 +21,8 @@ The `uart_id` is optional.
 
 All sensors are optional.
 
-The available numeric sensors are:
+The available numeric sensors are
+for MPPT:
 - `max_power_yesterday`
 - `max_power_today`
 - `yield_total`
@@ -34,13 +35,48 @@ The available numeric sensors are:
 - `day_number`
 - `charger_status`
 - `error_code`
-- `tracker_operation`
+- `tracking_mode_id`
 - `load_current`
 
-The available text sensors are:
-- `charger_text`
-- `error_text`
-- `tracker_text`
-- `fw_version`
-- `pid`
+for inverters:
+- `ac_out_voltage`
+- `ac_out_current`
+- `battery_voltage`
+- `warning_code`
+- `charger_status` (= State of operation)
+- `device_mode_id`
+
+
+The available text sensors are
+for MPPT:
+- `device_type`
+- `charging_mode`
+- `error`
+- `tracking_mode`
+- `firmware_version`
+
+for inverters:
+- `device_type`
+- `device_mode`
+- `warning`
+- `firmware_version`
+
+
+Example for multiple devices:
+```yaml
+victron:
+  - id: victron_mppt
+    uart_id: the_uart_of_mppt
+  - id: victron_inverter
+    uart_id: the_uart_of_inverter
+
+text_sensor:
+  - platform: victron
+    victron_id: victron_mppt
+    device_type:
+      name: "MPPT device type"
+  - platform: victron
+    victron_id: victron_inverter
+    device_type:
+      name: "Inverter device type"
 ```

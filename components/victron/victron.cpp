@@ -1,5 +1,6 @@
 #include "victron.h"
 #include "esphome/core/log.h"
+#include <algorithm>    // std::min
 
 namespace esphome {
 namespace victron {
@@ -17,14 +18,20 @@ void VictronComponent::dump_config() {
   LOG_SENSOR("  ", "Panel Power", panel_power_sensor_);
   LOG_SENSOR("  ", "Battery Voltage", battery_voltage_sensor_);
   LOG_SENSOR("  ", "Battery Current", battery_current_sensor_);
+  LOG_SENSOR("  ", "AC Out Voltage", ac_out_voltage_sensor_);
+  LOG_SENSOR("  ", "AC Out Current", ac_out_current_sensor_);
   LOG_SENSOR("  ", "Load Current", load_current_sensor_);
   LOG_SENSOR("  ", "Day Number", day_number_sensor_);
   LOG_SENSOR("  ", "Charging Mode ID", charging_mode_id_sensor_);
   LOG_SENSOR("  ", "Error Code", error_code_sensor_);
+  LOG_SENSOR("  ", "Warning Code", warning_code_sensor_);
   LOG_SENSOR("  ", "Tracking Mode ID", tracking_mode_id_sensor_);
+  LOG_SENSOR("  ", "Device Mode ID", device_mode_id_sensor_);
   LOG_TEXT_SENSOR("  ", "Charging Mode", charging_mode_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Error Text", error_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Warning Text", warning_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Tracking Mode", tracking_mode_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Device Mode", device_mode_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Firmware Version", firmware_version_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Device Type", device_type_text_sensor_);
   check_uart_settings(19200);
@@ -88,6 +95,8 @@ static const __FlashStringHelper *charging_mode_text(int value) {
       return F("Float");
     case 7:
       return F("Equalize (manual)");
+    case 9:
+      return F("Inverting");
     case 245:
       return F("Starting-up");
     case 247:
@@ -145,6 +154,38 @@ static const __FlashStringHelper *error_code_text(int value) {
       return F("Unknown");
   }
 }
+static const __FlashStringHelper *warning_code_text(int value) {
+  switch (value) {
+    case 0:
+      return F("No warning");
+    case 1:
+      return F("Low Voltage");
+    case 2:
+      return F("High Voltage");
+    case 4:
+      return F("Low SOC");
+    case 8:
+      return F("Low Starter Voltage");
+    case 16:
+      return F("High Starter Voltage");
+    case 32:
+      return F("Low Temperature");
+    case 64:
+      return F("High Temperature");
+    case 128:
+      return F("Mid Voltage");
+    case 256:
+      return F("Overload");
+    case 512:
+      return F("DC-ripple");
+    case 1024:
+      return F("Low V AC out");
+    case 2048:
+      return F("High V AC out");
+    default:
+      return F("Multiple warnings");
+  }
+}
 
 static const std::string tracking_mode_text(int value) {
   switch (value) {
@@ -154,6 +195,21 @@ static const std::string tracking_mode_text(int value) {
       return "Limited";
     case 2:
       return "Active";
+    default:
+      return "Unknown";
+  }
+}
+
+static const std::string device_mode_text(int value) {
+  switch (value) {
+    case 0:
+      return "Off";
+    case 2:
+      return "On";
+    case 4:
+      return "Off";
+    case 5:
+      return "Eco";
     default:
       return "Unknown";
   }
@@ -370,6 +426,12 @@ void VictronComponent::handle_value_() {
   } else if (label_ == "I") {
     if (battery_current_sensor_ != nullptr)
       battery_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+  } else if (label_ == "AC_OUT_V") {
+    if (ac_out_voltage_sensor_ != nullptr)
+      ac_out_voltage_sensor_->publish_state(atoi(value_.c_str()) / 100.0);  // NOLINT(cert-err34-c)
+  } else if (label_ == "AC_OUT_I") {
+    if (ac_out_current_sensor_ != nullptr)
+      ac_out_current_sensor_->publish_state(max(0.0, atoi(value_.c_str()) / 10.0));  // NOLINT(cert-err34-c)
   } else if (label_ == "IL") {
     if (load_current_sensor_ != nullptr)
       load_current_sensor_->publish_state(atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
@@ -388,12 +450,24 @@ void VictronComponent::handle_value_() {
       error_code_sensor_->publish_state(value);
     if (error_text_sensor_ != nullptr)
       error_text_sensor_->publish_state(flash_to_string(error_code_text(value)));
+  } else if (label_ == "WARN") {
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    if (warning_code_sensor_ != nullptr)
+      warning_code_sensor_->publish_state(value);
+    if (warning_text_sensor_ != nullptr)
+      warning_text_sensor_->publish_state(flash_to_string(warning_code_text(value)));
   } else if (label_ == "MPPT") {
     value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     if (tracking_mode_id_sensor_ != nullptr)
       tracking_mode_id_sensor_->publish_state((float) value);
     if (tracking_mode_text_sensor_ != nullptr)
       tracking_mode_text_sensor_->publish_state(tracking_mode_text(value));
+  } else if (label_ == "MODE") {
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    if (device_mode_id_sensor_ != nullptr)
+      device_mode_id_sensor_->publish_state((float) value);
+    if (device_mode_text_sensor_ != nullptr)
+      device_mode_text_sensor_->publish_state(device_mode_text(value));
   } else if (label_ == "FW") {
     if ((firmware_version_text_sensor_ != nullptr) && !firmware_version_text_sensor_->has_state())
       firmware_version_text_sensor_->publish_state(value_.insert(value_.size() - 2, "."));

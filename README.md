@@ -8,9 +8,11 @@ All Victron MPPT Chargers providing a ve.direct port.
 
 ## Tested devices
 
+  * Victron SmartSolar MPPT 75/15
   * Victron SmartSolar MPPT 100/20
   * Victron SmartSolar MPPT 150/35
   * Victron SmartSolar MPPT 250/70
+  * Victron Phoenix Inverter 12/500
 
 ## Requirements
 
