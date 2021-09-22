@@ -1,0 +1,92 @@
+substitutions:
+  name: victron
+  device0: victron0
+  device1: victron1
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+external_components:
+  - source: github://KinDR007/VictronMPPT-ESPHOME@main
+    refresh: 0s
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+ota:
+# api:
+
+logger:
+  baud_rate: 0
+  esp8266_store_log_strings_in_flash: false
+
+mqtt:
+  broker: !secret mqtt_host
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  id: mqtt_client
+
+uart:
+  - id: uart0
+    tx_pin: D8  # Not connected! The communication is read-only
+    rx_pin: D7  # Connect this this GPIO and GND to the first MPPT charger
+    baud_rate: 19200
+    rx_buffer_size: 256
+  - id: uart1
+    tx_pin: D6  # Not connected! The communication is read-only
+    rx_pin: D5  # Connect this this GPIO and GND to the second MPPT charger
+    baud_rate: 19200
+    rx_buffer_size: 256
+
+victron:
+  - id: victron0
+    uart_id: uart0
+  - id: victron1
+    uart_id: uart1
+
+sensor:
+  - platform: victron
+    victron_id: victron0
+    max_power_yesterday:
+    panel_voltage:
+      name: "${device0} panel voltage"
+    panel_power:
+      name: "${device0} panel power"
+    battery_current:
+      name: "${device0} panel current"
+    load_current:
+      name: "${device0} load current"
+
+  - platform: victron
+    victron_id: victron1
+    max_power_yesterday:
+    panel_voltage:
+      name: "${device1} panel voltage"
+    panel_power:
+      name: "${device1} panel power"
+    battery_current:
+      name: "${device1} panel current"
+    load_current:
+      name: "${device1} load current"
+
+text_sensor:
+  - platform: victron
+    victron_id: victron0
+    charging_mode:
+      name: "${device0} charging mode"
+    error:
+      name: "${device0} error"
+    tracking_mode:
+      name: "${device0} tracking mode"
+
+  - platform: victron
+    victron_id: victron1
+    charging_mode:
+      name: "${device1} charging mode"
+    error:
+      name: "${device1} error"
+    tracking_mode:
+      name: "${device1} tracking mode"
