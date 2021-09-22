@@ -34,11 +34,16 @@ CONF_BATTERY_CURRENT = "battery_current"
 CONF_DAY_NUMBER = "day_number"
 CONF_CHARGING_MODE_ID = "charging_mode_id"
 CONF_ERROR_CODE = "error_code"
+CONF_WARNING_CODE = "warning_code"
 CONF_TRACKING_MODE_ID = "tracking_mode_id"
+CONF_DEVICE_MODE_ID = "device_mode_id"
 CONF_LOAD_CURRENT = "load_current"
+CONF_AC_OUT_VOLTAGE = "ac_out_voltage"
+CONF_AC_OUT_CURRENT = "ac_out_current"
 
 SENSORS = [
     CONF_BATTERY_VOLTAGE,
+    CONF_AC_OUT_VOLTAGE,
     CONF_MAX_POWER_YESTERDAY,
     CONF_MAX_POWER_TODAY,
     CONF_YIELD_TOTAL,
@@ -47,10 +52,13 @@ SENSORS = [
     CONF_PANEL_VOLTAGE,
     CONF_PANEL_POWER,
     CONF_BATTERY_CURRENT,
+    CONF_AC_OUT_CURRENT,
     CONF_DAY_NUMBER,
     CONF_CHARGING_MODE_ID,
     CONF_ERROR_CODE,
+    CONF_WARNING_CODE,
     CONF_TRACKING_MODE_ID,
+    CONF_DEVICE_MODE_ID,
     CONF_LOAD_CURRENT,
 ]
 
@@ -81,7 +89,13 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_BATTERY_VOLTAGE): sensor.sensor_schema(
             UNIT_VOLT, ICON_FLASH, 3, DEVICE_CLASS_VOLTAGE
         ),
+        cv.Optional(CONF_AC_OUT_VOLTAGE): sensor.sensor_schema(
+            UNIT_VOLT, ICON_FLASH, 3, DEVICE_CLASS_VOLTAGE
+        ),
         cv.Optional(CONF_BATTERY_CURRENT): sensor.sensor_schema(
+            UNIT_AMPERE, ICON_CURRENT_AC, 3, DEVICE_CLASS_CURRENT
+        ),
+        cv.Optional(CONF_AC_OUT_CURRENT): sensor.sensor_schema(
             UNIT_AMPERE, ICON_CURRENT_AC, 3, DEVICE_CLASS_CURRENT
         ),
         cv.Optional(CONF_DAY_NUMBER): sensor.sensor_schema(
@@ -93,7 +107,13 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_ERROR_CODE): sensor.sensor_schema(
             UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
         ),
+        cv.Optional(CONF_WARNING_CODE): sensor.sensor_schema(
+            UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
+        ),
         cv.Optional(CONF_TRACKING_MODE_ID): sensor.sensor_schema(
+            UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
+        ),
+        cv.Optional(CONF_DEVICE_MODE_ID): sensor.sensor_schema(
             UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
         ),
         cv.Optional(CONF_LOAD_CURRENT): sensor.sensor_schema(
