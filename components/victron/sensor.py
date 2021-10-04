@@ -3,21 +3,22 @@ import esphome.config_validation as cv
 from esphome.components import sensor
 from esphome.const import (
     CONF_BATTERY_VOLTAGE,
-    UNIT_VOLT,
+    DEVICE_CLASS_CURRENT,
+    DEVICE_CLASS_EMPTY,
+    DEVICE_CLASS_POWER,
+    DEVICE_CLASS_VOLTAGE,
+    ICON_CURRENT_AC,
+    ICON_EMPTY,
     ICON_FLASH,
+    ICON_POWER,
     UNIT_AMPERE,
+    UNIT_EMPTY,
+    UNIT_VOLT,
     UNIT_WATT,
     UNIT_WATT_HOURS,
-    ICON_POWER,
-    ICON_CURRENT_AC,
-    UNIT_EMPTY,
-    ICON_EMPTY,
-    DEVICE_CLASS_POWER,
-    DEVICE_CLASS_CURRENT,
-    DEVICE_CLASS_VOLTAGE,
-    DEVICE_CLASS_EMPTY,
 )
-from . import VictronComponent, CONF_VICTRON_ID
+
+from . import CONF_VICTRON_ID, VictronComponent
 
 DEPENDENCIES = ["victron"]
 

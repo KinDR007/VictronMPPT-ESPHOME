@@ -2,7 +2,8 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import text_sensor
 from esphome.const import CONF_ID
-from . import VictronComponent, CONF_VICTRON_ID
+
+from . import CONF_VICTRON_ID, VictronComponent
 
 DEPENDENCIES = ["victron"]
 

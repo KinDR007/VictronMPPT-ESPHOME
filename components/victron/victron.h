@@ -53,7 +53,9 @@ class VictronComponent : public uart::UARTDevice, public Component {
     charging_mode_text_sensor_ = charging_mode_text_sensor;
   }
   void set_error_text_sensor(text_sensor::TextSensor *error_text_sensor) { error_text_sensor_ = error_text_sensor; }
-  void set_warning_text_sensor(text_sensor::TextSensor *warning_text_sensor) { warning_text_sensor_ = warning_text_sensor; }
+  void set_warning_text_sensor(text_sensor::TextSensor *warning_text_sensor) {
+    warning_text_sensor_ = warning_text_sensor;
+  }
   void set_tracking_mode_text_sensor(text_sensor::TextSensor *tracking_mode_text_sensor) {
     tracking_mode_text_sensor_ = tracking_mode_text_sensor;
   }
