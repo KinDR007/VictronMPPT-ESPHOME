@@ -72,7 +72,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void dump_config() override;
   void loop() override;
 
-  float get_setup_priority() const { return setup_priority::DATA; }
+  float get_setup_priority() const override { return setup_priority::DATA; }
 
  protected:
   void handle_value_();
