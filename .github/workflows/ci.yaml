@@ -21,7 +21,7 @@ jobs:
   lint-clang-format:
     env:
       esphome_directory: esphome
-      esphome_version: 2021.10.1
+      esphome_version: 2022.1.1
     runs-on: ubuntu-latest
     # cpp lint job runs with esphome-lint docker image so that clang-format-*
     # doesn't have to be installed
@@ -56,7 +56,7 @@ jobs:
   lint-clang-tidy:
     env:
       esphome_directory: esphome
-      esphome_version: 2021.10.1
+      esphome_version: 2022.1.1
     runs-on: ubuntu-latest
     # cpp lint job runs with esphome-lint docker image so that clang-format-*
     # doesn't have to be installed
@@ -98,7 +98,7 @@ jobs:
   lint-python:
     env:
       esphome_directory: esphome
-      esphome_version: 2021.10.1
+      esphome_version: 2022.1.1
     # Don't use the esphome-lint docker image because it may contain outdated requirements.
     # This way, all dependencies are cached via the cache action.
     runs-on: ubuntu-latest
