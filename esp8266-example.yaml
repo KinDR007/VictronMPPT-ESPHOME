@@ -81,3 +81,11 @@ text_sensor:
       name: "${name} firmware version"
     device_type:
       name: "${name} device type"
+
+binary_sensor:
+  - platform: victron
+    victron_id: victron0
+    load_state:
+      name: "${name} load state"
+    relay_state:
+      name: "${name} relay state"

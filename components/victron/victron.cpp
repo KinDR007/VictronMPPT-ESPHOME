@@ -34,8 +34,9 @@ void VictronComponent::dump_config() {
   LOG_TEXT_SENSOR("  ", "Device Mode", device_mode_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Firmware Version", firmware_version_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Device Type", device_type_text_sensor_);
-  LOG_TEXT_SENSOR("  ", "Load state", load_state_text_sensor_);
-  LOG_TEXT_SENSOR("  ", "Relay state", relay_state_text_sensor_);
+  LOG_BINARY_SENSOR("  ", "Load state", load_state_binary_sensor_);
+  LOG_BINARY_SENSOR("  ", "Relay state", relay_state_binary_sensor_);
+
   check_uart_settings(19200);
 }
 
@@ -484,7 +485,7 @@ void VictronComponent::handle_value_() {
   // ESP_LOGD(TAG, "received PID: '%s'", value_.c_str());
   // value = strtol(value_.c_str(), nullptr, 0);
   // ESP_LOGD(TAG, "received PID: '%04x'", value);
-  // if ((load_state_text_sensor_ != nullptr) && !load_state_text_sensor_->has_state()) {
+  // if ((load_state_binary_sensor_ != nullptr) && !load_state_binary_sensor_->has_state()) {
   //  load_state_text_sensor_->publish_state(value);
   //}
   //} else if (label_ == "RELAY") {
@@ -493,7 +494,7 @@ void VictronComponent::handle_value_() {
   // ESP_LOGD(TAG, "received PID: '%s'", value_.c_str());
   // value = strtol(value_.c_str(), nullptr, 0);
   //  ESP_LOGD(TAG, "received PID: '%04x'", value);
-  // if ((relay_state_text_sensor_ != nullptr) && !relay_state_text_sensor_->has_state()) {
+  // if ((relay_state_binary_sensor_ != nullptr) && !relay_state_binary_sensor_->has_state()) {
   // relay_state_text_sensor_->publish_state(value);
   //}
   //}

@@ -80,3 +80,15 @@ text_sensor:
     device_type:
       name: "Inverter device type"
 ```
+
+Binary sensors:
+
+```
+binary_sensor:
+  - platform: victron
+    victron_id: victron_inverter
+    load_state:
+      name: "Load state"
+    relay_state:
+      name: "Relay state"
+```

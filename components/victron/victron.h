@@ -1,6 +1,7 @@
 #pragma once
 
 #include "esphome/core/component.h"
+#include "esphome/components/binary_sensor/binary_sensor.h"
 #include "esphome/components/sensor/sensor.h"
 #include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/uart/uart.h"
@@ -10,6 +11,12 @@ namespace victron {
 
 class VictronComponent : public uart::UARTDevice, public Component {
  public:
+  void set_load_state_binary_sensor(binary_sensor::BinarySensor *load_state_binary_sensor) {
+    load_state_binary_sensor_ = load_state_binary_sensor;
+  }
+  void set_relay_state_binary_sensor(binary_sensor::BinarySensor *relay_state_binary_sensor) {
+    relay_state_binary_sensor_ = relay_state_binary_sensor;
+  }
   void set_max_power_yesterday_sensor(sensor::Sensor *max_power_yesterday_sensor) {
     max_power_yesterday_sensor_ = max_power_yesterday_sensor;
   }
@@ -68,12 +75,6 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_device_type_text_sensor(text_sensor::TextSensor *device_type_text_sensor) {
     device_type_text_sensor_ = device_type_text_sensor;
   }
-  void set_load_state_text_sensor(text_sensor::TextSensor *load_state_text_sensor) {
-    load_state_text_sensor_ = load_state_text_sensor;
-  }
-  void set_relay_state_text_sensor(text_sensor::TextSensor *relay_state_text_sensor) {
-    relay_state_text_sensor_ = relay_state_text_sensor;
-  }
 
   void dump_config() override;
   void loop() override;
@@ -82,6 +83,9 @@ class VictronComponent : public uart::UARTDevice, public Component {
 
  protected:
   void handle_value_();
+
+  binary_sensor::BinarySensor *load_state_binary_sensor_;
+  binary_sensor::BinarySensor *relay_state_binary_sensor_;
 
   sensor::Sensor *max_power_yesterday_sensor_{nullptr};
   sensor::Sensor *max_power_today_sensor_{nullptr};
@@ -110,8 +114,6 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *device_mode_text_sensor_{nullptr};
   text_sensor::TextSensor *firmware_version_text_sensor_{nullptr};
   text_sensor::TextSensor *device_type_text_sensor_{nullptr};
-  text_sensor::TextSensor *load_state_text_sensor_{nullptr};
-  text_sensor::TextSensor *relay_state_text_sensor_{nullptr};
 
   int state_{0};
   std::string label_;
