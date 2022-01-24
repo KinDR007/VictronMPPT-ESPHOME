@@ -122,16 +122,18 @@ The available numeric sensors are:
 - `ac_out_voltage`
 - `ac_out_current`
 - `battery_voltage`
+- `device_mode_id`
+- `warning_code`
 
 
-device_mode_id
 The available text sensors are:
 - `charging_mode`
 - `error`
 - `tracking_mode`
 - `firmware_version`
 - `device_type`
-- `warning_code`
+- `device_mode`
+- `warning`
 
 Binary sensors:
 
