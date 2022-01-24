@@ -474,10 +474,10 @@ void VictronComponent::handle_value_() {
       device_type_text_sensor_->publish_state(device_type_text(value));
     }
   } else if (label_ == "LOAD") {
-    ESP_LOGD(TAG, "received load value: '%04x'", value);
+    ESP_LOGD(TAG, "received load value: '%04x'", value_);
     ESP_LOGD(TAG, "received load value: '%s'", value_.c_str());
   } else if (label_ == "RELAY") {
-    ESP_LOGD(TAG, "received relay value: '%04x'", value);
+    ESP_LOGD(TAG, "received relay value: '%04x'", value_);
     ESP_LOGD(TAG, "received relay value: '%s'", value_.c_str());
   }
 
