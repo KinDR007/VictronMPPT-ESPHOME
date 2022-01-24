@@ -16,8 +16,6 @@ CONF_TRACKING_MODE = "tracking_mode"
 CONF_DEVICE_MODE = "device_mode"
 CONF_FIRMWARE_VERSION = "firmware_version"
 CONF_DEVICE_TYPE = "device_type"
-CONF_LOAD_STATE = "load_state"
-CONF_RELAY_STATE = "relay_state"
 
 TEXT_SENSORS = [
     CONF_CHARGING_MODE,
@@ -53,14 +51,9 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_DEVICE_TYPE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
-        cv.Optional(CONF_LOAD_STATE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
-        ),
-        cv.Optional(CONF_RELAY_STATE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
-            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
-        ),
     }
 )
+
 
 def to_code(config):
     hub = yield cg.get_variable(config[CONF_VICTRON_ID])

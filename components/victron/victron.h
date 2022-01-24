@@ -68,12 +68,6 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_device_type_text_sensor(text_sensor::TextSensor *device_type_text_sensor) {
     device_type_text_sensor_ = device_type_text_sensor;
   }
-  void set_load_state_text_sensor(text_sensor::TextSensor *load_state_text_sensor) {
-    load_state_text_sensor_ = load_state_text_sensor;
-  }
-  void set_relay_state_text_sensor(text_sensor::TextSensor *relay_state_text_sensor) {
-    relay_state_text_sensor_ = relay_state_text_sensor;
-  }
 
   void dump_config() override;
   void loop() override;
@@ -110,8 +104,6 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *device_mode_text_sensor_{nullptr};
   text_sensor::TextSensor *firmware_version_text_sensor_{nullptr};
   text_sensor::TextSensor *device_type_text_sensor_{nullptr};
-  text_sensor::TextSensor *load_state_text_sensor_{nullptr};
-  text_sensor::TextSensor *relay_state_text_sensor_{nullptr};
 
   int state_{0};
   std::string label_;
