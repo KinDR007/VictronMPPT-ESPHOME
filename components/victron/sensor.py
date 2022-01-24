@@ -63,6 +63,7 @@ SENSORS = [
     CONF_LOAD_CURRENT,
 ]
 
+
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_VICTRON_ID): cv.use_id(VictronComponent),
