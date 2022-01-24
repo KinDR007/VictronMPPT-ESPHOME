@@ -3,7 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import uart
 from esphome.const import CONF_ID
 
-AUTO_LOAD = ["sensor", "text_sensor"]
+AUTO_LOAD = ["binary_sensor", "sensor", "text_sensor"]
 
 DEPENDENCIES = ["uart"]
 
