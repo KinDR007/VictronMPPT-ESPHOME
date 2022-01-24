@@ -65,6 +65,7 @@ CONFIG_SCHEMA = cv.Schema(
     }
 )
 
+
 def to_code(config):
     hub = yield cg.get_variable(config[CONF_VICTRON_ID])
     for key in TEXT_SENSORS:
