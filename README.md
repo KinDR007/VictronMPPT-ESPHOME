@@ -83,7 +83,7 @@ text_sensor:
 
 Binary sensors:
 
-```
+```yaml
 binary_sensor:
   - platform: victron
     victron_id: victron_inverter
