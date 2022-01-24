@@ -475,29 +475,14 @@ void VictronComponent::handle_value_() {
       device_type_text_sensor_->publish_state(device_type_text(value));
     }
   } else if (label_ == "LOAD") {
-    ESP_LOGD(TAG, "received load value: '%s'", value_.c_str());
+    if (load_state_binary_sensor_ != nullptr) {
+      load_state_binary_sensor_->publish_state(value_ == "ON");
+    }
   } else if (label_ == "RELAY") {
-    ESP_LOGD(TAG, "received relay value: '%s'", value_.c_str());
+    if (relay_state_binary_sensor_ != nullptr) {
+      relay_state_binary_sensor_->publish_state(value_ == "ON");
+    }
   }
-  // else if (label_ == "LOAD") {
-  //  value = atoi(value_.c_str());
-
-  // ESP_LOGD(TAG, "received PID: '%s'", value_.c_str());
-  // value = strtol(value_.c_str(), nullptr, 0);
-  // ESP_LOGD(TAG, "received PID: '%04x'", value);
-  // if ((load_state_binary_sensor_ != nullptr) && !load_state_binary_sensor_->has_state()) {
-  //  load_state_text_sensor_->publish_state(value);
-  //}
-  //} else if (label_ == "RELAY") {
-  // value = atoi(value_.c_str());
-
-  // ESP_LOGD(TAG, "received PID: '%s'", value_.c_str());
-  // value = strtol(value_.c_str(), nullptr, 0);
-  //  ESP_LOGD(TAG, "received PID: '%04x'", value);
-  // if ((relay_state_binary_sensor_ != nullptr) && !relay_state_binary_sensor_->has_state()) {
-  // relay_state_text_sensor_->publish_state(value);
-  //}
-  //}
 }
 
 }  // namespace victron
