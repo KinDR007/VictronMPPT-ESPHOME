@@ -73,7 +73,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   }
   void set_relay_state_text_sensor(text_sensor::TextSensor *relay_state_text_sensor) {
     relay_state_text_sensor_ = relay_state_text_sensor;
-  }  
+  }
 
   void dump_config() override;
   void loop() override;
