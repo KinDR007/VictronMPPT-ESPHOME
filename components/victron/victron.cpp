@@ -476,11 +476,11 @@ void VictronComponent::handle_value_() {
     }
   } else if (label_ == "LOAD") {
     if (load_state_binary_sensor_ != nullptr) {
-      load_state_binary_sensor_->publish_state(value_.compare("ON") == 0);
+      load_state_binary_sensor_->publish_state(value_ == "ON");
     }
   } else if (label_ == "RELAY") {
     if (relay_state_binary_sensor_ != nullptr) {
-      relay_state_binary_sensor_->publish_state(value_.compare("ON") == 0);
+      relay_state_binary_sensor_->publish_state(value_ == "ON");
     }
   }
 }
