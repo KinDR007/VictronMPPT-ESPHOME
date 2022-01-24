@@ -14,7 +14,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_load_state_binary_sensor(binary_sensor::BinarySensor *load_state_binary_sensor) {
     load_state_binary_sensor_ = load_state_binary_sensor;
   }
-  void set_relay_state_binary_sensor(binary_sensor::BinarySensor *load_relay_state_binary_sensor) {
+  void set_relay_state_binary_sensor(binary_sensor::BinarySensor *relay_state_binary_sensor) {
     relay_state_binary_sensor_ = relay_state_binary_sensor;
   }
   void set_max_power_yesterday_sensor(sensor::Sensor *max_power_yesterday_sensor) {
