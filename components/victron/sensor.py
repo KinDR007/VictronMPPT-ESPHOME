@@ -68,58 +68,112 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_VICTRON_ID): cv.use_id(VictronComponent),
         cv.Optional(CONF_MAX_POWER_YESTERDAY): sensor.sensor_schema(
-            UNIT_WATT, ICON_POWER, 0, DEVICE_CLASS_POWER
+            unit_of_measurement=UNIT_WATT,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_MAX_POWER_TODAY): sensor.sensor_schema(
-            UNIT_WATT, ICON_POWER, 0, DEVICE_CLASS_POWER
+            unit_of_measurement=UNIT_WATT,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_YIELD_TOTAL): sensor.sensor_schema(
-            UNIT_WATT_HOURS, ICON_POWER, 0, DEVICE_CLASS_POWER
+            unit_of_measurement=UNIT_WATT_HOURS,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_YIELD_YESTERDAY): sensor.sensor_schema(
-            UNIT_WATT_HOURS, ICON_POWER, 0, DEVICE_CLASS_POWER
+            unit_of_measurement=UNIT_WATT_HOURS,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_YIELD_TODAY): sensor.sensor_schema(
-            UNIT_WATT_HOURS, ICON_POWER, 0, DEVICE_CLASS_POWER
+            unit_of_measurement=UNIT_WATT_HOURS,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_PANEL_VOLTAGE): sensor.sensor_schema(
-            UNIT_VOLT, ICON_FLASH, 3, DEVICE_CLASS_VOLTAGE
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
         ),
         cv.Optional(CONF_PANEL_POWER): sensor.sensor_schema(
-            UNIT_WATT, ICON_POWER, 0, DEVICE_CLASS_POWER
+            unit_of_measurement=UNIT_WATT,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_BATTERY_VOLTAGE): sensor.sensor_schema(
-            UNIT_VOLT, ICON_FLASH, 3, DEVICE_CLASS_VOLTAGE
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
         ),
         cv.Optional(CONF_AC_OUT_VOLTAGE): sensor.sensor_schema(
-            UNIT_VOLT, ICON_FLASH, 3, DEVICE_CLASS_VOLTAGE
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
         ),
         cv.Optional(CONF_BATTERY_CURRENT): sensor.sensor_schema(
-            UNIT_AMPERE, ICON_CURRENT_AC, 3, DEVICE_CLASS_CURRENT
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
         ),
         cv.Optional(CONF_AC_OUT_CURRENT): sensor.sensor_schema(
-            UNIT_AMPERE, ICON_CURRENT_AC, 3, DEVICE_CLASS_CURRENT
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
         ),
         cv.Optional(CONF_DAY_NUMBER): sensor.sensor_schema(
-            UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
         ),
         cv.Optional(CONF_CHARGING_MODE_ID): sensor.sensor_schema(
-            UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
         ),
         cv.Optional(CONF_ERROR_CODE): sensor.sensor_schema(
-            UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
         ),
         cv.Optional(CONF_WARNING_CODE): sensor.sensor_schema(
-            UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
         ),
         cv.Optional(CONF_TRACKING_MODE_ID): sensor.sensor_schema(
-            UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
         ),
         cv.Optional(CONF_DEVICE_MODE_ID): sensor.sensor_schema(
-            UNIT_EMPTY, ICON_EMPTY, 0, DEVICE_CLASS_EMPTY
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
         ),
         cv.Optional(CONF_LOAD_CURRENT): sensor.sensor_schema(
-            UNIT_AMPERE, ICON_CURRENT_AC, 3, DEVICE_CLASS_CURRENT
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
         ),
     }
 )
