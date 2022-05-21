@@ -105,6 +105,8 @@ esphome run esp8266-example.yaml
 
 The `uart_id` and `victron_id` is optional if you use a single UART / victron device. All sensors are optional.
 
+The victron device pushs one status message per second. To reduce the update interval of the ESPHome entities please use the `throttle` parameter to discard some messages.
+
 The available numeric sensors are:
 - `max_power_yesterday`
 - `max_power_today`

@@ -393,6 +393,12 @@ static const std::string device_type_text(int value) {
 void VictronComponent::handle_value_() {
   int value;
 
+  const uint32_t now = millis();
+  if (now - this->last_publish_ < this->throttle_) {
+    return;
+  }
+  this->last_publish_ = now;
+
   if (label_ == "H23") {
     if (max_power_yesterday_sensor_ != nullptr)
       max_power_yesterday_sensor_->publish_state(atoi(value_.c_str()));  // NOLINT(cert-err34-c)

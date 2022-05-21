@@ -44,8 +44,10 @@ uart:
 victron:
   - id: victron0
     uart_id: uart0
+    throttle: 10s
   - id: victron1
     uart_id: uart1
+    throttle: 10s
 
 sensor:
   - platform: victron
