@@ -72,10 +72,19 @@ void VictronComponent::loop() {
     if (state_ == 2) {
       if (label_ == "Checksum") {
         state_ = 0;
+        // The checksum is used as end of frame indicator
+        if (now - this->last_publish_ >= this->throttle_) {
+          this->last_publish_ = now;
+          this->publishing_ = true;
+        } else {
+          this->publishing_ = false;
+        }
         continue;
       }
       if ((c == '\r') || (c == '\n')) {
-        handle_value_();
+        if (this->publishing_) {
+          handle_value_();
+        }
         state_ = 0;
       } else {
         value_.push_back(c);
@@ -392,12 +401,6 @@ static const std::string device_type_text(int value) {
 
 void VictronComponent::handle_value_() {
   int value;
-
-  const uint32_t now = millis();
-  if (now - this->last_publish_ < this->throttle_) {
-    return;
-  }
-  this->last_publish_ = now;
 
   if (label_ == "H23") {
     if (max_power_yesterday_sensor_ != nullptr)
