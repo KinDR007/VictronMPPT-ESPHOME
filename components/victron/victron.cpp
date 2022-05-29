@@ -402,30 +402,16 @@ static const std::string device_type_text(int value) {
 void VictronComponent::handle_value_() {
   int value;
 
-  if (label_ == "H23") {
-    this->publish_state_(max_power_yesterday_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+  if (label_ == "V") {
+    this->publish_state_(battery_voltage_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
     return;
   }
 
-  if (label_ == "H21") {
-    this->publish_state_(max_power_today_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
-    return;
-  }
-
-  if (label_ == "H19") {
-    this->publish_state_(yield_total_sensor_, atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
-    return;
-  }
-
-  if (label_ == "H22") {
-    this->publish_state_(yield_yesterday_sensor_, atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
-    return;
-  }
-
-  if (label_ == "H20") {
-    this->publish_state_(yield_today_sensor_, atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
-    return;
-  }
+  // "V2"     mV         Channel 2 (battery) voltage
+  // "V3"     mV         Channel 3 (battery) voltage
+  // "VS"     mV         Auxiliary (starter) voltage
+  // "VM"     mV         Mid-point voltage of the battery bank
+  // "DM"     %o         Mid-point deviation of the battery bank
 
   if (label_ == "VPV") {
     this->publish_state_(panel_voltage_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
@@ -437,13 +423,121 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  if (label_ == "V") {
-    this->publish_state_(battery_voltage_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+  if (label_ == "I") {
+    this->publish_state_(battery_current_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
     return;
   }
 
-  if (label_ == "I") {
-    this->publish_state_(battery_current_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+  // "I2"     mA         Channel 2 battery current
+  // "I3"     mA         Channel 3 battery current
+
+  if (label_ == "IL") {
+    this->publish_state_(load_current_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+    return;
+  }
+
+  if (label_ == "LOAD") {
+    this->publish_state_(load_state_binary_sensor_, value_ == "ON");
+    return;
+  }
+
+  // "T"      °C         Battery temperature
+  // "P"      W          Instantaneous power
+  // "CE"     mAh        Consumed Amp Hours
+  // "SOC"    %o         State of charge
+  // "TTG"    min        Time-to-go
+  // "Alarm"             Alarm condition active
+
+  if (label_ == "RELAY") {
+    this->publish_state_(relay_state_binary_sensor_, value_ == "ON");
+    return;
+  }
+
+  // "AR"                Alarm reason
+  // "OR"                Off reason
+  // "H1"     mAh        Depth of the deepest discharge
+  // "H2"     mAh        Depth of the last discharge
+  // "H3"     mAh        Depth of the average discharge
+  // "H4"                Number of charge cycles
+  // "H5"                Number of full discharges
+  // "H6"     mAh        Cumulative Amp Hours drawn
+  // "H7"     mV         Minimum main (battery) voltage
+  // "H8"     mV         Maximum main (battery) voltage
+  // "H9"     S          Number of seconds since last full charge
+  // "H10"               Number of automatic synchronizations
+  // "H11"               Number of low main voltage alarms
+  // "H12"               Number of high main voltage alarms
+  // "H13"               Number of low auxiliary voltage alarms
+  // "H14"               Number of high auxiliary voltage alarms
+  // "H15"    mV         Minimum auxiliary (battery) voltage
+  // "H16"    mV         Maximum auxiliary (battery) voltage
+  // "H17"    0.01 kWh   Amount of discharged energy (BMV) / Amount of produced energy (DC monitor)
+  // "H18"    0.01 kWh   Amount of charged energy (BMV) / Amount of consumed energy (DC monitor)
+
+  if (label_ == "H19") {
+    this->publish_state_(yield_total_sensor_, atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
+    return;
+  }
+
+  if (label_ == "H20") {
+    this->publish_state_(yield_today_sensor_, atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
+    return;
+  }
+
+  if (label_ == "H21") {
+    this->publish_state_(max_power_today_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
+
+  if (label_ == "H22") {
+    this->publish_state_(yield_yesterday_sensor_, atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
+    return;
+  }
+
+  if (label_ == "H23") {
+    this->publish_state_(max_power_yesterday_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
+
+  if (label_ == "ERR") {
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    this->publish_state_(error_code_sensor_, value);
+    this->publish_state_(error_text_sensor_, error_code_text(value));
+    return;
+  }
+
+  if (label_ == "CS") {
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    this->publish_state_(charging_mode_id_sensor_, (float) value);
+    this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
+    return;
+  }
+
+  // "BMV"               Model description (deprecated)
+
+  if (label_ == "FW") {
+    this->publish_state_once_(firmware_version_text_sensor_, value_.insert(value_.size() - 2, "."));
+    return;
+  }
+
+  // "FWE"               Firmware version (24 bit)
+
+  if (label_ == "PID") {
+    this->publish_state_once_(device_type_text_sensor_, device_type_text(strtol(value_.c_str(), nullptr, 0)));
+    return;
+  }
+
+  // "SER#"              Serial number
+
+  if (label_ == "HSDS") {
+    this->publish_state_(day_number_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
+
+  if (label_ == "MODE") {
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    this->publish_state_(device_mode_id_sensor_, (float) value);
+    this->publish_state_(device_mode_text_sensor_, device_mode_text(value));
     return;
   }
 
@@ -457,29 +551,7 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  if (label_ == "IL") {
-    this->publish_state_(load_current_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
-    return;
-  }
-
-  if (label_ == "HSDS") {
-    this->publish_state_(day_number_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
-    return;
-  }
-
-  if (label_ == "CS") {
-    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
-    this->publish_state_(charging_mode_id_sensor_, (float) value);
-    this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
-    return;
-  }
-
-  if (label_ == "ERR") {
-    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
-    this->publish_state_(error_code_sensor_, value);
-    this->publish_state_(error_text_sensor_, error_code_text(value));
-    return;
-  }
+  // "AC_OUT_S"    VA    AC output apparent power
 
   if (label_ == "WARN") {
     value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
@@ -495,32 +567,7 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  if (label_ == "MODE") {
-    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
-    this->publish_state_(device_mode_id_sensor_, (float) value);
-    this->publish_state_(device_mode_text_sensor_, device_mode_text(value));
-    return;
-  }
-
-  if (label_ == "FW") {
-    this->publish_state_once_(firmware_version_text_sensor_, value_.insert(value_.size() - 2, "."));
-    return;
-  }
-
-  if (label_ == "PID") {
-    this->publish_state_once_(device_type_text_sensor_, device_type_text(strtol(value_.c_str(), nullptr, 0)));
-    return;
-  }
-
-  if (label_ == "LOAD") {
-    this->publish_state_(load_state_binary_sensor_, value_ == "ON");
-    return;
-  }
-
-  if (label_ == "RELAY") {
-    this->publish_state_(relay_state_binary_sensor_, value_ == "ON");
-    return;
-  }
+  // "MON"               DC monitor mode
 
   ESP_LOGD(TAG, "Unhandled property: %s %s", label_.c_str(), value_.c_str());
 }
