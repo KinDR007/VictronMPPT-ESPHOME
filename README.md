@@ -49,6 +49,10 @@ If you are unsure about to pin order please measure the voltage between GND and 
 |  **3**  | **TX**       | D7 (RX)        |
 |    4    | 5V           |                |
 
+<a href="images/circuit.jpg" target="_blank">
+<img src="images/circuit_thumbnail.jpg" width="50%">
+</a>
+
 ## Installation
 
 You can install this component with [ESPHome external components feature](https://esphome.io/components/external_components.html) like this:
