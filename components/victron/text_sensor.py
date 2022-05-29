@@ -17,6 +17,10 @@ CONF_DEVICE_MODE = "device_mode"
 CONF_FIRMWARE_VERSION = "firmware_version"
 CONF_DEVICE_TYPE = "device_type"
 
+CONF_ALARM_CONDITION_ACTIVE = "alarm_condition_active"
+CONF_ALARM_REASON = "alarm_reason"
+CONF_MODEL_DESCRIPTION = "model_description"
+
 TEXT_SENSORS = [
     CONF_CHARGING_MODE,
     CONF_ERROR,
@@ -25,6 +29,10 @@ TEXT_SENSORS = [
     CONF_DEVICE_MODE,
     CONF_FIRMWARE_VERSION,
     CONF_DEVICE_TYPE,
+    #
+    CONF_ALARM_CONDITION_ACTIVE,
+    CONF_ALARM_REASON,
+    CONF_MODEL_DESCRIPTION,
 ]
 
 
@@ -50,6 +58,15 @@ CONFIG_SCHEMA = cv.Schema(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
         cv.Optional(CONF_DEVICE_TYPE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
+        ),
+        cv.Optional(CONF_ALARM_CONDITION_ACTIVE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
+        ),
+        cv.Optional(CONF_ALARM_REASON): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
+        ),
+        cv.Optional(CONF_MODEL_DESCRIPTION): text_sensor.TEXT_SENSOR_SCHEMA.extend(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
     }

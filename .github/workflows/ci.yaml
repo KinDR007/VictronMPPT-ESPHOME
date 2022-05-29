@@ -163,14 +163,13 @@ jobs:
         shell: bash
         run: 'echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > secrets.yaml'
       - run: |
-          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example.yaml
-          esphome config esp8266-example.yaml
+          esphome -s external_components_source components config smartsolar-mppt-esp8266-example.yaml
       - run: |
-          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example-multiple-uarts.yaml
-          esphome config esp8266-example-multiple-uarts.yaml
+          esphome -s external_components_source components config smartsolar-mppt-esp8266-example-multiple-uarts.yaml
       - run: |
-          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example-advanced.yaml
-          esphome config esp8266-example-advanced.yaml
+          esphome -s external_components_source components config smartsolar-mppt-esp8266-example-advanced.yaml
+      - run: |
+          esphome -s external_components_source components config smartshunt-esp8266-example.yaml
 
   esphome-compile:
     runs-on: ubuntu-latest
@@ -208,11 +207,10 @@ jobs:
         shell: bash
         run: 'echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > secrets.yaml'
       - run: |
-          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example.yaml
-          esphome compile esp8266-example.yaml
+          esphome -s external_components_source components compile smartsolar-mppt-esp8266-example.yaml
       - run: |
-          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example-multiple-uarts.yaml
-          esphome compile esp8266-example-multiple-uarts.yaml
+          esphome -s external_components_source components compile smartsolar-mppt-esp8266-example-multiple-uarts.yaml
       - run: |
-          sed -i 's#source: github://KinDR007/VictronMPPT-ESPHOME@main#source: components#' esp8266-example-advanced.yaml
-          esphome compile esp8266-example-advanced.yaml
+          esphome -s external_components_source components compile smartsolar-mppt-esp8266-example-advanced.yaml
+      - run: |
+          esphome -s external_components_source components compile smartshunt-esp8266-example.yaml

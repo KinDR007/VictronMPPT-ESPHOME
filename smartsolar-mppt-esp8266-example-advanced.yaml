@@ -1,3 +1,11 @@
+substitutions:
+  external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
+  lower_devicename: "victron"
+  devicename: "SmartSolar_150_35"
+  config_version: "v2021.05.30"
+  wifi_fast_connect: "false"
+  accuracy: "2"
+
 esphome:
   name: "${lower_devicename}"
   platform: ESP8266
@@ -5,21 +13,12 @@ esphome:
   # board: nodemcuv2
 
 external_components:
-  - source: github://KinDR007/VictronMPPT-ESPHOME@main
+  - source: ${external_components_source}
     refresh: 0s
-
-substitutions:
-  lower_devicename: "victron"
-  devicename: "SmartSolar_150_35"
-  config_version: "v2021.05.30"
-  wifi_fast_connect: "false"
-#  wifi_reboot_timeout: 0s
-  accuracy: "2"
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  # reboot_timeout: $wifi_reboot_timeout
   power_save_mode: none
   fast_connect: $wifi_fast_connect
 

@@ -77,6 +77,54 @@ class VictronComponent : public uart::UARTDevice, public Component {
     device_type_text_sensor_ = device_type_text_sensor;
   }
 
+  void set_instantaneous_power_sensor(sensor::Sensor *instantaneous_power_sensor) {
+    instantaneous_power_sensor_ = instantaneous_power_sensor;
+  }
+  void set_consumed_amp_hours_sensor(sensor::Sensor *consumed_amp_hours_sensor) {
+    consumed_amp_hours_sensor_ = consumed_amp_hours_sensor;
+  }
+  void set_state_of_charge_sensor(sensor::Sensor *state_of_charge_sensor) {
+    state_of_charge_sensor_ = state_of_charge_sensor;
+  }
+  void set_time_to_go_sensor(sensor::Sensor *time_to_go_sensor) { time_to_go_sensor_ = time_to_go_sensor; }
+  void set_depth_of_the_deepest_discharge_sensor(sensor::Sensor *depth_of_the_deepest_discharge_sensor) {
+    depth_of_the_deepest_discharge_sensor_ = depth_of_the_deepest_discharge_sensor;
+  }
+  void set_depth_of_the_last_discharge_sensor(sensor::Sensor *depth_of_the_last_discharge_sensor) {
+    depth_of_the_last_discharge_sensor_ = depth_of_the_last_discharge_sensor;
+  }
+  void set_number_of_charge_cycles_sensor(sensor::Sensor *number_of_charge_cycles_sensor) {
+    number_of_charge_cycles_sensor_ = number_of_charge_cycles_sensor;
+  }
+  void set_number_of_full_discharges_sensor(sensor::Sensor *number_of_full_discharges_sensor) {
+    number_of_full_discharges_sensor_ = number_of_full_discharges_sensor;
+  }
+  void set_min_battery_voltage_sensor(sensor::Sensor *min_battery_voltage_sensor) {
+    min_battery_voltage_sensor_ = min_battery_voltage_sensor;
+  }
+  void set_max_battery_voltage_sensor(sensor::Sensor *max_battery_voltage_sensor) {
+    max_battery_voltage_sensor_ = max_battery_voltage_sensor;
+  }
+  void set_last_full_charge_sensor(sensor::Sensor *last_full_charge_sensor) {
+    last_full_charge_sensor_ = last_full_charge_sensor;
+  }
+  void set_amount_of_discharged_energy_sensor(sensor::Sensor *amount_of_discharged_energy_sensor) {
+    amount_of_discharged_energy_sensor_ = amount_of_discharged_energy_sensor;
+  }
+  void set_amount_of_charged_energy_sensor(sensor::Sensor *amount_of_charged_energy_sensor) {
+    amount_of_charged_energy_sensor_ = amount_of_charged_energy_sensor;
+  }
+
+  void set_alarm_condition_active_text_sensor(text_sensor::TextSensor *alarm_condition_active_text_sensor) {
+    alarm_condition_active_text_sensor_ = alarm_condition_active_text_sensor;
+  }
+  void set_alarm_reason_text_sensor(text_sensor::TextSensor *alarm_reason_text_sensor) {
+    alarm_reason_text_sensor_ = alarm_reason_text_sensor;
+  }
+  void set_model_description_text_sensor(text_sensor::TextSensor *model_description_text_sensor) {
+    model_description_text_sensor_ = model_description_text_sensor;
+  }
+
   void dump_config() override;
   void loop() override;
 
@@ -111,7 +159,6 @@ class VictronComponent : public uart::UARTDevice, public Component {
   sensor::Sensor *warning_code_sensor_{nullptr};
   sensor::Sensor *tracking_mode_id_sensor_{nullptr};
   sensor::Sensor *device_mode_id_sensor_{nullptr};
-
   text_sensor::TextSensor *charging_mode_text_sensor_{nullptr};
   text_sensor::TextSensor *error_text_sensor_{nullptr};
   text_sensor::TextSensor *warning_text_sensor_{nullptr};
@@ -119,6 +166,23 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *device_mode_text_sensor_{nullptr};
   text_sensor::TextSensor *firmware_version_text_sensor_{nullptr};
   text_sensor::TextSensor *device_type_text_sensor_{nullptr};
+
+  sensor::Sensor *instantaneous_power_sensor_{nullptr};
+  sensor::Sensor *consumed_amp_hours_sensor_{nullptr};
+  sensor::Sensor *state_of_charge_sensor_{nullptr};
+  sensor::Sensor *time_to_go_sensor_{nullptr};
+  sensor::Sensor *depth_of_the_deepest_discharge_sensor_{nullptr};
+  sensor::Sensor *depth_of_the_last_discharge_sensor_{nullptr};
+  sensor::Sensor *number_of_charge_cycles_sensor_{nullptr};
+  sensor::Sensor *number_of_full_discharges_sensor_{nullptr};
+  sensor::Sensor *min_battery_voltage_sensor_{nullptr};
+  sensor::Sensor *max_battery_voltage_sensor_{nullptr};
+  sensor::Sensor *last_full_charge_sensor_{nullptr};
+  sensor::Sensor *amount_of_discharged_energy_sensor_{nullptr};
+  sensor::Sensor *amount_of_charged_energy_sensor_{nullptr};
+  text_sensor::TextSensor *alarm_condition_active_text_sensor_{nullptr};
+  text_sensor::TextSensor *alarm_reason_text_sensor_{nullptr};
+  text_sensor::TextSensor *model_description_text_sensor_{nullptr};
 
   bool publishing_{true};
   int state_{0};

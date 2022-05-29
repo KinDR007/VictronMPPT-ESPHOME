@@ -1,5 +1,6 @@
 substitutions:
-  name: victron
+  name: victron-mppt
+  external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
 
 esphome:
   name: ${name}
@@ -7,7 +8,7 @@ esphome:
   board: d1_mini
 
 external_components:
-  - source: github://KinDR007/VictronMPPT-ESPHOME@main
+  - source: ${external_components_source}
     refresh: 0s
 
 wifi:

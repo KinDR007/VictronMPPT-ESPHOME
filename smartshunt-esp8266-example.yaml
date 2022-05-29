@@ -1,0 +1,103 @@
+substitutions:
+  name: victron-smartshunt
+  external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+external_components:
+  - source: ${external_components_source}
+    refresh: 0s
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+ota:
+# api:
+
+logger:
+  baud_rate: 0
+  esp8266_store_log_strings_in_flash: false
+
+mqtt:
+  broker: !secret mqtt_host
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  id: mqtt_client
+
+uart:
+  id: uart0
+  tx_pin: D8  # Not connected! The communication is read-only
+  rx_pin: D7  # Connect this this GPIO and GND to the MPPT charger
+  baud_rate: 19200
+  rx_buffer_size: 256
+
+victron:
+  uart_id: uart0
+  id: victron0
+  throttle: 10s
+
+sensor:
+  - platform: victron
+    victron_id: victron0
+    battery_voltage:
+      name: "${name} battery voltage"
+    # TODO: VS
+    # TODO: VM
+    # TODO: DM
+    battery_current:
+      name: "${name} battery current"
+    # TODO: T
+    instantaneous_power:
+      name: "${name} instantaneous power"
+    consumed_amp_hours:
+      name: "${name} consumed amp hours"
+    state_of_charge:
+      name: "${name} state of charge"
+    time_to_go:
+      name: "${name} time to go"
+    depth_of_the_deepest_discharge:
+      name: "${name} depth of the deepest discharge"
+    depth_of_the_last_discharge:
+      name: "${name} depth of the last discharge"
+    # TODO: H3
+    number_of_charge_cycles:
+      name: "${name} number of charge cycles"
+    number_of_full_discharges:
+      name: "${name} number of full discharges"
+    # TODO: H6
+    min_battery_voltage:
+      name: "${name} min battery voltage"
+    max_battery_voltage:
+      name: "${name} max battery voltage"
+    last_full_charge:
+      name: "${name} last full charge"
+    # TODO: H10...H16
+    amount_of_discharged_energy:
+      name: "${name} amount of discharged energy"
+    amount_of_charged_energy:
+      name: "${name} amount of charged energy"
+
+text_sensor:
+  - platform: victron
+    victron_id: victron0
+    alarm_condition_active:
+      name: "${name} alarm condition active"
+    alarm_reason:
+      name: "${name} alarm reason"
+    model_description:
+      name: "${name} model description"
+    firmware_version:
+      name: "${name} firmware version"
+    device_type:
+      name: "${name} device type"
+
+binary_sensor:
+  - platform: victron
+    victron_id: victron0
+    relay_state:
+      name: "${name} relay state"
+    # TODO: MON
