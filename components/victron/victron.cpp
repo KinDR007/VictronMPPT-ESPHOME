@@ -522,7 +522,7 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  ESP_LOGD(TAG, "Unhandled key-value: %s %s", label_.c_str(), value_.c_str());
+  ESP_LOGD(TAG, "Unhandled property: %s %s", label_.c_str(), value_.c_str());
 }
 
 void VictronComponent::publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state) {
