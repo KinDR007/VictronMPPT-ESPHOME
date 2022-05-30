@@ -59,6 +59,8 @@ sensor:
       name: "${name} panel power"
     battery_current:
       name: "${name} panel current"
+    battery_voltage:
+      name: "${name} battery voltage"
     day_number:
       name: "${name} day number"
     charging_mode_id:
