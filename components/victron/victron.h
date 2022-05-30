@@ -34,8 +34,20 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_battery_voltage_sensor(sensor::Sensor *battery_voltage_sensor) {
     battery_voltage_sensor_ = battery_voltage_sensor;
   }
+  void set_battery_voltage_2_sensor(sensor::Sensor *battery_voltage_2_sensor) {
+    battery_voltage_2_sensor_ = battery_voltage_2_sensor;
+  }
+  void set_battery_voltage_3_sensor(sensor::Sensor *battery_voltage_3_sensor) {
+    battery_voltage_3_sensor_ = battery_voltage_3_sensor;
+  }
   void set_battery_current_sensor(sensor::Sensor *battery_current_sensor) {
     battery_current_sensor_ = battery_current_sensor;
+  }
+  void set_battery_current_2_sensor(sensor::Sensor *battery_current_2_sensor) {
+    battery_current_2_sensor_ = battery_current_2_sensor;
+  }
+  void set_battery_current_3_sensor(sensor::Sensor *battery_current_3_sensor) {
+    battery_current_3_sensor_ = battery_current_3_sensor;
   }
   void set_ac_out_voltage_sensor(sensor::Sensor *ac_out_voltage_sensor) {
     ac_out_voltage_sensor_ = ac_out_voltage_sensor;
@@ -151,7 +163,11 @@ class VictronComponent : public uart::UARTDevice, public Component {
   sensor::Sensor *panel_voltage_sensor_{nullptr};
   sensor::Sensor *panel_power_sensor_{nullptr};
   sensor::Sensor *battery_voltage_sensor_{nullptr};
+  sensor::Sensor *battery_voltage_2_sensor_{nullptr};
+  sensor::Sensor *battery_voltage_3_sensor_{nullptr};
   sensor::Sensor *battery_current_sensor_{nullptr};
+  sensor::Sensor *battery_current_2_sensor_{nullptr};
+  sensor::Sensor *battery_current_3_sensor_{nullptr};
   sensor::Sensor *ac_out_voltage_sensor_{nullptr};
   sensor::Sensor *ac_out_current_sensor_{nullptr};
   sensor::Sensor *load_current_sensor_{nullptr};
