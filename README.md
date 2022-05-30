@@ -141,11 +141,20 @@ The available numeric sensors are:
 - `time_to_go`
 - `depth_of_the_deepest_discharge`
 - `depth_of_the_last_discharge`
+- `depth_of_the_average_discharge`
 - `number_of_charge_cycles`
 - `number_of_full_discharges`
+- `cumulative_amp_hours_drawn`
 - `min_battery_voltage`
 - `max_battery_voltage`
 - `last_full_charge`
+- `number_of_automatic_synchronizations`
+- `number_of_low_main_voltage_alarms`
+- `number_of_high_main_voltage_alarms`
+- `number_of_low_auxiliary_voltage_alarms`
+- `number_of_high_auxiliary_voltage_alarms`
+- `min_auxiliary_battery_voltage`
+- `max_auxiliary_battery_voltage`
 - `amount_of_discharged_energy`
 - `amount_of_charged_energy`
 
