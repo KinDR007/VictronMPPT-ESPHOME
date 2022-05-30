@@ -64,7 +64,8 @@ sensor:
       name: "${name} depth of the deepest discharge"
     depth_of_the_last_discharge:
       name: "${name} depth of the last discharge"
-    # TODO: H3
+    depth_of_the_average_discharge:
+      name: "${name} depth of the average discharge"
     number_of_charge_cycles:
       name: "${name} number of charge cycles"
     number_of_full_discharges:

@@ -108,6 +108,9 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_depth_of_the_last_discharge_sensor(sensor::Sensor *depth_of_the_last_discharge_sensor) {
     depth_of_the_last_discharge_sensor_ = depth_of_the_last_discharge_sensor;
   }
+  void set_depth_of_the_average_discharge_sensor(sensor::Sensor *depth_of_the_average_discharge_sensor) {
+    depth_of_the_average_discharge_sensor_ = depth_of_the_average_discharge_sensor;
+  }
   void set_number_of_charge_cycles_sensor(sensor::Sensor *number_of_charge_cycles_sensor) {
     number_of_charge_cycles_sensor_ = number_of_charge_cycles_sensor;
   }
@@ -193,6 +196,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   sensor::Sensor *time_to_go_sensor_{nullptr};
   sensor::Sensor *depth_of_the_deepest_discharge_sensor_{nullptr};
   sensor::Sensor *depth_of_the_last_discharge_sensor_{nullptr};
+  sensor::Sensor *depth_of_the_average_discharge_sensor_{nullptr};
   sensor::Sensor *number_of_charge_cycles_sensor_{nullptr};
   sensor::Sensor *number_of_full_discharges_sensor_{nullptr};
   sensor::Sensor *min_battery_voltage_sensor_{nullptr};

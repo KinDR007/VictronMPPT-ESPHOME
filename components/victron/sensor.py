@@ -61,6 +61,7 @@ CONF_STATE_OF_CHARGE = "state_of_charge"
 CONF_TIME_TO_GO = "time_to_go"
 CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE = "depth_of_the_deepest_discharge"
 CONF_DEPTH_OF_THE_LAST_DISCHARGE = "depth_of_the_last_discharge"
+CONF_DEPTH_OF_THE_AVERAGE_DISCHARGE = "depth_of_the_average_discharge"
 CONF_NUMBER_OF_CHARGE_CYCLES = "number_of_charge_cycles"
 CONF_NUMBER_OF_FULL_DISCHARGES = "number_of_full_discharges"
 CONF_MIN_BATTERY_VOLTAGE = "min_battery_voltage"
@@ -100,6 +101,7 @@ SENSORS = [
     CONF_TIME_TO_GO,
     CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE,
     CONF_DEPTH_OF_THE_LAST_DISCHARGE,
+    CONF_DEPTH_OF_THE_AVERAGE_DISCHARGE,
     CONF_NUMBER_OF_CHARGE_CYCLES,
     CONF_NUMBER_OF_FULL_DISCHARGES,
     CONF_MIN_BATTERY_VOLTAGE,
@@ -283,6 +285,12 @@ CONFIG_SCHEMA = cv.Schema(
             device_class=DEVICE_CLASS_CURRENT,
         ),
         cv.Optional(CONF_DEPTH_OF_THE_LAST_DISCHARGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_DEPTH_OF_THE_AVERAGE_DISCHARGE): sensor.sensor_schema(
             unit_of_measurement=UNIT_AMPERE,
             icon=ICON_CURRENT_AC,
             accuracy_decimals=3,

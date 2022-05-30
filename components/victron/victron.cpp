@@ -667,6 +667,11 @@ void VictronComponent::handle_value_() {
   }
 
   // "H3"     mAh        Depth of the average discharge
+  if (label_ == "H3") {
+    // mAh -> Ah
+    this->publish_state_(depth_of_the_average_discharge_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+    return;
+  }
 
   // "H4"                Number of charge cycles
   if (label_ == "H4") {
