@@ -108,11 +108,17 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_depth_of_the_last_discharge_sensor(sensor::Sensor *depth_of_the_last_discharge_sensor) {
     depth_of_the_last_discharge_sensor_ = depth_of_the_last_discharge_sensor;
   }
+  void set_depth_of_the_average_discharge_sensor(sensor::Sensor *depth_of_the_average_discharge_sensor) {
+    depth_of_the_average_discharge_sensor_ = depth_of_the_average_discharge_sensor;
+  }
   void set_number_of_charge_cycles_sensor(sensor::Sensor *number_of_charge_cycles_sensor) {
     number_of_charge_cycles_sensor_ = number_of_charge_cycles_sensor;
   }
   void set_number_of_full_discharges_sensor(sensor::Sensor *number_of_full_discharges_sensor) {
     number_of_full_discharges_sensor_ = number_of_full_discharges_sensor;
+  }
+  void set_cumulative_amp_hours_drawn_sensor(sensor::Sensor *cumulative_amp_hours_drawn_sensor) {
+    cumulative_amp_hours_drawn_sensor_ = cumulative_amp_hours_drawn_sensor;
   }
   void set_min_battery_voltage_sensor(sensor::Sensor *min_battery_voltage_sensor) {
     min_battery_voltage_sensor_ = min_battery_voltage_sensor;
@@ -122,6 +128,29 @@ class VictronComponent : public uart::UARTDevice, public Component {
   }
   void set_last_full_charge_sensor(sensor::Sensor *last_full_charge_sensor) {
     last_full_charge_sensor_ = last_full_charge_sensor;
+  }
+  void set_number_of_automatic_synchronizations_sensor(sensor::Sensor *number_of_automatic_synchronizations_sensor) {
+    number_of_automatic_synchronizations_sensor_ = number_of_automatic_synchronizations_sensor;
+  }
+  void set_number_of_low_main_voltage_alarms_sensor(sensor::Sensor *number_of_low_main_voltage_alarms_sensor) {
+    number_of_low_main_voltage_alarms_sensor_ = number_of_low_main_voltage_alarms_sensor;
+  }
+  void set_number_of_high_main_voltage_alarms_sensor(sensor::Sensor *number_of_high_main_voltage_alarms_sensor) {
+    number_of_high_main_voltage_alarms_sensor_ = number_of_high_main_voltage_alarms_sensor;
+  }
+  void set_number_of_low_auxiliary_voltage_alarms_sensor(
+      sensor::Sensor *number_of_low_auxiliary_voltage_alarms_sensor) {
+    number_of_low_auxiliary_voltage_alarms_sensor_ = number_of_low_auxiliary_voltage_alarms_sensor;
+  }
+  void set_number_of_high_auxiliary_voltage_alarms_sensor(
+      sensor::Sensor *number_of_high_auxiliary_voltage_alarms_sensor) {
+    number_of_high_auxiliary_voltage_alarms_sensor_ = number_of_high_auxiliary_voltage_alarms_sensor;
+  }
+  void set_min_auxiliary_battery_voltage_sensor(sensor::Sensor *min_auxiliary_battery_voltage_sensor) {
+    min_auxiliary_battery_voltage_sensor_ = min_auxiliary_battery_voltage_sensor;
+  }
+  void set_max_auxiliary_battery_voltage_sensor(sensor::Sensor *max_auxiliary_battery_voltage_sensor) {
+    max_auxiliary_battery_voltage_sensor_ = max_auxiliary_battery_voltage_sensor;
   }
   void set_amount_of_discharged_energy_sensor(sensor::Sensor *amount_of_discharged_energy_sensor) {
     amount_of_discharged_energy_sensor_ = amount_of_discharged_energy_sensor;
@@ -193,11 +222,20 @@ class VictronComponent : public uart::UARTDevice, public Component {
   sensor::Sensor *time_to_go_sensor_{nullptr};
   sensor::Sensor *depth_of_the_deepest_discharge_sensor_{nullptr};
   sensor::Sensor *depth_of_the_last_discharge_sensor_{nullptr};
+  sensor::Sensor *depth_of_the_average_discharge_sensor_{nullptr};
   sensor::Sensor *number_of_charge_cycles_sensor_{nullptr};
   sensor::Sensor *number_of_full_discharges_sensor_{nullptr};
+  sensor::Sensor *cumulative_amp_hours_drawn_sensor_{nullptr};
   sensor::Sensor *min_battery_voltage_sensor_{nullptr};
   sensor::Sensor *max_battery_voltage_sensor_{nullptr};
   sensor::Sensor *last_full_charge_sensor_{nullptr};
+  sensor::Sensor *number_of_automatic_synchronizations_sensor_{nullptr};
+  sensor::Sensor *number_of_low_main_voltage_alarms_sensor_{nullptr};
+  sensor::Sensor *number_of_high_main_voltage_alarms_sensor_{nullptr};
+  sensor::Sensor *number_of_low_auxiliary_voltage_alarms_sensor_{nullptr};
+  sensor::Sensor *number_of_high_auxiliary_voltage_alarms_sensor_{nullptr};
+  sensor::Sensor *min_auxiliary_battery_voltage_sensor_{nullptr};
+  sensor::Sensor *max_auxiliary_battery_voltage_sensor_{nullptr};
   sensor::Sensor *amount_of_discharged_energy_sensor_{nullptr};
   sensor::Sensor *amount_of_charged_energy_sensor_{nullptr};
   text_sensor::TextSensor *alarm_condition_active_text_sensor_{nullptr};

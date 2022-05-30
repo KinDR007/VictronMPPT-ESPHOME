@@ -64,19 +64,34 @@ sensor:
       name: "${name} depth of the deepest discharge"
     depth_of_the_last_discharge:
       name: "${name} depth of the last discharge"
-    # TODO: H3
+    depth_of_the_average_discharge:
+      name: "${name} depth of the average discharge"
     number_of_charge_cycles:
       name: "${name} number of charge cycles"
     number_of_full_discharges:
       name: "${name} number of full discharges"
-    # TODO: H6
+    cumulative_amp_hours_drawn:
+      name: "${name} cumulative amp hours drawn"
     min_battery_voltage:
       name: "${name} min battery voltage"
     max_battery_voltage:
       name: "${name} max battery voltage"
     last_full_charge:
       name: "${name} last full charge"
-    # TODO: H10...H16
+    number_of_automatic_synchronizations:
+      name: "${name} number of automatic synchronizations"
+    number_of_low_main_voltage_alarms:
+      name: "${name} number of low main voltage alarms"
+    number_of_high_main_voltage_alarms:
+      name: "${name} number of high main voltage alarms"
+    number_of_low_auxiliary_voltage_alarms:
+      name: "${name} number of low auxiliary voltage alarms"
+    number_of_high_auxiliary_voltage_alarms:
+      name: "${name} number of high auxiliary voltage alarms"
+    min_auxiliary_battery_voltage:
+      name: "${name} min auxiliary battery voltage"
+    max_auxiliary_battery_voltage:
+      name: "${name} max auxiliary battery voltage"
     amount_of_discharged_energy:
       name: "${name} amount of discharged energy"
     amount_of_charged_energy:

@@ -61,13 +61,24 @@ CONF_STATE_OF_CHARGE = "state_of_charge"
 CONF_TIME_TO_GO = "time_to_go"
 CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE = "depth_of_the_deepest_discharge"
 CONF_DEPTH_OF_THE_LAST_DISCHARGE = "depth_of_the_last_discharge"
+CONF_DEPTH_OF_THE_AVERAGE_DISCHARGE = "depth_of_the_average_discharge"
 CONF_NUMBER_OF_CHARGE_CYCLES = "number_of_charge_cycles"
 CONF_NUMBER_OF_FULL_DISCHARGES = "number_of_full_discharges"
+CONF_CUMULATIVE_AMP_HOURS_DRAWN = "cumulative_amp_hours_drawn"
 CONF_MIN_BATTERY_VOLTAGE = "min_battery_voltage"
 CONF_MAX_BATTERY_VOLTAGE = "max_battery_voltage"
 CONF_LAST_FULL_CHARGE = "last_full_charge"
+CONF_NUMBER_OF_AUTOMATIC_SYNCHRONIZATIONS = "number_of_automatic_synchronizations"
+CONF_NUMBER_OF_LOW_MAIN_VOLTAGE_ALARMS = "number_of_low_main_voltage_alarms"
+CONF_NUMBER_OF_HIGH_MAIN_VOLTAGE_ALARMS = "number_of_high_main_voltage_alarms"
+CONF_NUMBER_OF_LOW_AUXILIARY_VOLTAGE_ALARMS = "number_of_low_auxiliary_voltage_alarms"
+CONF_NUMBER_OF_HIGH_AUXILIARY_VOLTAGE_ALARMS = "number_of_high_auxiliary_voltage_alarms"
+CONF_MIN_AUXILIARY_BATTERY_VOLTAGE = "min_auxiliary_battery_voltage"
+CONF_MAX_AUXILIARY_BATTERY_VOLTAGE = "max_auxiliary_battery_voltage"
 CONF_AMOUNT_OF_DISCHARGED_ENERGY = "amount_of_discharged_energy"
 CONF_AMOUNT_OF_CHARGED_ENERGY = "amount_of_charged_energy"
+
+UNIT_AMPERE_HOURS = "Ah"
 
 SENSORS = [
     CONF_BATTERY_VOLTAGE,
@@ -100,11 +111,20 @@ SENSORS = [
     CONF_TIME_TO_GO,
     CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE,
     CONF_DEPTH_OF_THE_LAST_DISCHARGE,
+    CONF_DEPTH_OF_THE_AVERAGE_DISCHARGE,
     CONF_NUMBER_OF_CHARGE_CYCLES,
     CONF_NUMBER_OF_FULL_DISCHARGES,
+    CONF_CUMULATIVE_AMP_HOURS_DRAWN,
     CONF_MIN_BATTERY_VOLTAGE,
     CONF_MAX_BATTERY_VOLTAGE,
     CONF_LAST_FULL_CHARGE,
+    CONF_NUMBER_OF_AUTOMATIC_SYNCHRONIZATIONS,
+    CONF_NUMBER_OF_LOW_MAIN_VOLTAGE_ALARMS,
+    CONF_NUMBER_OF_HIGH_MAIN_VOLTAGE_ALARMS,
+    CONF_NUMBER_OF_LOW_AUXILIARY_VOLTAGE_ALARMS,
+    CONF_NUMBER_OF_HIGH_AUXILIARY_VOLTAGE_ALARMS,
+    CONF_MIN_AUXILIARY_BATTERY_VOLTAGE,
+    CONF_MAX_AUXILIARY_BATTERY_VOLTAGE,
     CONF_AMOUNT_OF_DISCHARGED_ENERGY,
     CONF_AMOUNT_OF_CHARGED_ENERGY,
 ]
@@ -259,10 +279,11 @@ CONFIG_SCHEMA = cv.Schema(
             device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_CONSUMED_AMP_HOURS): sensor.sensor_schema(
-            unit_of_measurement=UNIT_AMPERE,
-            icon=ICON_CURRENT_AC,
+            unit_of_measurement=UNIT_AMPERE_HOURS,
+            icon=ICON_EMPTY,
             accuracy_decimals=3,
-            device_class=DEVICE_CLASS_POWER,
+            device_class=DEVICE_CLASS_EMPTY,
+            state_class=STATE_CLASS_MEASUREMENT,
         ),
         cv.Optional(CONF_STATE_OF_CHARGE): sensor.sensor_schema(
             unit_of_measurement=UNIT_PERCENT,
@@ -288,6 +309,12 @@ CONFIG_SCHEMA = cv.Schema(
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_CURRENT,
         ),
+        cv.Optional(CONF_DEPTH_OF_THE_AVERAGE_DISCHARGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
+        ),
         cv.Optional(CONF_NUMBER_OF_CHARGE_CYCLES): sensor.sensor_schema(
             unit_of_measurement=UNIT_EMPTY,
             icon=ICON_EMPTY,
@@ -299,6 +326,13 @@ CONFIG_SCHEMA = cv.Schema(
             icon=ICON_EMPTY,
             accuracy_decimals=0,
             device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_CUMULATIVE_AMP_HOURS_DRAWN): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE_HOURS,
+            icon=ICON_EMPTY,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_EMPTY,
+            state_class=STATE_CLASS_MEASUREMENT,
         ),
         cv.Optional(CONF_MIN_BATTERY_VOLTAGE): sensor.sensor_schema(
             unit_of_measurement=UNIT_VOLT,
@@ -317,6 +351,48 @@ CONFIG_SCHEMA = cv.Schema(
             icon=ICON_TIMELAPSE,
             accuracy_decimals=0,
             device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_NUMBER_OF_AUTOMATIC_SYNCHRONIZATIONS): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_NUMBER_OF_LOW_MAIN_VOLTAGE_ALARMS): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_NUMBER_OF_HIGH_MAIN_VOLTAGE_ALARMS): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_NUMBER_OF_LOW_AUXILIARY_VOLTAGE_ALARMS): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_NUMBER_OF_HIGH_AUXILIARY_VOLTAGE_ALARMS): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_MIN_AUXILIARY_BATTERY_VOLTAGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
+        ),
+        cv.Optional(CONF_MAX_AUXILIARY_BATTERY_VOLTAGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
         ),
         cv.Optional(CONF_AMOUNT_OF_DISCHARGED_ENERGY): sensor.sensor_schema(
             unit_of_measurement=UNIT_WATT_HOURS,
