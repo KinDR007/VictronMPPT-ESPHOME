@@ -130,6 +130,7 @@ The available numeric sensors are:
 - `battery_voltage`
 - `device_mode_id`
 - `warning_code`
+- `battery_temperature`
 - `instantaneous_power`
 - `consumed_amp_hours`
 - `state_of_charge`

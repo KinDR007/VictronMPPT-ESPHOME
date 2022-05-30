@@ -50,7 +50,8 @@ sensor:
     # TODO: DM
     battery_current:
       name: "${name} battery current"
-    # TODO: T
+    battery_temperature:
+      name: "${name} battery temperature"
     instantaneous_power:
       name: "${name} instantaneous power"
     consumed_amp_hours:
