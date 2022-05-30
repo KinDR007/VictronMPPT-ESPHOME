@@ -37,6 +37,7 @@ void VictronComponent::dump_config() {
   LOG_TEXT_SENSOR("  ", "Firmware Version", firmware_version_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Device Type", device_type_text_sensor_);
 
+  LOG_SENSOR("  ", "Battery Temperature ", battery_temperature_sensor_);
   LOG_SENSOR("  ", "Instantaneous Power", instantaneous_power_sensor_);
   LOG_SENSOR("  ", "Consumed Amp Hours", consumed_amp_hours_sensor_);
   LOG_SENSOR("  ", "State Of Charge", state_of_charge_sensor_);
@@ -573,6 +574,16 @@ void VictronComponent::handle_value_() {
   }
 
   // "T"      °C         Battery temperature
+  if (label_ == "T") {
+    if (value_ == "---") {
+      this->publish_state_(battery_temperature_sensor_, NAN);
+      return;
+    }
+
+    this->publish_state_(battery_temperature_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "P"      W          Instantaneous power
   if (label_ == "P") {
     this->publish_state_(instantaneous_power_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)

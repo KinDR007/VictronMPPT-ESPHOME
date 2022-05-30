@@ -6,6 +6,7 @@ from esphome.const import (
     DEVICE_CLASS_CURRENT,
     DEVICE_CLASS_EMPTY,
     DEVICE_CLASS_POWER,
+    DEVICE_CLASS_TEMPERATURE,
     DEVICE_CLASS_VOLTAGE,
     ICON_CURRENT_AC,
     ICON_EMPTY,
@@ -13,7 +14,9 @@ from esphome.const import (
     ICON_PERCENT,
     ICON_POWER,
     ICON_TIMELAPSE,
+    STATE_CLASS_MEASUREMENT,
     UNIT_AMPERE,
+    UNIT_CELSIUS,
     UNIT_EMPTY,
     UNIT_MINUTE,
     UNIT_PERCENT,
@@ -46,6 +49,7 @@ CONF_LOAD_CURRENT = "load_current"
 CONF_AC_OUT_VOLTAGE = "ac_out_voltage"
 CONF_AC_OUT_CURRENT = "ac_out_current"
 
+CONF_BATTERY_TEMPERATURE = "battery_temperature"
 CONF_INSTANTANEOUS_POWER = "instantaneous_power"
 CONF_CONSUMED_AMP_HOURS = "consumed_amp_hours"
 CONF_STATE_OF_CHARGE = "state_of_charge"
@@ -80,6 +84,7 @@ SENSORS = [
     CONF_DEVICE_MODE_ID,
     CONF_LOAD_CURRENT,
     #
+    CONF_BATTERY_TEMPERATURE,
     CONF_INSTANTANEOUS_POWER,
     CONF_CONSUMED_AMP_HOURS,
     CONF_STATE_OF_CHARGE,
@@ -206,6 +211,13 @@ CONFIG_SCHEMA = cv.Schema(
             icon=ICON_CURRENT_AC,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_BATTERY_TEMPERATURE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_CELSIUS,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_TEMPERATURE,
+            state_class=STATE_CLASS_MEASUREMENT,
         ),
         cv.Optional(CONF_INSTANTANEOUS_POWER): sensor.sensor_schema(
             unit_of_measurement=UNIT_WATT,
