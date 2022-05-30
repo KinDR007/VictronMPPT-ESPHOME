@@ -170,6 +170,8 @@ jobs:
           esphome -s external_components_source components config smartsolar-mppt-esp8266-example-advanced.yaml
       - run: |
           esphome -s external_components_source components config smartshunt-esp8266-example.yaml
+      - run: |
+          esphome -s external_components_source components config phoenix-charger-esp8266-example.yaml
 
   esphome-compile:
     runs-on: ubuntu-latest
@@ -214,3 +216,5 @@ jobs:
           esphome -s external_components_source components compile smartsolar-mppt-esp8266-example-advanced.yaml
       - run: |
           esphome -s external_components_source components compile smartshunt-esp8266-example.yaml
+      - run: |
+          esphome -s external_components_source components compile phoenix-charger-esp8266-example.yaml

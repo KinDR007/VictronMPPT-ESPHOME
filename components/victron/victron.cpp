@@ -19,7 +19,11 @@ void VictronComponent::dump_config() {
   LOG_SENSOR("  ", "Panel Voltage", panel_voltage_sensor_);
   LOG_SENSOR("  ", "Panel Power", panel_power_sensor_);
   LOG_SENSOR("  ", "Battery Voltage", battery_voltage_sensor_);
+  LOG_SENSOR("  ", "Battery Voltage 2", battery_voltage_2_sensor_);
+  LOG_SENSOR("  ", "Battery Voltage 3", battery_voltage_3_sensor_);
   LOG_SENSOR("  ", "Battery Current", battery_current_sensor_);
+  LOG_SENSOR("  ", "Battery Current", battery_current_2_sensor_);
+  LOG_SENSOR("  ", "Battery Current", battery_current_3_sensor_);
   LOG_SENSOR("  ", "AC Out Voltage", ac_out_voltage_sensor_);
   LOG_SENSOR("  ", "AC Out Current", ac_out_current_sensor_);
   LOG_SENSOR("  ", "Load Current", load_current_sensor_);
@@ -540,7 +544,17 @@ void VictronComponent::handle_value_() {
   }
 
   // "V2"     mV         Channel 2 (battery) voltage
+  if (label_ == "V2") {
+    this->publish_state_(battery_voltage_2_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "V3"     mV         Channel 3 (battery) voltage
+  if (label_ == "V3") {
+    this->publish_state_(battery_voltage_3_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "VS"     mV         Auxiliary (starter) voltage
   // "VM"     mV         Mid-point voltage of the battery bank
   // "DM"     %o         Mid-point deviation of the battery bank
@@ -561,7 +575,16 @@ void VictronComponent::handle_value_() {
   }
 
   // "I2"     mA         Channel 2 battery current
+  if (label_ == "I2") {
+    this->publish_state_(battery_current_2_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "I3"     mA         Channel 3 battery current
+  if (label_ == "I3") {
+    this->publish_state_(battery_current_3_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+    return;
+  }
 
   if (label_ == "IL") {
     this->publish_state_(load_current_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)

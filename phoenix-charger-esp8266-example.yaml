@@ -1,0 +1,81 @@
+substitutions:
+  name: victron-phoenix
+  external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+external_components:
+  - source: ${external_components_source}
+    refresh: 0s
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+ota:
+# api:
+
+logger:
+  baud_rate: 0
+  esp8266_store_log_strings_in_flash: false
+
+mqtt:
+  broker: !secret mqtt_host
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  id: mqtt_client
+
+uart:
+  id: uart0
+  tx_pin: D8  # Not connected! The communication is read-only
+  rx_pin: D7  # Connect this this GPIO and GND to the MPPT charger
+  baud_rate: 19200
+  rx_buffer_size: 256
+
+victron:
+  uart_id: uart0
+  id: victron0
+  throttle: 10s
+
+sensor:
+  - platform: victron
+    victron_id: victron0
+    battery_voltage:
+      name: "${name} battery voltage"
+    battery_voltage_2:
+      name: "${name} battery voltage 2"
+    battery_voltage_3:
+      name: "${name} battery voltage 3"
+    battery_current:
+      name: "${name} battery current"
+    battery_current_2:
+      name: "${name} battery current 2"
+    battery_current_3:
+      name: "${name} battery current 3"
+    error_code:
+      name: "${name} error code"
+    charging_mode_id:
+      name: "${name} charging mode id"
+    device_mode_id:
+      name: "${name} device mode id"
+
+text_sensor:
+  - platform: victron
+    victron_id: victron0
+    error:
+      name: "${name} error"
+    charging_mode:
+      name: "${name} charging mode"
+    device_type:
+      name: "${name} device type"
+    device_mode:
+      name: "${name} device mode"
+
+binary_sensor:
+  - platform: victron
+    victron_id: victron0
+    relay_state:
+      name: "${name} relay state"

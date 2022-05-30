@@ -119,7 +119,12 @@ The available numeric sensors are:
 - `yield_today`
 - `panel_voltage`
 - `panel_power`
+- `battery_voltage`
+- `battery_voltage_2`
+- `battery_voltage_3`
 - `battery_current`
+- `battery_current_2`
+- `battery_current_3`
 - `day_number`
 - `charging_mode_id`
 - `error_code`
@@ -127,7 +132,6 @@ The available numeric sensors are:
 - `load_current`
 - `ac_out_voltage`
 - `ac_out_current`
-- `battery_voltage`
 - `device_mode_id`
 - `warning_code`
 - `battery_temperature`

@@ -38,7 +38,12 @@ CONF_YIELD_YESTERDAY = "yield_yesterday"
 CONF_YIELD_TODAY = "yield_today"
 CONF_PANEL_VOLTAGE = "panel_voltage"
 CONF_PANEL_POWER = "panel_power"
+# CONF_BATTERY_VOLTAGE imported from const
+CONF_BATTERY_VOLTAGE_2 = "battery_voltage_2"
+CONF_BATTERY_VOLTAGE_3 = "battery_voltage_3"
 CONF_BATTERY_CURRENT = "battery_current"
+CONF_BATTERY_CURRENT_2 = "battery_current_2"
+CONF_BATTERY_CURRENT_3 = "battery_current_3"
 CONF_DAY_NUMBER = "day_number"
 CONF_CHARGING_MODE_ID = "charging_mode_id"
 CONF_ERROR_CODE = "error_code"
@@ -74,7 +79,11 @@ SENSORS = [
     CONF_YIELD_TODAY,
     CONF_PANEL_VOLTAGE,
     CONF_PANEL_POWER,
+    CONF_BATTERY_VOLTAGE_2,
+    CONF_BATTERY_VOLTAGE_3,
     CONF_BATTERY_CURRENT,
+    CONF_BATTERY_CURRENT_2,
+    CONF_BATTERY_CURRENT_3,
     CONF_AC_OUT_CURRENT,
     CONF_DAY_NUMBER,
     CONF_CHARGING_MODE_ID,
@@ -152,7 +161,13 @@ CONFIG_SCHEMA = cv.Schema(
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_VOLTAGE,
         ),
-        cv.Optional(CONF_AC_OUT_VOLTAGE): sensor.sensor_schema(
+        cv.Optional(CONF_BATTERY_VOLTAGE_2): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
+        ),
+        cv.Optional(CONF_BATTERY_VOLTAGE_3): sensor.sensor_schema(
             unit_of_measurement=UNIT_VOLT,
             icon=ICON_FLASH,
             accuracy_decimals=3,
@@ -163,6 +178,24 @@ CONFIG_SCHEMA = cv.Schema(
             icon=ICON_CURRENT_AC,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_BATTERY_CURRENT_2): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_BATTERY_CURRENT_3): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_AC_OUT_VOLTAGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
         ),
         cv.Optional(CONF_AC_OUT_CURRENT): sensor.sensor_schema(
             unit_of_measurement=UNIT_AMPERE,
