@@ -9,6 +9,8 @@ static const char *const TAG = "victron";
 
 void VictronComponent::dump_config() {
   ESP_LOGCONFIG(TAG, "Victron:");
+  LOG_BINARY_SENSOR("  ", "Load state", load_state_binary_sensor_);
+  LOG_BINARY_SENSOR("  ", "Relay state", relay_state_binary_sensor_);
   LOG_SENSOR("  ", "Max Power Yesterday", max_power_yesterday_sensor_);
   LOG_SENSOR("  ", "Max Power Today", max_power_today_sensor_);
   LOG_SENSOR("  ", "Yield Total", yield_total_sensor_);
@@ -34,8 +36,23 @@ void VictronComponent::dump_config() {
   LOG_TEXT_SENSOR("  ", "Device Mode", device_mode_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Firmware Version", firmware_version_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Device Type", device_type_text_sensor_);
-  LOG_BINARY_SENSOR("  ", "Load state", load_state_binary_sensor_);
-  LOG_BINARY_SENSOR("  ", "Relay state", relay_state_binary_sensor_);
+
+  LOG_SENSOR("  ", "Instantaneous Power", instantaneous_power_sensor_);
+  LOG_SENSOR("  ", "Consumed Amp Hours", consumed_amp_hours_sensor_);
+  LOG_SENSOR("  ", "State Of Charge", state_of_charge_sensor_);
+  LOG_SENSOR("  ", "Time To Go", time_to_go_sensor_);
+  LOG_SENSOR("  ", "Depth Of The Deepest Discharge", depth_of_the_deepest_discharge_sensor_);
+  LOG_SENSOR("  ", "Depth Of The Last Discharge", depth_of_the_last_discharge_sensor_);
+  LOG_SENSOR("  ", "Number Of Charge Cycles", number_of_charge_cycles_sensor_);
+  LOG_SENSOR("  ", "Number Of Full Discharges", number_of_full_discharges_sensor_);
+  LOG_SENSOR("  ", "Min Battery Voltage", min_battery_voltage_sensor_);
+  LOG_SENSOR("  ", "Max Battery Voltage", max_battery_voltage_sensor_);
+  LOG_SENSOR("  ", "Last Full Charge", last_full_charge_sensor_);
+  LOG_SENSOR("  ", "Amount Of Discharged Energy", amount_of_discharged_energy_sensor_);
+  LOG_SENSOR("  ", "Amount Of Charged Energy", amount_of_charged_energy_sensor_);
+  LOG_TEXT_SENSOR("  ", "Alarm Condition Active", alarm_condition_active_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Alarm Reason", alarm_reason_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Model Description", model_description_text_sensor_);
 
   check_uart_settings(19200);
 }
@@ -97,6 +114,8 @@ static const std::string charging_mode_text(int value) {
   switch (value) {
     case 0:
       return "Off";
+    case 1:
+      return "Low power";
     case 2:
       return "Fault";
     case 3:
@@ -105,14 +124,22 @@ static const std::string charging_mode_text(int value) {
       return "Absorption";
     case 5:
       return "Float";
+    case 6:
+      return "Storage";
     case 7:
       return "Equalize (manual)";
     case 9:
       return "Inverting";
+    case 11:
+      return "Power supply";
     case 245:
       return "Starting-up";
+    case 246:
+      return "Repeated absorption";
     case 247:
       return "Auto equalize / Recondition";
+    case 248:
+      return "BatterySafe";
     case 252:
       return "External control";
     default:
@@ -236,86 +263,144 @@ static const std::string device_type_text(int value) {
       return "BMV-702";
     case 0x205:
       return "BMV-700H";
-    case 0xA389:
-      return "SmartShunt";
-    case 0xA381:
-      return "BMV-712 Smart";
-    case 0xA04C:
-      return "BlueSolar MPPT 75/10";
-    case 0x300:
-      return "BlueSolar MPPT 70/15";
-    case 0xA042:
-      return "BlueSolar MPPT 75/15";
-    case 0xA043:
-      return "BlueSolar MPPT 100/15";
-    case 0xA044:
-      return "BlueSolar MPPT 100/30 rev1";
-    case 0xA04A:
-      return "BlueSolar MPPT 100/30 rev2";
-    case 0xA041:
-      return "BlueSolar MPPT 150/35 rev1";
-    case 0xA04B:
-      return "BlueSolar MPPT 150/35 rev2";
-    case 0xA04D:
-      return "BlueSolar MPPT 150/45";
+    case 0x0300:
+      return "BlueSolar MPPT 70|15";
     case 0xA040:
-      return "BlueSolar MPPT 75/50";
+      return "BlueSolar MPPT 75|50";
+    case 0xA041:
+      return "BlueSolar MPPT 150|35";
+    case 0xA042:
+      return "BlueSolar MPPT 75|15";
+    case 0xA043:
+      return "BlueSolar MPPT 100|15";
+    case 0xA044:
+      return "BlueSolar MPPT 100|30";
     case 0xA045:
-      return "BlueSolar MPPT 100/50 rev1";
-    case 0xA049:
-      return "BlueSolar MPPT 100/50 rev2";
-    case 0xA04E:
-      return "BlueSolar MPPT 150/60";
+      return "BlueSolar MPPT 100|50";
     case 0xA046:
-      return "BlueSolar MPPT 150/70";
-    case 0xA04F:
-      return "BlueSolar MPPT 150/85";
+      return "BlueSolar MPPT 150|70";
     case 0xA047:
-      return "BlueSolar MPPT 150/100";
+      return "BlueSolar MPPT 150|100";
+    case 0xA049:
+      return "BlueSolar MPPT 100|50 rev2";
+    case 0xA04A:
+      return "BlueSolar MPPT 100|30 rev2";
+    case 0xA04B:
+      return "BlueSolar MPPT 150|35 rev2";
+    case 0xA04C:
+      return "BlueSolar MPPT 75|10";
+    case 0xA04D:
+      return "BlueSolar MPPT 150|45";
+    case 0xA04E:
+      return "BlueSolar MPPT 150|60";
+    case 0xA04F:
+      return "BlueSolar MPPT 150|85";
     case 0xA050:
-      return "SmartSolar MPPT 250/100";
+      return "SmartSolar MPPT 250|100";
     case 0xA051:
-      return "SmartSolar MPPT 150/100";
+      return "SmartSolar MPPT 150|100";
     case 0xA052:
-      return "SmartSolar MPPT 150/85";
+      return "SmartSolar MPPT 150|85";
     case 0xA053:
-      return "SmartSolar MPPT 75/15";
+      return "SmartSolar MPPT 75|15";
     case 0xA054:
-      return "SmartSolar MPPT 75/10";
+      return "SmartSolar MPPT 75|10";
     case 0xA055:
-      return "SmartSolar MPPT 100/15";
+      return "SmartSolar MPPT 100|15";
     case 0xA056:
-      return "SmartSolar MPPT 100/30";
+      return "SmartSolar MPPT 100|30";
     case 0xA057:
-      return "SmartSolar MPPT 100/50";
+      return "SmartSolar MPPT 100|50";
     case 0xA058:
-      return "SmartSolar MPPT 150/35";
+      return "SmartSolar MPPT 150|35";
     case 0xA059:
-      return "SmartSolar MPPT 150/100 rev2";
+      return "SmartSolar MPPT 150|100 rev2";
     case 0xA05A:
-      return "SmartSolar MPPT 150/85 rev2";
+      return "SmartSolar MPPT 150|85 rev2";
     case 0xA05B:
-      return "SmartSolar MPPT 250/70";
+      return "SmartSolar MPPT 250|70";
     case 0xA05C:
-      return "SmartSolar MPPT 250/85";
+      return "SmartSolar MPPT 250|85";
     case 0xA05D:
-      return "SmartSolar MPPT 250/60";
+      return "SmartSolar MPPT 250|60";
     case 0xA05E:
-      return "SmartSolar MPPT 250/45";
+      return "SmartSolar MPPT 250|45";
     case 0xA05F:
-      return "SmartSolar MPPT 100/20";
+      return "SmartSolar MPPT 100|20";
     case 0xA060:
-      return "SmartSolar MPPT 100/20 48V";
+      return "SmartSolar MPPT 100|20 48V";
     case 0xA061:
-      return "SmartSolar MPPT 150/45";
+      return "SmartSolar MPPT 150|45";
     case 0xA062:
-      return "SmartSolar MPPT 150/60";
+      return "SmartSolar MPPT 150|60";
     case 0xA063:
-      return "SmartSolar MPPT 150/70";
+      return "SmartSolar MPPT 150|70";
     case 0xA064:
-      return "SmartSolar MPPT 250/85 rev2";
+      return "SmartSolar MPPT 250|85 rev2";
     case 0xA065:
-      return "SmartSolar MPPT 250/100 rev2";
+      return "SmartSolar MPPT 250|100 rev2";
+    case 0xA066:
+      return "BlueSolar MPPT 100|20";
+    case 0xA067:
+      return "BlueSolar MPPT 100|20 48V";
+    case 0xA068:
+      return "SmartSolar MPPT 250|60 rev2";
+    case 0xA069:
+      return "SmartSolar MPPT 250|70 rev2";
+    case 0xA06A:
+      return "SmartSolar MPPT 150|45 rev2";
+    case 0xA06B:
+      return "SmartSolar MPPT 150|60 rev2";
+    case 0xA06C:
+      return "SmartSolar MPPT 150|70 rev2";
+    case 0xA06D:
+      return "SmartSolar MPPT 150|85 rev3";
+    case 0xA06E:
+      return "SmartSolar MPPT 150|100 rev3";
+    case 0xA06F:
+      return "BlueSolar MPPT 150|45 rev2";
+    case 0xA070:
+      return "BlueSolar MPPT 150|60 rev2";
+    case 0xA071:
+      return "BlueSolar MPPT 150|70 rev2";
+    case 0xA102:
+      return "SmartSolar MPPT VE.Can 150/70";
+    case 0xA103:
+      return "SmartSolar MPPT VE.Can 150/45";
+    case 0xA104:
+      return "SmartSolar MPPT VE.Can 150/60";
+    case 0xA105:
+      return "SmartSolar MPPT VE.Can 150/85";
+    case 0xA106:
+      return "SmartSolar MPPT VE.Can 150/100";
+    case 0xA107:
+      return "SmartSolar MPPT VE.Can 250/45";
+    case 0xA108:
+      return "SmartSolar MPPT VE.Can 250/60";
+    case 0xA109:
+      return "SmartSolar MPPT VE.Can 250/70";
+    case 0xA10A:
+      return "SmartSolar MPPT VE.Can 250/85";
+    case 0xA10B:
+      return "SmartSolar MPPT VE.Can 250/100";
+    case 0xA10C:
+      return "SmartSolar MPPT VE.Can 150/70 rev2";
+    case 0xA10D:
+      return "SmartSolar MPPT VE.Can 150/85 rev2";
+    case 0xA10E:
+      return "SmartSolar MPPT VE.Can 150/100 rev2";
+    case 0xA10F:
+      return "BlueSolar MPPT VE.Can 150/100";
+    case 0xA112:
+      return "BlueSolar MPPT VE.Can 250/70";
+    case 0xA113:
+      return "BlueSolar MPPT VE.Can 250/100";
+    case 0xA114:
+      return "SmartSolar MPPT VE.Can 250/70 rev2";
+    case 0xA115:
+      return "SmartSolar MPPT VE.Can 250/100 rev2";
+    case 0xA116:
+      return "SmartSolar MPPT VE.Can 250/85 rev2";
     case 0xA201:
       return "Phoenix Inverter 12V 250VA 230V";
     case 0xA202:
@@ -394,6 +479,52 @@ static const std::string device_type_text(int value) {
       return "Phoenix Inverter 24V 1200VA 120V";
     case 0xA27C:
       return "Phoenix Inverter 48V 1200VA 120V";
+    case 0xA281:
+      return "Phoenix Inverter 12V 1600VA 230V";
+    case 0xA282:
+      return "Phoenix Inverter 24V 1600VA 230V";
+    case 0xA284:
+      return "Phoenix Inverter 48V 1600VA 230V";
+    case 0xA291:
+      return "Phoenix Inverter 12V 2000VA 230V";
+    case 0xA292:
+      return "Phoenix Inverter 24V 2000VA 230V";
+    case 0xA294:
+      return "Phoenix Inverter 48V 2000VA 230V";
+    case 0xA2A1:
+      return "Phoenix Inverter 12V 3000VA 230V";
+    case 0xA2A2:
+      return "Phoenix Inverter 24V 3000VA 230V";
+    case 0xA2A4:
+      return "Phoenix Inverter 48V 3000VA 230V";
+    case 0xA340:
+      return "Phoenix Smart IP43 Charger 12|50 (1+1)";
+    case 0xA341:
+      return "Phoenix Smart IP43 Charger 12|50 (3)";
+    case 0xA342:
+      return "Phoenix Smart IP43 Charger 24|25 (1+1)";
+    case 0xA343:
+      return "Phoenix Smart IP43 Charger 24|25 (3)";
+    case 0xA344:
+      return "Phoenix Smart IP43 Charger 12|30 (1+1)";
+    case 0xA345:
+      return "Phoenix Smart IP43 Charger 12|30 (3)";
+    case 0xA346:
+      return "Phoenix Smart IP43 Charger 24|16 (1+1)";
+    case 0xA347:
+      return "Phoenix Smart IP43 Charger 24|16 (3)";
+    case 0xA381:
+      return "BMV-712 Smart";
+    case 0xA382:
+      return "BMV-710H Smart";
+    case 0xA383:
+      return "BMV-712 Smart Rev2";
+    case 0xA389:
+      return "SmartShunt 500A/50mV";
+    case 0xA38A:
+      return "SmartShunt 1000A/50mV";
+    case 0xA38B:
+      return "SmartShunt 2000A/50mV";
     default:
       return "Unknown";
   }
@@ -443,10 +574,35 @@ void VictronComponent::handle_value_() {
 
   // "T"      °C         Battery temperature
   // "P"      W          Instantaneous power
+  if (label_ == "P") {
+    this->publish_state_(instantaneous_power_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "CE"     mAh        Consumed Amp Hours
+  if (label_ == "CE") {
+    this->publish_state_(consumed_amp_hours_sensor_, atoi(value_.c_str()) / 1000.00);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "SOC"    %o         State of charge
+  if (label_ == "SOC") {
+    // Per mill to %
+    this->publish_state_(state_of_charge_sensor_, atoi(value_.c_str()) * 0.10);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "TTG"    min        Time-to-go
+  if (label_ == "TTG") {
+    this->publish_state_(time_to_go_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "Alarm"             Alarm condition active
+  if (label_ == "Alarm") {
+    this->publish_state_(alarm_condition_active_text_sensor_, value_);
+    return;
+  }
 
   if (label_ == "RELAY") {
     this->publish_state_(relay_state_binary_sensor_, value_ == "ON");
@@ -454,16 +610,64 @@ void VictronComponent::handle_value_() {
   }
 
   // "AR"                Alarm reason
+  if (label_ == "AR") {
+    this->publish_state_(alarm_reason_text_sensor_, error_code_text(atoi(value_.c_str())));  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "OR"                Off reason
+
   // "H1"     mAh        Depth of the deepest discharge
+  if (label_ == "H1") {
+    // mAh -> Ah
+    this->publish_state_(depth_of_the_deepest_discharge_sensor_,
+                         atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "H2"     mAh        Depth of the last discharge
+  if (label_ == "H2") {
+    // mAh -> Ah
+    this->publish_state_(depth_of_the_last_discharge_sensor_, atoi(value_.c_str()) / 1000.0);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "H3"     mAh        Depth of the average discharge
+
   // "H4"                Number of charge cycles
+  if (label_ == "H4") {
+    this->publish_state_(number_of_charge_cycles_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "H5"                Number of full discharges
+  if (label_ == "H5") {
+    this->publish_state_(number_of_full_discharges_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "H6"     mAh        Cumulative Amp Hours drawn
   // "H7"     mV         Minimum main (battery) voltage
+  if (label_ == "H7") {
+    // mV to V
+    this->publish_state_(min_battery_voltage_sensor_, atoi(value_.c_str()) / 1000.00);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "H8"     mV         Maximum main (battery) voltage
+  if (label_ == "H8") {
+    // mV to V
+    this->publish_state_(max_battery_voltage_sensor_, atoi(value_.c_str()) / 1000.00);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "H9"     S          Number of seconds since last full charge
+  if (label_ == "H9") {
+    // sec -> min
+    this->publish_state_(last_full_charge_sensor_, (float) atoi(value_.c_str()) / 60.0);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "H10"               Number of automatic synchronizations
   // "H11"               Number of low main voltage alarms
   // "H12"               Number of high main voltage alarms
@@ -471,8 +675,20 @@ void VictronComponent::handle_value_() {
   // "H14"               Number of high auxiliary voltage alarms
   // "H15"    mV         Minimum auxiliary (battery) voltage
   // "H16"    mV         Maximum auxiliary (battery) voltage
+
   // "H17"    0.01 kWh   Amount of discharged energy (BMV) / Amount of produced energy (DC monitor)
+  if (label_ == "H17") {
+    // Wh
+    this->publish_state_(amount_of_discharged_energy_sensor_, atoi(value_.c_str()) * 10.00);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "H18"    0.01 kWh   Amount of charged energy (BMV) / Amount of consumed energy (DC monitor)
+  if (label_ == "H18") {
+    // Wh
+    this->publish_state_(amount_of_charged_energy_sensor_, atoi(value_.c_str()) * 10.00);  // NOLINT(cert-err34-c)
+    return;
+  }
 
   if (label_ == "H19") {
     this->publish_state_(yield_total_sensor_, atoi(value_.c_str()) * 10);  // NOLINT(cert-err34-c)
@@ -514,6 +730,10 @@ void VictronComponent::handle_value_() {
   }
 
   // "BMV"               Model description (deprecated)
+  if (label_ == "BMV") {
+    this->publish_state_(model_description_text_sensor_, value_);
+    return;
+  }
 
   if (label_ == "FW") {
     this->publish_state_once_(firmware_version_text_sensor_, value_.insert(value_.size() - 2, "."));

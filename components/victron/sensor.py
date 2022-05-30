@@ -10,9 +10,13 @@ from esphome.const import (
     ICON_CURRENT_AC,
     ICON_EMPTY,
     ICON_FLASH,
+    ICON_PERCENT,
     ICON_POWER,
+    ICON_TIMELAPSE,
     UNIT_AMPERE,
     UNIT_EMPTY,
+    UNIT_MINUTE,
+    UNIT_PERCENT,
     UNIT_VOLT,
     UNIT_WATT,
     UNIT_WATT_HOURS,
@@ -42,6 +46,20 @@ CONF_LOAD_CURRENT = "load_current"
 CONF_AC_OUT_VOLTAGE = "ac_out_voltage"
 CONF_AC_OUT_CURRENT = "ac_out_current"
 
+CONF_INSTANTANEOUS_POWER = "instantaneous_power"
+CONF_CONSUMED_AMP_HOURS = "consumed_amp_hours"
+CONF_STATE_OF_CHARGE = "state_of_charge"
+CONF_TIME_TO_GO = "time_to_go"
+CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE = "depth_of_the_deepest_discharge"
+CONF_DEPTH_OF_THE_LAST_DISCHARGE = "depth_of_the_last_discharge"
+CONF_NUMBER_OF_CHARGE_CYCLES = "number_of_charge_cycles"
+CONF_NUMBER_OF_FULL_DISCHARGES = "number_of_full_discharges"
+CONF_MIN_BATTERY_VOLTAGE = "min_battery_voltage"
+CONF_MAX_BATTERY_VOLTAGE = "max_battery_voltage"
+CONF_LAST_FULL_CHARGE = "last_full_charge"
+CONF_AMOUNT_OF_DISCHARGED_ENERGY = "amount_of_discharged_energy"
+CONF_AMOUNT_OF_CHARGED_ENERGY = "amount_of_charged_energy"
+
 SENSORS = [
     CONF_BATTERY_VOLTAGE,
     CONF_AC_OUT_VOLTAGE,
@@ -61,6 +79,20 @@ SENSORS = [
     CONF_TRACKING_MODE_ID,
     CONF_DEVICE_MODE_ID,
     CONF_LOAD_CURRENT,
+    #
+    CONF_INSTANTANEOUS_POWER,
+    CONF_CONSUMED_AMP_HOURS,
+    CONF_STATE_OF_CHARGE,
+    CONF_TIME_TO_GO,
+    CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE,
+    CONF_DEPTH_OF_THE_LAST_DISCHARGE,
+    CONF_NUMBER_OF_CHARGE_CYCLES,
+    CONF_NUMBER_OF_FULL_DISCHARGES,
+    CONF_MIN_BATTERY_VOLTAGE,
+    CONF_MAX_BATTERY_VOLTAGE,
+    CONF_LAST_FULL_CHARGE,
+    CONF_AMOUNT_OF_DISCHARGED_ENERGY,
+    CONF_AMOUNT_OF_CHARGED_ENERGY,
 ]
 
 
@@ -174,6 +206,84 @@ CONFIG_SCHEMA = cv.Schema(
             icon=ICON_CURRENT_AC,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_INSTANTANEOUS_POWER): sensor.sensor_schema(
+            unit_of_measurement=UNIT_WATT,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
+        ),
+        cv.Optional(CONF_CONSUMED_AMP_HOURS): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_POWER,
+        ),
+        cv.Optional(CONF_STATE_OF_CHARGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_PERCENT,
+            icon=ICON_PERCENT,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_TIME_TO_GO): sensor.sensor_schema(
+            unit_of_measurement=UNIT_MINUTE,
+            icon=ICON_TIMELAPSE,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_DEPTH_OF_THE_LAST_DISCHARGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_NUMBER_OF_CHARGE_CYCLES): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_NUMBER_OF_FULL_DISCHARGES): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_MIN_BATTERY_VOLTAGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
+        ),
+        cv.Optional(CONF_MAX_BATTERY_VOLTAGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
+        ),
+        cv.Optional(CONF_LAST_FULL_CHARGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_MINUTE,
+            icon=ICON_TIMELAPSE,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_AMOUNT_OF_DISCHARGED_ENERGY): sensor.sensor_schema(
+            unit_of_measurement=UNIT_WATT_HOURS,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
+        ),
+        cv.Optional(CONF_AMOUNT_OF_CHARGED_ENERGY): sensor.sensor_schema(
+            unit_of_measurement=UNIT_WATT_HOURS,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
     }
 )

@@ -130,7 +130,19 @@ The available numeric sensors are:
 - `battery_voltage`
 - `device_mode_id`
 - `warning_code`
-
+- `instantaneous_power`
+- `consumed_amp_hours`
+- `state_of_charge`
+- `time_to_go`
+- `depth_of_the_deepest_discharge`
+- `depth_of_the_last_discharge`
+- `number_of_charge_cycles`
+- `number_of_full_discharges`
+- `min_battery_voltage`
+- `max_battery_voltage`
+- `last_full_charge`
+- `amount_of_discharged_energy`
+- `amount_of_charged_energy`
 
 The available text sensors are:
 - `charging_mode`
@@ -140,6 +152,9 @@ The available text sensors are:
 - `device_type`
 - `device_mode`
 - `warning`
+- `alarm_condition_active`
+- `alarm_reason`
+- `model_description`
 
 Binary sensors:
 
