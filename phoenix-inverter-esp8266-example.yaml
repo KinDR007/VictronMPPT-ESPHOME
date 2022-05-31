@@ -1,5 +1,5 @@
 substitutions:
-  name: phoenix-charger
+  name: phoenix-inverter
   external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
 
 esphome:
@@ -45,34 +45,38 @@ sensor:
     victron_id: victron0
     battery_voltage:
       name: "${name} battery voltage"
-    battery_voltage_2:
-      name: "${name} battery voltage 2"
-    battery_voltage_3:
-      name: "${name} battery voltage 3"
     battery_current:
       name: "${name} battery current"
-    battery_current_2:
-      name: "${name} battery current 2"
-    battery_current_3:
-      name: "${name} battery current 3"
-    error_code:
-      name: "${name} error code"
     charging_mode_id:
       name: "${name} charging mode id"
     device_mode_id:
       name: "${name} device mode id"
+    ac_out_voltage:
+      name: "${name} ac out voltage"
+    ac_out_current:
+      name: "${name} ac out current"
+    ac_out_apparent_power:
+      name: "${name} ac out apparent power"
+    warning_code:
+      name: "${name} warning code"
 
 text_sensor:
   - platform: victron
     victron_id: victron0
-    error:
-      name: "${name} error"
+    alarm_reason:
+      name: "${name} alarm reason"
+    # TODO: "OR"
     charging_mode:
       name: "${name} charging mode"
-    device_type:
-      name: "${name} device type"
+    firmware_version:
+      name: "${name} firmware version"
+    # TODO: "SER#"
     device_mode:
       name: "${name} device mode"
+    device_type:
+      name: "${name} device type"
+    warning:
+      name: "${name} warning"
 
 binary_sensor:
   - platform: victron
