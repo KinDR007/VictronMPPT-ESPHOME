@@ -65,6 +65,9 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_ac_out_current_sensor(sensor::Sensor *ac_out_current_sensor) {
     ac_out_current_sensor_ = ac_out_current_sensor;
   }
+  void set_ac_out_apparent_power_sensor(sensor::Sensor *ac_out_apparent_power_sensor) {
+    ac_out_apparent_power_sensor_ = ac_out_apparent_power_sensor;
+  }
   void set_load_current_sensor(sensor::Sensor *load_current_sensor) { load_current_sensor_ = load_current_sensor; }
   void set_day_number_sensor(sensor::Sensor *day_number_sensor) { day_number_sensor_ = day_number_sensor; }
   void set_charging_mode_id_sensor(sensor::Sensor *charging_mode_id_sensor) {
@@ -212,6 +215,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   sensor::Sensor *battery_current_3_sensor_{nullptr};
   sensor::Sensor *ac_out_voltage_sensor_{nullptr};
   sensor::Sensor *ac_out_current_sensor_{nullptr};
+  sensor::Sensor *ac_out_apparent_power_sensor_{nullptr};
   sensor::Sensor *load_current_sensor_{nullptr};
   sensor::Sensor *day_number_sensor_{nullptr};
   sensor::Sensor *device_mode_sensor_{nullptr};

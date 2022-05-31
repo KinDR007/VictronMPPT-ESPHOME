@@ -1,10 +1,10 @@
 # VictronMPPT-ESPHOME
 
-ESPHome component to monitor a Victron MPPT Charger via ve.direct / UART TTL
+ESPHome component to monitor a Victron device via ve.direct / UART TTL
 
 ## Supported devices
 
-All Victron MPPT Chargers providing a ve.direct port.
+All Victron devices providing a ve.direct port.
 
 ## Tested devices
 
@@ -132,6 +132,7 @@ The available numeric sensors are:
 - `load_current`
 - `ac_out_voltage`
 - `ac_out_current`
+- `ac_out_apparent_power`
 - `device_mode_id`
 - `warning_code`
 - `battery_temperature`

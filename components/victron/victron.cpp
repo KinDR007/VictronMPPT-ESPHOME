@@ -891,6 +891,10 @@ void VictronComponent::handle_value_() {
   }
 
   // "AC_OUT_S"    VA    AC output apparent power
+  if (label_ == "AC_OUT_S") {
+    this->publish_state_(ac_out_apparent_power_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
+    return;
+  }
 
   if (label_ == "WARN") {
     value = atoi(value_.c_str());  // NOLINT(cert-err34-c)

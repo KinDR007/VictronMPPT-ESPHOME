@@ -56,6 +56,7 @@ CONF_DEVICE_MODE_ID = "device_mode_id"
 CONF_LOAD_CURRENT = "load_current"
 CONF_AC_OUT_VOLTAGE = "ac_out_voltage"
 CONF_AC_OUT_CURRENT = "ac_out_current"
+CONF_AC_OUT_APPARENT_POWER = "ac_out_apparent_power"
 
 CONF_BATTERY_TEMPERATURE = "battery_temperature"
 CONF_INSTANTANEOUS_POWER = "instantaneous_power"
@@ -85,7 +86,6 @@ UNIT_AMPERE_HOURS = "Ah"
 
 SENSORS = [
     CONF_BATTERY_VOLTAGE,
-    CONF_AC_OUT_VOLTAGE,
     CONF_MAX_POWER_YESTERDAY,
     CONF_MAX_POWER_TODAY,
     CONF_YIELD_TOTAL,
@@ -101,7 +101,9 @@ SENSORS = [
     CONF_BATTERY_CURRENT,
     CONF_BATTERY_CURRENT_2,
     CONF_BATTERY_CURRENT_3,
+    CONF_AC_OUT_VOLTAGE,
     CONF_AC_OUT_CURRENT,
+    CONF_AC_OUT_APPARENT_POWER,
     CONF_DAY_NUMBER,
     CONF_CHARGING_MODE_ID,
     CONF_ERROR_CODE,
@@ -246,6 +248,12 @@ CONFIG_SCHEMA = cv.Schema(
             icon=ICON_CURRENT_AC,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_AC_OUT_APPARENT_POWER): sensor.sensor_schema(
+            unit_of_measurement=UNIT_WATT,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_DAY_NUMBER): sensor.sensor_schema(
             unit_of_measurement=UNIT_EMPTY,
