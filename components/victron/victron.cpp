@@ -556,8 +556,27 @@ void VictronComponent::handle_value_() {
   }
 
   // "VS"     mV         Auxiliary (starter) voltage
+  if (label_ == "VS") {
+    // mV to V
+    this->publish_state_(auxiliary_battery_voltage_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "VM"     mV         Mid-point voltage of the battery bank
+  if (label_ == "VM") {
+    // mV to V
+    this->publish_state_(midpoint_voltage_of_the_battery_bank_sensor_,
+                         atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
+    return;
+  }
+
   // "DM"     %o         Mid-point deviation of the battery bank
+  if (label_ == "DM") {
+    // Per mill to %
+    this->publish_state_(midpoint_deviation_of_the_battery_bank_sensor_,
+                         atoi(value_.c_str()) * 0.10f);  // NOLINT(cert-err34-c)
+    return;
+  }
 
   if (label_ == "VPV") {
     this->publish_state_(panel_voltage_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)

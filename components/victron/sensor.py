@@ -41,6 +41,9 @@ CONF_PANEL_POWER = "panel_power"
 # CONF_BATTERY_VOLTAGE imported from const
 CONF_BATTERY_VOLTAGE_2 = "battery_voltage_2"
 CONF_BATTERY_VOLTAGE_3 = "battery_voltage_3"
+CONF_AUXILIARY_BATTERY_VOLTAGE = "auxiliary_battery_voltage"
+CONF_MIDPOINT_VOLTAGE_OF_THE_BATTERY_BANK = "midpoint_voltage_of_the_battery_bank"
+CONF_MIDPOINT_DEVIATION_OF_THE_BATTERY_BANK = "midpoint_deviation_of_the_battery_bank"
 CONF_BATTERY_CURRENT = "battery_current"
 CONF_BATTERY_CURRENT_2 = "battery_current_2"
 CONF_BATTERY_CURRENT_3 = "battery_current_3"
@@ -92,6 +95,9 @@ SENSORS = [
     CONF_PANEL_POWER,
     CONF_BATTERY_VOLTAGE_2,
     CONF_BATTERY_VOLTAGE_3,
+    CONF_AUXILIARY_BATTERY_VOLTAGE,
+    CONF_MIDPOINT_VOLTAGE_OF_THE_BATTERY_BANK,
+    CONF_MIDPOINT_DEVIATION_OF_THE_BATTERY_BANK,
     CONF_BATTERY_CURRENT,
     CONF_BATTERY_CURRENT_2,
     CONF_BATTERY_CURRENT_3,
@@ -192,6 +198,24 @@ CONFIG_SCHEMA = cv.Schema(
             icon=ICON_FLASH,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_VOLTAGE,
+        ),
+        cv.Optional(CONF_AUXILIARY_BATTERY_VOLTAGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
+        ),
+        cv.Optional(CONF_MIDPOINT_VOLTAGE_OF_THE_BATTERY_BANK): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_VOLTAGE,
+        ),
+        cv.Optional(CONF_MIDPOINT_DEVIATION_OF_THE_BATTERY_BANK): sensor.sensor_schema(
+            unit_of_measurement=UNIT_PERCENT,
+            icon=ICON_PERCENT,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
         ),
         cv.Optional(CONF_BATTERY_CURRENT): sensor.sensor_schema(
             unit_of_measurement=UNIT_AMPERE,
