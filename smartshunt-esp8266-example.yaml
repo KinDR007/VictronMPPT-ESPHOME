@@ -45,9 +45,12 @@ sensor:
     victron_id: victron0
     battery_voltage:
       name: "${name} battery voltage"
-    # TODO: VS
-    # TODO: VM
-    # TODO: DM
+    auxiliary_battery_voltage:
+      name: "${name} auxiliary battery voltage"
+    midpoint_voltage_of_the_battery_bank:
+      name: "${name} midpoint voltage of the battery bank"
+    midpoint_deviation_of_the_battery_bank:
+      name: "${name} midpoint deviation of the battery bank"
     battery_current:
       name: "${name} battery current"
     battery_temperature:

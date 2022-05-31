@@ -40,6 +40,16 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_battery_voltage_3_sensor(sensor::Sensor *battery_voltage_3_sensor) {
     battery_voltage_3_sensor_ = battery_voltage_3_sensor;
   }
+  void set_auxiliary_battery_voltage_sensor(sensor::Sensor *auxiliary_battery_voltage_sensor) {
+    auxiliary_battery_voltage_sensor_ = auxiliary_battery_voltage_sensor;
+  }
+  void set_midpoint_voltage_of_the_battery_bank_sensor(sensor::Sensor *midpoint_voltage_of_the_battery_bank_sensor) {
+    midpoint_voltage_of_the_battery_bank_sensor_ = midpoint_voltage_of_the_battery_bank_sensor;
+  }
+  void set_midpoint_deviation_of_the_battery_bank_sensor(
+      sensor::Sensor *midpoint_deviation_of_the_battery_bank_sensor) {
+    midpoint_deviation_of_the_battery_bank_sensor_ = midpoint_deviation_of_the_battery_bank_sensor;
+  }
   void set_battery_current_sensor(sensor::Sensor *battery_current_sensor) {
     battery_current_sensor_ = battery_current_sensor;
   }
@@ -194,6 +204,9 @@ class VictronComponent : public uart::UARTDevice, public Component {
   sensor::Sensor *battery_voltage_sensor_{nullptr};
   sensor::Sensor *battery_voltage_2_sensor_{nullptr};
   sensor::Sensor *battery_voltage_3_sensor_{nullptr};
+  sensor::Sensor *auxiliary_battery_voltage_sensor_{nullptr};
+  sensor::Sensor *midpoint_voltage_of_the_battery_bank_sensor_{nullptr};
+  sensor::Sensor *midpoint_deviation_of_the_battery_bank_sensor_{nullptr};
   sensor::Sensor *battery_current_sensor_{nullptr};
   sensor::Sensor *battery_current_2_sensor_{nullptr};
   sensor::Sensor *battery_current_3_sensor_{nullptr};
