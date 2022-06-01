@@ -85,6 +85,8 @@ text_sensor:
       name: "${name} firmware version"
     device_type:
       name: "${name} device type"
+    serial_number:
+      name: "${name} serial number"
 
 binary_sensor:
   - platform: victron

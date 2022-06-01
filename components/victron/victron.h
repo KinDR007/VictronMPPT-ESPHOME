@@ -101,6 +101,9 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_device_type_text_sensor(text_sensor::TextSensor *device_type_text_sensor) {
     device_type_text_sensor_ = device_type_text_sensor;
   }
+  void set_serial_number_text_sensor(text_sensor::TextSensor *serial_number_text_sensor) {
+    serial_number_text_sensor_ = serial_number_text_sensor;
+  }
 
   void set_battery_temperature_sensor(sensor::Sensor *battery_temperature_sensor) {
     battery_temperature_sensor_ = battery_temperature_sensor;
@@ -231,6 +234,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *device_mode_text_sensor_{nullptr};
   text_sensor::TextSensor *firmware_version_text_sensor_{nullptr};
   text_sensor::TextSensor *device_type_text_sensor_{nullptr};
+  text_sensor::TextSensor *serial_number_text_sensor_{nullptr};
 
   sensor::Sensor *battery_temperature_sensor_{nullptr};
   sensor::Sensor *instantaneous_power_sensor_{nullptr};

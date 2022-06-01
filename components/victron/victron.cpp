@@ -867,6 +867,10 @@ void VictronComponent::handle_value_() {
   }
 
   // "SER#"              Serial number
+  if (label_ == "SER#") {
+    this->publish_state_once_(serial_number_text_sensor_, value_);
+    return;
+  }
 
   if (label_ == "HSDS") {
     this->publish_state_(day_number_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
