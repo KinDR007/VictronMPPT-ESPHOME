@@ -70,11 +70,12 @@ text_sensor:
       name: "${name} charging mode"
     firmware_version:
       name: "${name} firmware version"
-    # TODO: "SER#"
-    device_mode:
-      name: "${name} device mode"
     device_type:
       name: "${name} device type"
+    serial_number:
+      name: "${name} serial number"
+    device_mode:
+      name: "${name} device mode"
     warning:
       name: "${name} warning"
 
