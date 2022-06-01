@@ -543,26 +543,24 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "V2"     mV         Channel 2 (battery) voltage
   if (label_ == "V2") {
+    // mV to V
     this->publish_state_(battery_voltage_2_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "V3"     mV         Channel 3 (battery) voltage
   if (label_ == "V3") {
+    // mV to V
     this->publish_state_(battery_voltage_3_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "VS"     mV         Auxiliary (starter) voltage
   if (label_ == "VS") {
     // mV to V
     this->publish_state_(auxiliary_battery_voltage_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "VM"     mV         Mid-point voltage of the battery bank
   if (label_ == "VM") {
     // mV to V
     this->publish_state_(midpoint_voltage_of_the_battery_bank_sensor_,
@@ -570,7 +568,6 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "DM"     %o         Mid-point deviation of the battery bank
   if (label_ == "DM") {
     // Per mill to %
     this->publish_state_(midpoint_deviation_of_the_battery_bank_sensor_,
@@ -579,6 +576,7 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "VPV") {
+    // mV to V
     this->publish_state_(panel_voltage_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
@@ -589,18 +587,19 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "I") {
+    // mA to A
     this->publish_state_(battery_current_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "I2"     mA         Channel 2 battery current
   if (label_ == "I2") {
+    // mA to A
     this->publish_state_(battery_current_2_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "I3"     mA         Channel 3 battery current
   if (label_ == "I3") {
+    // mA to A
     this->publish_state_(battery_current_3_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
@@ -615,7 +614,6 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "T"      °C         Battery temperature
   if (label_ == "T") {
     if (value_ == "---") {
       this->publish_state_(battery_temperature_sensor_, NAN);
@@ -626,32 +624,28 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "P"      W          Instantaneous power
   if (label_ == "P") {
     this->publish_state_(instantaneous_power_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "CE"     mAh        Consumed Amp Hours
   if (label_ == "CE") {
+    // mAh -> Ah
     this->publish_state_(consumed_amp_hours_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "SOC"    %o         State of charge
   if (label_ == "SOC") {
     // Per mill to %
     this->publish_state_(state_of_charge_sensor_, atoi(value_.c_str()) * 0.10f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "TTG"    min        Time-to-go
   if (label_ == "TTG") {
     this->publish_state_(time_to_go_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "Alarm"             Alarm condition active
   if (label_ == "Alarm") {
     this->publish_state_(alarm_condition_active_text_sensor_, value_);
     return;
@@ -662,15 +656,13 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "AR"                Alarm reason
   if (label_ == "AR") {
     this->publish_state_(alarm_reason_text_sensor_, error_code_text(atoi(value_.c_str())));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "OR"                Off reason
+  // @TODO: "OR"                Off reason
 
-  // "H1"     mAh        Depth of the deepest discharge
   if (label_ == "H1") {
     // mAh -> Ah
     this->publish_state_(depth_of_the_deepest_discharge_sensor_,
@@ -678,14 +670,12 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "H2"     mAh        Depth of the last discharge
   if (label_ == "H2") {
     // mAh -> Ah
     this->publish_state_(depth_of_the_last_discharge_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H3"     mAh        Depth of the average discharge
   if (label_ == "H3") {
     // mAh -> Ah
     this->publish_state_(depth_of_the_average_discharge_sensor_,
@@ -693,45 +683,39 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "H4"                Number of charge cycles
   if (label_ == "H4") {
     this->publish_state_(number_of_charge_cycles_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H5"                Number of full discharges
   if (label_ == "H5") {
     this->publish_state_(number_of_full_discharges_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H6"     mAh        Cumulative Amp Hours drawn
   if (label_ == "H6") {
-    // mAh -> Ah
     if (value_ == "---") {
       this->publish_state_(cumulative_amp_hours_drawn_sensor_, NAN);
       return;
     }
 
+    // mAh -> Ah
     this->publish_state_(cumulative_amp_hours_drawn_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H7"     mV         Minimum main (battery) voltage
   if (label_ == "H7") {
     // mV to V
     this->publish_state_(min_battery_voltage_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H8"     mV         Maximum main (battery) voltage
   if (label_ == "H8") {
     // mV to V
     this->publish_state_(max_battery_voltage_sensor_, atoi(value_.c_str()) / 1000.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H9"     S          Number of seconds since last full charge
   if (label_ == "H9") {
     if (value_ == "---") {
       this->publish_state_(last_full_charge_sensor_, NAN);
@@ -743,7 +727,6 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "H10"               Number of automatic synchronizations
   if (label_ == "H10") {
     if (value_ == "---") {
       this->publish_state_(number_of_automatic_synchronizations_sensor_, NAN);
@@ -754,32 +737,27 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "H11"               Number of low main voltage alarms
   if (label_ == "H11") {
     this->publish_state_(number_of_low_main_voltage_alarms_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H12"               Number of high main voltage alarms
   if (label_ == "H12") {
     this->publish_state_(number_of_high_main_voltage_alarms_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H13"               Number of low auxiliary voltage alarms
   if (label_ == "H13") {
     this->publish_state_(number_of_low_auxiliary_voltage_alarms_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H14"               Number of high auxiliary voltage alarms
   if (label_ == "H14") {
     this->publish_state_(number_of_high_auxiliary_voltage_alarms_sensor_,
                          atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
   }
 
-  // "H15"    mV         Minimum auxiliary (battery) voltage
   if (label_ == "H15") {
     // mV to V
     this->publish_state_(min_auxiliary_battery_voltage_sensor_,
@@ -787,7 +765,6 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "H16"    mV         Maximum auxiliary (battery) voltage
   if (label_ == "H16") {
     // mV to V
     this->publish_state_(max_auxiliary_battery_voltage_sensor_,
@@ -859,14 +836,13 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "FWE"               Firmware version (24 bit)
+  // @TODO: "FWE"               Firmware version (24 bit)
 
   if (label_ == "PID") {
     this->publish_state_once_(device_type_text_sensor_, device_type_text(strtol(value_.c_str(), nullptr, 0)));
     return;
   }
 
-  // "SER#"              Serial number
   if (label_ == "SER#") {
     this->publish_state_once_(serial_number_text_sensor_, value_);
     return;
@@ -894,7 +870,6 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "AC_OUT_S"    VA    AC output apparent power
   if (label_ == "AC_OUT_S") {
     this->publish_state_(ac_out_apparent_power_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
@@ -914,7 +889,7 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // "MON"               DC monitor mode
+  // @TODO: "MON"               DC monitor mode
 
   ESP_LOGD(TAG, "Unhandled property: %s %s", label_.c_str(), value_.c_str());
 }
