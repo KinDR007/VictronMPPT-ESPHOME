@@ -1,0 +1,55 @@
+substitutions:
+  name: fake-smartsolar-mppt
+  tx_pin: GPIO4
+  rx_pin: GPIO5
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+ota:
+logger:
+  level: DEBUG
+
+uart:
+  baud_rate: 19200
+  tx_pin: ${tx_pin}
+  rx_pin: ${rx_pin}
+  debug:
+    direction: BOTH
+    dummy_receiver: true
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
+
+interval:
+  - interval: 3s
+    then:
+      - uart.write: "PID\t0xA053\r\n"
+      - uart.write: "FW\t156\r\n"
+      - uart.write: "SER#\tHQ1942K7LJ8\r\n"
+      - uart.write: "V\t12450\r\n"
+      - uart.write: "I\t0\r\n"
+      - uart.write: "VPV\t10\r\n"
+      - uart.write: "PPV\t0\r\n"
+      - uart.write: "CS\t0\r\n"
+      - uart.write: "MPPT\t0\r\n"
+      - uart.write: "OR\t0x00000001\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "LOAD\tON\r\n"
+      - uart.write: "IL\t0\r\n"
+      - uart.write: "H19\t3\r\n"
+      - uart.write: "H20\t0\r\n"
+      - uart.write: "H21\t24\r\n"
+      - uart.write: "H22\t1\r\n"
+      - uart.write: "H23\t15\r\n"
+      - uart.write: "HSDS\t3\r\n"
+      - uart.write: "Checksum\t\xE1"
+      - uart.write: "\r\n"
