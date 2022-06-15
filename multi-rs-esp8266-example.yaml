@@ -49,8 +49,10 @@ sensor:
       name: "${name} error code"
     ac_out_current:
       name: "${name} ac out current"
+      id: ac_current
     ac_out_voltage:
       name: "${name} ac out voltage"
+      id: ac_voltage
     yield_total:
       name: "${name} yield total"
     yield_today:
@@ -71,6 +73,16 @@ sensor:
       name: "${name} battery voltage"
     panel_voltage:
       name: "${name} panel voltage"
+
+  - platform: template
+    name: "${name} ac out power"
+    # https://github.com/esphome/issues/issues/2793#issuecomment-988257209
+    lambda: |-
+       auto val = id(ac_voltage).state * id(ac_current).state;
+       if (isnan(val))
+          return {};
+       return val;
+    update_interval: 10s
 
 text_sensor:
   - platform: victron
