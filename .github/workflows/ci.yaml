@@ -178,10 +178,11 @@ jobs:
           esphome -s external_components_source components config debug-esp8266-example.yaml
       - run: |
           esphome -s external_components_source components config tests/emulator-all-keys.yaml
-          esphome -s external_components_source components config tests/fake-bmv700.yaml
           esphome -s external_components_source components config tests/fake-bmv600.yaml
-          esphome -s external_components_source components config tests/fake-phoenix-inverter.yaml
+          esphome -s external_components_source components config tests/fake-bmv700.yaml
+          esphome -s external_components_source components config tests/fake-bmv710.yaml
           esphome -s external_components_source components config tests/fake-multi-rs-solar.yaml
+          esphome -s external_components_source components config tests/fake-phoenix-inverter.yaml
           esphome -s external_components_source components config tests/fake-smartsolar-mppt.yaml
 
   esphome-compile:
