@@ -894,6 +894,19 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "FWE") {
+    if (this->firmware_version_24bit_text_sensor_ == nullptr || this->firmware_version_24bit_text_sensor_->has_state())
+      return;
+
+    if (value_.size() > 4) {
+      std::string release_type = value_.substr(value_.size() - 2, 2);
+      std::string version_number = value_.substr(0, value_.size() - 2);
+      version_number = version_number.insert(version_number.size() - 2, ".");
+      release_type = (release_type == "FF") ? "-official" : "-beta-" + release_type;
+
+      this->publish_state_once_(firmware_version_24bit_text_sensor_, version_number + release_type);
+      return;
+    }
+
     this->publish_state_once_(firmware_version_24bit_text_sensor_, value_);
     return;
   }
