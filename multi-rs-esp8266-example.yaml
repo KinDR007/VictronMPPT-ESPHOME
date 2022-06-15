@@ -1,0 +1,88 @@
+substitutions:
+  name: multi-rs
+  external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+external_components:
+  - source: ${external_components_source}
+    refresh: 0s
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+ota:
+# api:
+
+logger:
+  baud_rate: 0
+  esp8266_store_log_strings_in_flash: false
+
+mqtt:
+  broker: !secret mqtt_host
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  id: mqtt_client
+
+uart:
+  id: uart0
+  tx_pin: D8  # Not connected! The communication is read-only
+  rx_pin: D7  # Connect this this GPIO and GND to the MPPT charger
+  baud_rate: 19200
+  rx_buffer_size: 256
+
+victron:
+  uart_id: uart0
+  id: victron0
+  throttle: 10s
+
+sensor:
+  - platform: victron
+    victron_id: victron0
+    charging_mode_id:
+      name: "${name} charging mode id"
+    error_code:
+      name: "${name} error code"
+    ac_out_current:
+      name: "${name} ac out current"
+    ac_out_voltage:
+      name: "${name} ac out voltage"
+    yield_total:
+      name: "${name} yield total"
+    yield_today:
+      name: "${name} yield today"
+    max_power_today:
+      name: "${name} max power today"
+    yield_yesterday:
+      name: "${name} yield yesterday"
+    max_power_yesterday:
+      name: "${name} max power yesterday"
+    day_number:
+      name: "${name} day number"
+    battery_current:
+      name: "${name} battery current"
+    panel_power:
+      name: "${name} panel power"
+    battery_voltage:
+      name: "${name} battery voltage"
+    panel_voltage:
+      name: "${name} panel voltage"
+
+text_sensor:
+  - platform: victron
+    victron_id: victron0
+    device_type:
+      name: "${name} device type"
+    serial_number:
+      name: "${name} serial number"
+    # TODO: FWE
+    charging_mode:
+      name: "${name} charging mode"
+    error:
+      name: "${name} error"
+    device_mode:
+      name: "${name} device mode"

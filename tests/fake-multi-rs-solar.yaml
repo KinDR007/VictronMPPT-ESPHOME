@@ -1,0 +1,59 @@
+substitutions:
+  name: fake-multi-rs-solar
+  tx_pin: GPIO4
+  rx_pin: GPIO5
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+ota:
+logger:
+  level: DEBUG
+
+uart:
+  baud_rate: 19200
+  tx_pin: ${tx_pin}
+  rx_pin: ${rx_pin}
+  debug:
+    direction: BOTH
+    dummy_receiver: true
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
+
+interval:
+  - interval: 3s
+    then:
+      - uart.write: "PID\t0xA442\r\n"
+      - uart.write: "SER#\tHQ2206WVU9D\r\n"
+      - uart.write: "FWE\t109FF\r\n"
+      - uart.write: "CS\t6\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "AC_OUT_I\t10\r\n"
+      - uart.write: "AC_OUT_V\t23001\r\n"
+      - uart.write: "H19\t2551\r\n"
+      - uart.write: "H20\t217\r\n"
+      - uart.write: "H21\t1289\r\n"
+      - uart.write: "H22\t264\r\n"
+      - uart.write: "H23\t1404\r\n"
+      - uart.write: "HSDS\t5\r\n"
+      - uart.write: "I\t-3200\r\n"
+      - uart.write: "PPV\t0\r\n"
+      - uart.write: "V\t56650\r\n"
+      - uart.write: "VPV\t190090\r\n"
+      - uart.write: "Checksum\t⸮:A0922001C0004\r\n"
+      - uart.write: ":A052200EB00000039\r\n"
+      - uart.write: ":A8DED00221699\r\n"
+      - uart.write: ":A0422009500000090\r\n"
+      - uart.write: ":A8DED0021169A\r\n"
+      - uart.write: ":ABBED003C4A1D\r\n"
+      - uart.write: ":ACBEC003C4A0E\r\n"
+      - uart.write: "\r\n"

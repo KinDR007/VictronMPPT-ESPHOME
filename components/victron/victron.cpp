@@ -66,7 +66,7 @@ void VictronComponent::loop() {
   const uint32_t now = millis();
   if ((state_ > 0) && (now - last_transmission_ >= 200)) {
     // last transmission too long ago. Reset RX index.
-    ESP_LOGW(TAG, "Last transmission too long ago.");
+    ESP_LOGW(TAG, "Last transmission too long ago");
     state_ = 0;
   }
 
@@ -78,13 +78,18 @@ void VictronComponent::loop() {
     uint8_t c;
     read_byte(&c);
     if (state_ == 0) {
-      if ((c == '\r') || (c == '\n'))
+      if (c == '\r' || c == '\n')
         continue;
       label_.clear();
       value_.clear();
       state_ = 1;
     }
     if (state_ == 1) {
+      // Start of a ve.direct hex frame
+      if (c == ':') {
+        state_ = 3;
+        continue;
+      }
       if (c == '\t')
         state_ = 2;
       else
@@ -103,13 +108,19 @@ void VictronComponent::loop() {
         }
         continue;
       }
-      if ((c == '\r') || (c == '\n')) {
+      if (c == '\r' || c == '\n') {
         if (this->publishing_) {
           handle_value_();
         }
         state_ = 0;
       } else {
         value_.push_back(c);
+      }
+    }
+    // Discard ve.direct hex frame
+    if (state_ == 3) {
+      if (c == '\r' || c == '\n') {
+        state_ = 0;
       }
     }
   }
@@ -530,6 +541,8 @@ static const std::string device_type_text(int value) {
       return "SmartShunt 1000A/50mV";
     case 0xA38B:
       return "SmartShunt 2000A/50mV";
+    case 0xA442:
+      return "Multi RS Solar 48V 6000VA 230V";
     default:
       return "Unknown";
   }
