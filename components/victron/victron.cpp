@@ -624,7 +624,7 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "LOAD") {
-    this->publish_state_(load_state_binary_sensor_, value_ == "ON");
+    this->publish_state_(load_state_binary_sensor_, value_ == "ON" || value_ == "On");
     return;
   }
 
@@ -666,7 +666,7 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "Relay") {
-    this->publish_state_(relay_state_binary_sensor_, value_ == "ON");
+    this->publish_state_(relay_state_binary_sensor_, value_ == "ON" || value_ == "On");
     return;
   }
 
