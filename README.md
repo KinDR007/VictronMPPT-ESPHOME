@@ -177,3 +177,12 @@ Binary sensors:
 - `relay_state`
 
 Big thanks for help to ssieb for the support!
+
+
+## Debugging
+
+If this component doesn't work out of the box for your device please flash the `debug-esp8266-example.yaml` and create an issue providing the full ESPHome log.
+
+```
+esphome run debug-esp8266-example.yaml
+```
