@@ -183,6 +183,9 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void set_amount_of_charged_energy_sensor(sensor::Sensor *amount_of_charged_energy_sensor) {
     amount_of_charged_energy_sensor_ = amount_of_charged_energy_sensor;
   }
+  void set_off_reason_bitmask_sensor(sensor::Sensor *off_reason_bitmask_sensor) {
+    off_reason_bitmask_sensor_ = off_reason_bitmask_sensor;
+  }
 
   void set_alarm_condition_active_text_sensor(text_sensor::TextSensor *alarm_condition_active_text_sensor) {
     alarm_condition_active_text_sensor_ = alarm_condition_active_text_sensor;
@@ -192,6 +195,9 @@ class VictronComponent : public uart::UARTDevice, public Component {
   }
   void set_model_description_text_sensor(text_sensor::TextSensor *model_description_text_sensor) {
     model_description_text_sensor_ = model_description_text_sensor;
+  }
+  void set_off_reason_text_sensor(text_sensor::TextSensor *off_reason_text_sensor) {
+    off_reason_text_sensor_ = off_reason_text_sensor;
   }
 
   void dump_config() override;
@@ -237,6 +243,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   sensor::Sensor *tracking_mode_id_sensor_{nullptr};
   sensor::Sensor *device_mode_id_sensor_{nullptr};
   sensor::Sensor *dc_monitor_mode_id_sensor_{nullptr};
+  sensor::Sensor *off_reason_bitmask_sensor_{nullptr};
   text_sensor::TextSensor *charging_mode_text_sensor_{nullptr};
   text_sensor::TextSensor *error_text_sensor_{nullptr};
   text_sensor::TextSensor *warning_text_sensor_{nullptr};
@@ -247,6 +254,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *device_type_text_sensor_{nullptr};
   text_sensor::TextSensor *serial_number_text_sensor_{nullptr};
   text_sensor::TextSensor *dc_monitor_mode_text_sensor_{nullptr};
+  text_sensor::TextSensor *off_reason_text_sensor_{nullptr};
 
   sensor::Sensor *battery_temperature_sensor_{nullptr};
   sensor::Sensor *instantaneous_power_sensor_{nullptr};

@@ -71,7 +71,7 @@ interval:
       - uart.write: "LOAD\tON\r\n"
       - uart.write: "MODE\t2\r\n"
       - uart.write: "MPPT\t2\r\n"
-      - uart.write: "OR\t0x00000000\r\n"
+      - uart.write: "OR\t0x00000003\r\n"
       - uart.write: "P\t130\r\n"
       - uart.write: "PID\t0x204\r\n"
       - uart.write: "PPV\t130\r\n"

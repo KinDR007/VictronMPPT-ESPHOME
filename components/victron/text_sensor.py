@@ -23,6 +23,7 @@ CONF_ALARM_CONDITION_ACTIVE = "alarm_condition_active"
 CONF_ALARM_REASON = "alarm_reason"
 CONF_MODEL_DESCRIPTION = "model_description"
 CONF_DC_MONITOR_MODE = "dc_monitor_mode"
+CONF_OFF_REASON = "off_reason"
 
 TEXT_SENSORS = [
     CONF_CHARGING_MODE,
@@ -39,6 +40,7 @@ TEXT_SENSORS = [
     CONF_ALARM_REASON,
     CONF_MODEL_DESCRIPTION,
     CONF_DC_MONITOR_MODE,
+    CONF_OFF_REASON,
 ]
 
 
@@ -82,6 +84,9 @@ CONFIG_SCHEMA = cv.Schema(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
         cv.Optional(CONF_DC_MONITOR_MODE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
+        ),
+        cv.Optional(CONF_OFF_REASON): text_sensor.TEXT_SENSOR_SCHEMA.extend(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
     }
