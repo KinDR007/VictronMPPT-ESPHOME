@@ -79,7 +79,8 @@ text_sensor:
       name: "${name} device type"
     serial_number:
       name: "${name} serial number"
-    # TODO: FWE
+    firmware_version_24bit:
+      name: "${name} firmware version 24bit"
     charging_mode:
       name: "${name} charging mode"
     error:

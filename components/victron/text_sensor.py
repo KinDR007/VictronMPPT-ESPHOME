@@ -15,6 +15,7 @@ CONF_WARNING = "warning"
 CONF_TRACKING_MODE = "tracking_mode"
 CONF_DEVICE_MODE = "device_mode"
 CONF_FIRMWARE_VERSION = "firmware_version"
+CONF_FIRMWARE_VERSION_24BIT = "firmware_version_24bit"
 CONF_DEVICE_TYPE = "device_type"
 CONF_SERIAL_NUMBER = "serial_number"
 
@@ -29,6 +30,7 @@ TEXT_SENSORS = [
     CONF_TRACKING_MODE,
     CONF_DEVICE_MODE,
     CONF_FIRMWARE_VERSION,
+    CONF_FIRMWARE_VERSION_24BIT,
     CONF_DEVICE_TYPE,
     CONF_SERIAL_NUMBER,
     #
@@ -57,6 +59,9 @@ CONFIG_SCHEMA = cv.Schema(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
         cv.Optional(CONF_FIRMWARE_VERSION): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
+        ),
+        cv.Optional(CONF_FIRMWARE_VERSION_24BIT): text_sensor.TEXT_SENSOR_SCHEMA.extend(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
         cv.Optional(CONF_DEVICE_TYPE): text_sensor.TEXT_SENSOR_SCHEMA.extend(

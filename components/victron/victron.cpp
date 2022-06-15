@@ -7,7 +7,7 @@ namespace victron {
 
 static const char *const TAG = "victron";
 
-void VictronComponent::dump_config() {
+void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
   ESP_LOGCONFIG(TAG, "Victron:");
   LOG_BINARY_SENSOR("  ", "Load state", load_state_binary_sensor_);
   LOG_BINARY_SENSOR("  ", "Relay state", relay_state_binary_sensor_);
@@ -39,6 +39,7 @@ void VictronComponent::dump_config() {
   LOG_TEXT_SENSOR("  ", "Tracking Mode", tracking_mode_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Device Mode", device_mode_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Firmware Version", firmware_version_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Firmware Version 24bit", firmware_version_24bit_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Device Type", device_type_text_sensor_);
 
   LOG_SENSOR("  ", "Battery Temperature ", battery_temperature_sensor_);
@@ -849,7 +850,10 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // @TODO: "FWE"               Firmware version (24 bit)
+  if (label_ == "FWE") {
+    this->publish_state_once_(firmware_version_24bit_text_sensor_, value_);
+    return;
+  }
 
   if (label_ == "PID") {
     this->publish_state_once_(device_type_text_sensor_, device_type_text(strtol(value_.c_str(), nullptr, 0)));
