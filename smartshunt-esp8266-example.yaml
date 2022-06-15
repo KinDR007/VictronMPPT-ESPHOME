@@ -99,6 +99,8 @@ sensor:
       name: "${name} amount of discharged energy"
     amount_of_charged_energy:
       name: "${name} amount of charged energy"
+    dc_monitor_mode_id:
+      name: "${name} dc monitor mode id"
 
 text_sensor:
   - platform: victron
@@ -115,10 +117,11 @@ text_sensor:
       name: "${name} device type"
     serial_number:
       name: "${name} serial number"
+    dc_monitor_mode:
+      name: "${name} dc monitor mode"
 
 binary_sensor:
   - platform: victron
     victron_id: victron0
     relay_state:
       name: "${name} relay state"
-    # TODO: MON

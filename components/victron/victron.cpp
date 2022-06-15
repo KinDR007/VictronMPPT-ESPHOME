@@ -272,6 +272,49 @@ static const std::string device_mode_text(int value) {
   }
 }
 
+static const std::string dc_monitor_mode_text(int value) {
+  switch (value) {
+    case -9:
+      return "Solar charger";
+    case -8:
+      return "Wind turbine";
+    case -7:
+      return "Shaft generator";
+    case -6:
+      return "Alternator";
+    case -5:
+      return "Fuel cell";
+    case -4:
+      return "Water generator";
+    case -3:
+      return "DC/DC charger";
+    case -2:
+      return "AC charger";
+    case -1:
+      return "Generic source";
+    case 0:
+      return "Battery monitor (BMV)";
+    case 1:
+      return "Generic load";
+    case 2:
+      return "Electric drive";
+    case 3:
+      return "Fridge";
+    case 4:
+      return "Water pump";
+    case 5:
+      return "Bilge pump";
+    case 6:
+      return "DC system";
+    case 7:
+      return "Inverter";
+    case 8:
+      return "Water heater";
+    default:
+      return "Unknown";
+  }
+}
+
 static const std::string device_type_text(int value) {
   switch (value) {
     case 0x203:
@@ -906,7 +949,12 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // @TODO: "MON"               DC monitor mode
+  if (label_ == "MON") {
+    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    this->publish_state_(dc_monitor_mode_id_sensor_, (float) value);
+    this->publish_state_(dc_monitor_mode_text_sensor_, dc_monitor_mode_text(value));
+    return;
+  }
 
   ESP_LOGD(TAG, "Unhandled property: %s %s", label_.c_str(), value_.c_str());
 }
