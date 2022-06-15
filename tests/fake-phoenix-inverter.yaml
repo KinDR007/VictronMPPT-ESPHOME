@@ -1,0 +1,45 @@
+substitutions:
+  name: fake-multi-rs-solar
+  tx_pin: GPIO4
+  rx_pin: GPIO5
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+ota:
+logger:
+  level: DEBUG
+
+uart:
+  baud_rate: 19200
+  tx_pin: ${tx_pin}
+  rx_pin: ${rx_pin}
+  debug:
+    direction: BOTH
+    dummy_receiver: true
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
+
+interval:
+  - interval: 3s
+    then:
+      - uart.write: "AC_OUT_I\t50\r\n"
+      - uart.write: "AC_OUT_V\t23000\r\n"
+      - uart.write: "AR\t1\r\n"
+      - uart.write: "CS\t5\r\n"
+      - uart.write: "FW\t1.19\r\n"
+      - uart.write: "MODE\t2\r\n"
+      - uart.write: "PID\t0xA201\r\n"
+      - uart.write: "SER#\tHQ141112345\r\n"
+      - uart.write: "WARN\t1\r\n"
+      - uart.write: "Checksum\t?\r\n"
+      - uart.write: "\r\n"
