@@ -1,11 +1,32 @@
 #include "victron.h"
 #include "esphome/core/log.h"
 #include <algorithm>  // std::min
+#include "esphome/core/helpers.h"
 
 namespace esphome {
 namespace victron {
 
 static const char *const TAG = "victron";
+
+static const uint8_t OFF_REASONS_SIZE = 16;
+static const char *const OFF_REASONS[OFF_REASONS_SIZE] = {
+    "No input power",                       // 0000 0000 0000 0001
+    "Switched off (power switch)",          // 0000 0000 0000 0010
+    "Switched off (device mode register)",  // 0000 0000 0000 0100
+    "Remote input",                         // 0000 0000 0000 1000
+    "Protection active",                    // 0000 0000 0001 0000
+    "Paygo",                                // 0000 0000 0010 0000
+    "BMS",                                  // 0000 0000 0100 0000
+    "Engine shutdown detection",            // 0000 0000 1000 0000
+    "Analysing input voltage",              // 0000 0001 0000 0000
+    "Unknown: Bit 10",                      // 0000 0010 0000 0000
+    "Unknown: Bit 11",                      // 0000 0100 0000 0000
+    "Unknown: Bit 12",                      // 0000 1000 0000 0000
+    "Unknown: Bit 13",                      // 0001 0000 0000 0000
+    "Unknown: Bit 14",                      // 0010 0000 0000 0000
+    "Unknown: Bit 15",                      // 0100 0000 0000 0000
+    "Unknown: Bit 16",                      // 1000 0000 0000 0000
+};
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
   ESP_LOGCONFIG(TAG, "Victron:");
@@ -33,6 +54,7 @@ void VictronComponent::dump_config() {  // NOLINT(google-readability-function-si
   LOG_SENSOR("  ", "Warning Code", warning_code_sensor_);
   LOG_SENSOR("  ", "Tracking Mode ID", tracking_mode_id_sensor_);
   LOG_SENSOR("  ", "Device Mode ID", device_mode_id_sensor_);
+  LOG_SENSOR("  ", "Off Reason Bitmask", off_reason_bitmask_sensor_);
   LOG_TEXT_SENSOR("  ", "Charging Mode", charging_mode_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Error Text", error_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Warning Text", warning_text_sensor_);
@@ -41,6 +63,7 @@ void VictronComponent::dump_config() {  // NOLINT(google-readability-function-si
   LOG_TEXT_SENSOR("  ", "Firmware Version", firmware_version_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Firmware Version 24bit", firmware_version_24bit_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Device Type", device_type_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Off Reason", off_reason_text_sensor_);
 
   LOG_SENSOR("  ", "Battery Temperature ", battery_temperature_sensor_);
   LOG_SENSOR("  ", "Instantaneous Power", instantaneous_power_sensor_);
@@ -592,6 +615,26 @@ static const std::string device_type_text(int value) {
   }
 }
 
+static const std::string off_reason_text(uint32_t mask) {
+  bool first = true;
+  std::string value_list = "";
+
+  if (mask) {
+    for (uint8_t i = 0; i < OFF_REASONS_SIZE; i++) {
+      if (mask & (1 << i)) {
+        if (first) {
+          first = false;
+        } else {
+          value_list.append(";");
+        }
+        value_list.append(OFF_REASONS[i]);
+      }
+    }
+  }
+
+  return value_list;
+}
+
 void VictronComponent::handle_value_() {
   int value;
 
@@ -718,7 +761,14 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  // @TODO: "OR"                Off reason
+  if (label_ == "OR") {
+    auto off_reason_bitmask = parse_hex<uint32_t>(value_.substr(2, value_.size() - 2));
+    if (off_reason_bitmask) {
+      this->publish_state_(off_reason_bitmask_sensor_, *off_reason_bitmask);
+      this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
+    }
+    return;
+  }
 
   if (label_ == "H1") {
     // mAh -> Ah

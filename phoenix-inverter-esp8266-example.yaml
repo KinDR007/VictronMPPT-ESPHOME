@@ -59,6 +59,8 @@ sensor:
       name: "${name} ac out apparent power"
     warning_code:
       name: "${name} warning code"
+    off_reason_bitmask:
+      name: "${name} off reason bitmask"
 
 text_sensor:
   - platform: victron
@@ -78,6 +80,8 @@ text_sensor:
       name: "${name} device mode"
     warning:
       name: "${name} warning"
+    off_reason:
+      name: "${name} off reason"
 
 binary_sensor:
   - platform: victron

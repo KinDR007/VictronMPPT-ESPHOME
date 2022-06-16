@@ -177,6 +177,8 @@ jobs:
       - run: |
           esphome -s external_components_source components config debug-esp8266-example.yaml
       - run: |
+          esphome -s external_components_source components config debug-esp32-example.yaml
+      - run: |
           esphome -s external_components_source components config tests/emulator-all-keys.yaml
           esphome -s external_components_source components config tests/fake-bmv600.yaml
           esphome -s external_components_source components config tests/fake-bmv700.yaml
@@ -232,3 +234,5 @@ jobs:
           esphome -s external_components_source components compile phoenix-charger-esp8266-example.yaml
       - run: |
           esphome -s external_components_source components compile phoenix-inverter-esp8266-example.yaml
+      - run: |
+          esphome -s external_components_source components compile debug-esp32-example.yaml

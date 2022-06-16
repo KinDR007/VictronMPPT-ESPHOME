@@ -82,6 +82,7 @@ CONF_MAX_AUXILIARY_BATTERY_VOLTAGE = "max_auxiliary_battery_voltage"
 CONF_AMOUNT_OF_DISCHARGED_ENERGY = "amount_of_discharged_energy"
 CONF_AMOUNT_OF_CHARGED_ENERGY = "amount_of_charged_energy"
 CONF_DC_MONITOR_MODE_ID = "dc_monitor_mode_id"
+CONF_OFF_REASON_BITMASK = "off_reason_bitmask"
 
 UNIT_AMPERE_HOURS = "Ah"
 
@@ -137,6 +138,7 @@ SENSORS = [
     CONF_AMOUNT_OF_DISCHARGED_ENERGY,
     CONF_AMOUNT_OF_CHARGED_ENERGY,
     CONF_DC_MONITOR_MODE_ID,
+    CONF_OFF_REASON_BITMASK,
 ]
 
 
@@ -441,6 +443,12 @@ CONFIG_SCHEMA = cv.Schema(
             device_class=DEVICE_CLASS_POWER,
         ),
         cv.Optional(CONF_DC_MONITOR_MODE_ID): sensor.sensor_schema(
+            unit_of_measurement=UNIT_EMPTY,
+            icon=ICON_EMPTY,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_OFF_REASON_BITMASK): sensor.sensor_schema(
             unit_of_measurement=UNIT_EMPTY,
             icon=ICON_EMPTY,
             accuracy_decimals=0,
