@@ -21,6 +21,10 @@ All Victron devices providing a ve.direct port.
 
 ## Schematics
 
+Attention: [The TX voltage of the VE.Direct interface depends on the product: Some are 5V, others 3.3V!](https://www.victronenergy.com/live/vedirect_protocol:faq#q4is_the_vedirect_interface_33_or_5v)
+
+Please measure the voltage between TX and GND. In case of a logic level of 5V you should add a voltage divider or logic level converter between the ESP and the Victron device.
+
 ```
                 UART-TTL
 ┌────────────────┐                ┌──────────────────┐
