@@ -32,7 +32,7 @@ uart:
   rx_pin: ${rx_pin}
   debug:
     direction: BOTH
-    dummy_receiver: true
+    dummy_receiver: false
     after:
       delimiter: "\n"
     sequence:
