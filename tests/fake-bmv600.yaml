@@ -1,5 +1,5 @@
 substitutions:
-  name: fake-multi-rs-solar
+  name: fake-bmv600
   tx_pin: GPIO4
   rx_pin: GPIO5
 

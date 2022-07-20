@@ -1,0 +1,102 @@
+substitutions:
+  name: fake-bmv712
+  tx_pin: GPIO4
+  rx_pin: GPIO5
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+ota:
+logger:
+  level: DEBUG
+
+uart:
+  baud_rate: 19200
+  tx_pin: ${tx_pin}
+  rx_pin: ${rx_pin}
+  debug:
+    direction: BOTH
+    dummy_receiver: true
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
+
+interval:
+  - interval: 3s
+    then:
+      - uart.write: "PID\t0xA381\r\n"
+      - uart.write: "V\t26464\r\n"
+      - uart.write: "VS\t34\r\n"
+      - uart.write: "I\t-5647\r\n"
+      - uart.write: "P\t-149\r\n"
+      - uart.write: "CE\t-6671\r\n"
+      - uart.write: "SOC\t937\r\n"
+      - uart.write: "TTG\t436\r\n"
+      - uart.write: "Alarm\tOFF\r\n"
+      - uart.write: "Relay\tOFF\r\n"
+      - uart.write: "AR\t0\r\n"
+      - uart.write: "BMV\t712 Smart\r\n"
+      - uart.write: "FW\t0408\r\n"
+      - uart.write: "MON\t0\r\n"
+      - uart.write: "\r\n"
+      - uart.write: "H1\t-96470\r\n"
+      - uart.write: "H2\t-6671\r\n"
+      - uart.write: "H3\t-26485\r\n"
+      - uart.write: "H4\t29\r\n"
+      - uart.write: "H5\t4\r\n"
+      - uart.write: "H6\t-2316635\r\n"
+      - uart.write: "H7\t27\r\n"
+      - uart.write: "H8\t28776\r\n"
+      - uart.write: "H9\t7134\r\n"
+      - uart.write: "H10\t31\r\n"
+      - uart.write: "H11\t0\r\n"
+      - uart.write: "H12\t0\r\n"
+      - uart.write: "H15\t22\r\n"
+      - uart.write: "H16\t38\r\n"
+      - uart.write: "H17\t6066\r\n"
+      - uart.write: "H18\t6117\r\n"
+      - uart.write: "Checksum\tn"
+      - uart.write: "\r\n"
+
+      - uart.write: "PID\t0xA381\r\n"
+      - uart.write: "V\t26457\r\n"
+      - uart.write: "VS\t34\r\n"
+      - uart.write: "I\t-6032\r\n"
+      - uart.write: "P\t-160\r\n"
+      - uart.write: "CE\t-6673\r\n"
+      - uart.write: "SOC\t937\r\n"
+      - uart.write: "TTG\t435\r\n"
+      - uart.write: "Alarm\tOFF\r\n"
+      - uart.write: "Relay\tOFF\r\n"
+      - uart.write: "AR\t0\r\n"
+      - uart.write: "BMV\t712 Smart\r\n"
+      - uart.write: "FW\t0408\r\n"
+      - uart.write: "MON\t0\r\n"
+      - uart.write: "Checksum\t\x9E"
+      - uart.write: "\r\n"
+      - uart.write: "H1\t-96470\r\n"
+      - uart.write: "H2\t-6673\r\n"
+      - uart.write: "H3\t-26485\r\n"
+      - uart.write: "H4\t29\r\n"
+      - uart.write: "H5\t4\r\n"
+      - uart.write: "H6\t-2316636\r\n"
+      - uart.write: "H7\t27\r\n"
+      - uart.write: "H8\t28776\r\n"
+      - uart.write: "H9\t7135\r\n"
+      - uart.write: "H10\t31\r\n"
+      - uart.write: "H11\t0\r\n"
+      - uart.write: "H12\t0\r\n"
+      - uart.write: "H15\t22\r\n"
+      - uart.write: "H16\t38\r\n"
+      - uart.write: "H17\t6066\r\n"
+      - uart.write: "H18\t6117\r\n"
+      - uart.write: "Checksum\tj"
+      - uart.write: "\r\n"
