@@ -339,19 +339,19 @@ CONFIG_SCHEMA = cv.Schema(
             device_class=DEVICE_CLASS_EMPTY,
         ),
         cv.Optional(CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE): sensor.sensor_schema(
-            unit_of_measurement=UNIT_AMPERE,
+            unit_of_measurement=UNIT_AMPERE_HOURS,
             icon=ICON_CURRENT_AC,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_CURRENT,
         ),
         cv.Optional(CONF_DEPTH_OF_THE_LAST_DISCHARGE): sensor.sensor_schema(
-            unit_of_measurement=UNIT_AMPERE,
+            unit_of_measurement=UNIT_AMPERE_HOURS,
             icon=ICON_CURRENT_AC,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_CURRENT,
         ),
         cv.Optional(CONF_DEPTH_OF_THE_AVERAGE_DISCHARGE): sensor.sensor_schema(
-            unit_of_measurement=UNIT_AMPERE,
+            unit_of_measurement=UNIT_AMPERE_HOURS,
             icon=ICON_CURRENT_AC,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_CURRENT,
