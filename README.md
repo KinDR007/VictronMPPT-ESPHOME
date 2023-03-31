@@ -57,6 +57,9 @@ If you are unsure about to pin order please measure the voltage between GND and 
 <img src="images/circuit_thumbnail.jpg" width="50%">
 </a>
 
+## Community Tutorials
+Step-by-Step Tutorial: Add Victron MPPT to Home Assistant with ESPHome - https://peyanski.com/add-victron-mppt-to-home-assistant-with-esphome/
+
 ## Installation
 
 You can install this component with [ESPHome external components feature](https://esphome.io/components/external_components.html) like this:
