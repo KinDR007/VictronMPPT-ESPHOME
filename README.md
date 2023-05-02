@@ -65,7 +65,7 @@ external_components:
   - source: github://KinDR007/VictronMPPT-ESPHOME@main
 
 uart:
-  id: uart0
+  id: uart_0
   tx_pin: D8  # Not used! The communication is read-only
   rx_pin: D7
   baud_rate: 19200
@@ -73,7 +73,7 @@ uart:
 
 victron:
   id: victron0
-  uart_id: uart0
+  uart_id: uart_0
 
 sensor:
   - platform: victron

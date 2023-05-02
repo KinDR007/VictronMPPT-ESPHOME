@@ -11,7 +11,6 @@ esp32:
   board: wemos_d1_mini32
   framework:
     type: esp-idf
-    version: latest
 
 external_components:
   - source: ${external_components_source}
@@ -26,7 +25,7 @@ api:
 logger:
 
 uart:
-  id: uart0
+  id: uart_0
   baud_rate: 19200
   tx_pin: ${tx_pin}
   rx_pin: ${rx_pin}
@@ -39,7 +38,7 @@ uart:
       - lambda: UARTDebug::log_string(direction, bytes);
 
 victron:
-  uart_id: uart0
+  uart_id: uart_0
   id: victron0
   throttle: 10s
 
