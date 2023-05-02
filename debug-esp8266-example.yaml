@@ -25,7 +25,7 @@ logger:
   esp8266_store_log_strings_in_flash: false
 
 uart:
-  id: uart0
+  id: uart_0
   baud_rate: 19200
   tx_pin: ${tx_pin}
   rx_pin: ${rx_pin}
@@ -38,7 +38,7 @@ uart:
       - lambda: UARTDebug::log_string(direction, bytes);
 
 victron:
-  uart_id: uart0
+  uart_id: uart_0
   id: victron0
   throttle: 10s
 

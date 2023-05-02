@@ -31,12 +31,12 @@ mqtt:
   id: mqtt_client
 
 uart:
-  - id: uart0
+  - id: uart_0
     tx_pin: D8  # Not connected! The communication is read-only
     rx_pin: D7  # Connect this this GPIO and GND to the first MPPT charger
     baud_rate: 19200
     rx_buffer_size: 256
-  - id: uart1
+  - id: uart_1
     tx_pin: D6  # Not connected! The communication is read-only
     rx_pin: D5  # Connect this this GPIO and GND to the second MPPT charger
     baud_rate: 19200
@@ -44,10 +44,10 @@ uart:
 
 victron:
   - id: victron0
-    uart_id: uart0
+    uart_id: uart_0
     throttle: 10s
   - id: victron1
-    uart_id: uart1
+    uart_id: uart_1
     throttle: 10s
 
 sensor:
