@@ -59,7 +59,7 @@ sensor:
       name: "${device0} panel voltage"
     panel_power:
       name: "${device0} panel power"
-    battery_current:
+    panel_current:
       name: "${device0} panel current"
     load_current:
       name: "${device0} load current"
@@ -72,7 +72,7 @@ sensor:
       name: "${device1} panel voltage"
     panel_power:
       name: "${device1} panel power"
-    battery_current:
+    panel_current:
       name: "${device1} panel current"
     load_current:
       name: "${device1} load current"

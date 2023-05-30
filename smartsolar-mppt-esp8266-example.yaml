@@ -58,7 +58,7 @@ sensor:
     panel_power:
       name: "${name} panel power"
     battery_current:
-      name: "${name} panel current"
+      name: "${name} battery current"
     battery_voltage:
       name: "${name} battery voltage"
     day_number:
