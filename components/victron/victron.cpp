@@ -883,15 +883,15 @@ void VictronComponent::handle_value_() {
 
   // "H17"    0.01 kWh   Amount of discharged energy (BMV) / Amount of produced energy (DC monitor)
   if (label_ == "H17") {
-    // Wh
-    this->publish_state_(amount_of_discharged_energy_sensor_, atoi(value_.c_str()) * 10.0f);  // NOLINT(cert-err34-c)
+    // Wh to kWh
+    this->publish_state_(amount_of_discharged_energy_sensor_, atoi(value_.c_str()) / 100.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
   // "H18"    0.01 kWh   Amount of charged energy (BMV) / Amount of consumed energy (DC monitor)
   if (label_ == "H18") {
-    // Wh
-    this->publish_state_(amount_of_charged_energy_sensor_, atoi(value_.c_str()) * 10.0f);  // NOLINT(cert-err34-c)
+    // Wh to kWh
+    this->publish_state_(amount_of_charged_energy_sensor_, atoi(value_.c_str()) / 100.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
