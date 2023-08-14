@@ -1,6 +1,6 @@
-# VictronMPPT-ESPHOME
+# VictronMPPT-ESPHOME 
 
-ESPHome component to monitor a Victron device via ve.direct / UART TTL
+ESPHome component to monitor a Victron device _(MPPT, SmarShunt, BMV, Phoenix Inverter ... )_ via ve.direct / UART TTL
 
 ## Supported devices
 
@@ -14,6 +14,8 @@ All Victron devices providing a ve.direct port.
   * Victron SmartSolar MPPT VE.Can 150/100 rev2 (Using VE.Direct port)
   * Victron SmartSolar MPPT 250/70
   * Victron Phoenix Inverter 12/500
+   
+  * Victron SmartShunt 500A/50mV
 
 ## Requirements
 
