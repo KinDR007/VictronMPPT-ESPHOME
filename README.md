@@ -13,6 +13,8 @@ All Victron devices providing a ve.direct port.
   * Victron SmartSolar MPPT 100/20
   * Victron BlueSolar  MPPT 100/30
   * Victron SmartSolar MPPT 150/35
+  * Victron SmartSolar MPPT 150/45
+  * Victron SmartSolar MPPT 150/60
   * Victron SmartSolar MPPT VE.Can 150/100 rev2 (Using VE.Direct port)
   * Victron SmartSolar MPPT 250/70
   * Victron Phoenix Inverter 12/500
