@@ -93,61 +93,59 @@ void VictronComponent::loop() {
     ESP_LOGW(TAG, "Last transmission too long ago");
     state_ = 0;
   }
-
   if (!available())
     return;
 
   last_transmission_ = now;
-  while (available()) {
-    uint8_t c;
-    read_byte(&c);
-    if (state_ == 0) {
-      if (c == '\r' || c == '\n') {
-        continue;
-      }
-      label_.clear();
-      value_.clear();
-      state_ = 1;
+  uint8_t c;
+  read_byte(&c);
+  if (state_ == 0) {
+    if (c == '\r' || c == '\n') {
+      return;
     }
-    if (state_ == 1) {
-      // Start of a ve.direct hex frame
-      if (c == ':') {
-        state_ = 3;
-        continue;
-      }
-      if (c == '\t') {
-        state_ = 2;
+    label_.clear();
+    value_.clear();
+    state_ = 1;
+    begin_frame_ = now;
+  }
+  if (state_ == 1) {
+    // Start of a ve.direct hex frame
+    if (c == ':') {
+      state_ = 3;
+      return;
+    }
+    if (c == '\t') {
+      state_ = 2;
+    } else {
+      label_.push_back(c);
+    }
+    return;
+  }
+  if (state_ == 2) {
+    if (label_ == "Checksum") {
+      state_ = 0;
+      // The checksum is used as end of frame indicator
+      if (begin_frame_ - this->last_publish_ >= this->throttle_) {
+        this->last_publish_ = begin_frame_;
+        this->publishing_ = true;
       } else {
-        label_.push_back(c);
+        this->publishing_ = false;
       }
-      continue;
+      return;
     }
-    if (state_ == 2) {
-      if (label_ == "Checksum") {
-        state_ = 0;
-        // The checksum is used as end of frame indicator
-        if (now - this->last_publish_ >= this->throttle_) {
-          this->last_publish_ = now;
-          this->publishing_ = true;
-        } else {
-          this->publishing_ = false;
-        }
-        continue;
+    if (c == '\r' || c == '\n') {
+      if (this->publishing_) {
+        handle_value_();
       }
-      if (c == '\r' || c == '\n') {
-        if (this->publishing_) {
-          handle_value_();
-        }
-        state_ = 0;
-      } else {
-        value_.push_back(c);
-      }
+      state_ = 0;
+    } else {
+      value_.push_back(c);
     }
-    // Discard ve.direct hex frame
-    if (state_ == 3) {
-      if (c == '\r' || c == '\n') {
-        state_ = 0;
-      }
+  }
+  // Discard ve.direct hex frame
+  if (state_ == 3) {
+    if (c == '\r' || c == '\n') {
+      state_ = 0;
     }
   }
 }
