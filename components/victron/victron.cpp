@@ -87,6 +87,8 @@ void VictronComponent::dump_config() {  // NOLINT(google-readability-function-si
 }
 
 void VictronComponent::loop() {
+  // publish one value at a time to yield to esphome between
+  // each value and avoid blocking too long
   if (publishing_ && recv_buffer_.size() > 0) {
     std::pair<std::string, std::string> p = recv_buffer_.back();
     handle_value_(p.first, p.second);
@@ -96,6 +98,7 @@ void VictronComponent::loop() {
     }
     return;
   }
+  // reset publishing in case buffer is empty while publishing
   publishing_ = false;
   const uint32_t now = millis();
   if ((state_ > 0) && (now - last_transmission_ >= 200)) {
@@ -109,11 +112,14 @@ void VictronComponent::loop() {
   last_transmission_ = now;
   uint8_t c;
   read_byte(&c);
+  // checksum is calculated as the sum of all bytes in a frame
+  // the final checksum should be a multiple of 256 (0 in 8 bit value)
   checksum_ += c;
   if (state_ == 0) {
     if (c == '\r' || c == '\n') {
       return;
     }
+    // reset label/value
     label_.clear();
     value_.clear();
     state_ = 1;
@@ -121,6 +127,7 @@ void VictronComponent::loop() {
       begin_frame_ = now;
     }
   }
+  // read label
   if (state_ == 1) {
     // Start of a ve.direct hex frame
     if (c == ':') {
@@ -128,18 +135,21 @@ void VictronComponent::loop() {
       return;
     }
     if (c == '\t') {
+      // end of label received, start reading value
       state_ = 2;
     } else {
+      // update label
       label_.push_back(c);
     }
     return;
   }
+  // read value
   if (state_ == 2) {
+    // The checksum is used as end of frame indicator
     if (label_ == "Checksum") {
       state_ = 0;
-      // The checksum is used as end of frame indicator
       if (begin_frame_ - this->last_publish_ >= this->throttle_) {
-        // check checksum
+        // check that checksum value is accurate
         if (checksum_ != 0) {
           // invalid checksum, drop frame
           ESP_LOGW(TAG, "Received invalid checksum, dropping frame: recv %d, calc %d", c, checksum_);
@@ -147,29 +157,30 @@ void VictronComponent::loop() {
           for (std::pair<std::string, std::string> element : recv_buffer_) {
             ESP_LOGD(TAG, ">> %s: %s", element.first.c_str(), element.second.c_str());
           }
+          // clear buffer with invalid data
           recv_buffer_.clear();
           return;
         }
         this->last_publish_ = begin_frame_;
+        // full buffer received, with valid checksum
+        // set state to publishing to publish the values in the buffer
         publishing_ = true;
-        /*
-        for (std::pair<std::string, std::string> element : recv_buffer_) {
-          handle_value_(element.first, element.second);
-        }
-        */
       } else {
+        // frame is throttled, clear buffer and skip publishing
         ESP_LOGD(TAG, "recv throttled, drop frame");
         recv_buffer_.clear();
       }
-      // reset checksum
+      // reset checksum and frame
       checksum_ = 0;
       begin_frame_ = now;
       return;
     }
     if (c == '\r' || c == '\n') {
+      // end of value received, add label/value to buffer
       recv_buffer_.insert(recv_buffer_.begin(), std::make_pair(label_, value_));
       state_ = 0;
     } else {
+      // update value
       value_.push_back(c);
     }
   }
