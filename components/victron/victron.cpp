@@ -102,6 +102,7 @@ void VictronComponent::loop() {
   checksum_ += c;
   if (state_ == 0) {
     if (c == '\r' || c == '\n') {
+      checksum_ = c;
       return;
     }
     label_.clear();
@@ -130,7 +131,7 @@ void VictronComponent::loop() {
         // check checksum
         if (checksum_ != 0) {
           // invalid checksum, drop frame
-          ESP_LOGW(TAG, "Received invalid checksum, dropping frame");
+          ESP_LOGW(TAG, "Received invalid checksum, dropping frame: recv %s, calc %s", c, checksum_);
           return;
         }
         this->last_publish_ = begin_frame_;
@@ -145,7 +146,7 @@ void VictronComponent::loop() {
         handle_value_();
       }
       state_ = 0;
-      checksum_ = 0;
+      checksum_ = c;
     } else {
       value_.push_back(c);
     }
@@ -154,7 +155,7 @@ void VictronComponent::loop() {
   if (state_ == 3) {
     if (c == '\r' || c == '\n') {
       state_ = 0;
-      checksum_ = 0;
+      checksum_ = c;
     }
   }
 }
