@@ -87,7 +87,7 @@ void VictronComponent::dump_config() {  // NOLINT(google-readability-function-si
 }
 
 void VictronComponent::loop() {
-  if (publishing_) {
+  if (publishing_ && recv_buffer_.size() > 0) {
     std::pair<std::string, std::string> p = recv_buffer_.back();
     handle_value_(p.first, p.second);
     recv_buffer_.pop_back();
@@ -96,6 +96,7 @@ void VictronComponent::loop() {
     }
     return;
   }
+  publishing_ = false;
   const uint32_t now = millis();
   if ((state_ > 0) && (now - last_transmission_ >= 200)) {
     // last transmission too long ago. Reset RX index.
