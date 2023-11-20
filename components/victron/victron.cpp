@@ -135,7 +135,7 @@ void VictronComponent::loop() {
           ESP_LOGW(TAG, "Received invalid checksum, dropping frame: recv %d, calc %d", c, checksum_);
           checksum_ = 0;
           for (std::pair<std::string, std::string> element : recv_buffer_) {
-            ESP_LOGD(TAG, ">> %s: %s", element.first, element.second);
+            ESP_LOGD(TAG, ">> %s: %s", element.first.c_str(), element.second.c_str());
           }
           recv_buffer_.clear();
           return;
