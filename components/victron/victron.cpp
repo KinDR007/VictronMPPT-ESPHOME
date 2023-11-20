@@ -166,7 +166,7 @@ void VictronComponent::loop() {
       return;
     }
     if (c == '\r' || c == '\n') {
-      recv_buffer_.insert(recv_buffer.begin(), std::make_pair(label_, value_));
+      recv_buffer_.insert(recv_buffer_.begin(), std::make_pair(label_, value_));
       state_ = 0;
     } else {
       value_.push_back(c);
