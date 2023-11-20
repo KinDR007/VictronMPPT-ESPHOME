@@ -131,9 +131,9 @@ void VictronComponent::loop() {
         if (checksum_ != 0) {
           // invalid checksum, drop frame
           ESP_LOGW(TAG, "Received invalid checksum, dropping frame: recv %d, calc %d", c, checksum_);
+          checksum_ = 0;
           return;
         }
-        checksum_ = 0;
         this->last_publish_ = begin_frame_;
         this->publishing_ = true;
       } else {
