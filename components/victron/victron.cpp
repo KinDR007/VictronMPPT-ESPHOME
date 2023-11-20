@@ -125,6 +125,7 @@ void VictronComponent::loop() {
   }
   if (state_ == 2) {
     if (label_ == "Checksum") {
+      state_ = 0;
       // The checksum is used as end of frame indicator
       if (begin_frame_ - this->last_publish_ >= this->throttle_) {
         // check checksum
