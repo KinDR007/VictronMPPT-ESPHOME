@@ -144,10 +144,10 @@ void VictronComponent::loop() {
         for (std::pair<std::string, std::string> element : recv_buffer_) {
           handle_value_(element.first, element.second);
         }
-        recv_buffer_.clear();
       } else {
         ESP_LOGD(TAG, "recv throttled, drop frame");
       }
+      recv_buffer_.clear();
       // reset checksum
       checksum_ = 0;
       begin_frame_ = now;
