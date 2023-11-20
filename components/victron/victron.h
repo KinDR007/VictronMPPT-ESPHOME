@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include <utility>
 #include "esphome/core/component.h"
 #include "esphome/components/binary_sensor/binary_sensor.h"
 #include "esphome/components/sensor/sensor.h"
@@ -206,7 +208,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   float get_setup_priority() const override { return setup_priority::DATA; }
 
  protected:
-  void handle_value_();
+  void handle_value_(std::string l, std::string v);
   void publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state);
   void publish_state_(sensor::Sensor *sensor, float value);
   void publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state);
@@ -283,7 +285,6 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *alarm_reason_text_sensor_{nullptr};
   text_sensor::TextSensor *model_description_text_sensor_{nullptr};
 
-  bool publishing_{true};
   int state_{0};
   std::string label_;
   std::string value_;
@@ -292,6 +293,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   uint32_t last_publish_{0};
   uint32_t throttle_{0};
   uint8_t checksum_{0};
+  std::vector<std::pair<std::string, std::string>> recv_buffer_{};
 };
 
 }  // namespace victron
