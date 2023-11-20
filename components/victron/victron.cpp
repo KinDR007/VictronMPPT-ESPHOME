@@ -99,6 +99,7 @@ void VictronComponent::loop() {
   last_transmission_ = now;
   uint8_t c;
   read_byte(&c);
+  checksum_ += c;
   if (state_ == 0) {
     if (c == '\r' || c == '\n') {
       return;
@@ -107,6 +108,7 @@ void VictronComponent::loop() {
     value_.clear();
     state_ = 1;
     begin_frame_ = now;
+    return;
   }
   if (state_ == 1) {
     // Start of a ve.direct hex frame
@@ -123,9 +125,14 @@ void VictronComponent::loop() {
   }
   if (state_ == 2) {
     if (label_ == "Checksum") {
-      state_ = 0;
       // The checksum is used as end of frame indicator
       if (begin_frame_ - this->last_publish_ >= this->throttle_) {
+        // check checksum
+        if (c != 0) {
+          // invalid checksum, drop frame
+          ESP_LOGW(TAG, "Received invalid checksum, dropping frame");
+          return;
+        }
         this->last_publish_ = begin_frame_;
         this->publishing_ = true;
       } else {
@@ -138,6 +145,7 @@ void VictronComponent::loop() {
         handle_value_();
       }
       state_ = 0;
+      checksum_ = 0;
     } else {
       value_.push_back(c);
     }

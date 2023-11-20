@@ -291,6 +291,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   uint32_t last_transmission_{0};
   uint32_t last_publish_{0};
   uint32_t throttle_{0};
+  uint8_t checksum_{0};
 };
 
 }  // namespace victron
