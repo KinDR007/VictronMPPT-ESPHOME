@@ -87,6 +87,15 @@ void VictronComponent::dump_config() {  // NOLINT(google-readability-function-si
 }
 
 void VictronComponent::loop() {
+  if (publishing_) {
+    std::pair<std::string, std::string> p = recv_buffer_.back();
+    handle_value_(p.first, p.second);
+    recv_buffer_.pop_back();
+    if (recv_buffer_.size() == 0) {
+      publishing_ = false;
+    }
+    return;
+  }
   const uint32_t now = millis();
   if ((state_ > 0) && (now - last_transmission_ >= 200)) {
     // last transmission too long ago. Reset RX index.
@@ -141,9 +150,12 @@ void VictronComponent::loop() {
           return;
         }
         this->last_publish_ = begin_frame_;
+        publishing_ = true;
+        /*
         for (std::pair<std::string, std::string> element : recv_buffer_) {
           handle_value_(element.first, element.second);
         }
+        */
       } else {
         ESP_LOGD(TAG, "recv throttled, drop frame");
       }
@@ -154,7 +166,7 @@ void VictronComponent::loop() {
       return;
     }
     if (c == '\r' || c == '\n') {
-      recv_buffer_.push_back(std::make_pair(label_, value_));
+      recv_buffer_.insert(recv_buffer.begin(), std::make_pair(label_, value_));
       state_ = 0;
     } else {
       value_.push_back(c);

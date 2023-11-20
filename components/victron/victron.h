@@ -286,6 +286,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *model_description_text_sensor_{nullptr};
 
   int state_{0};
+  bool publishing_{false};
   std::string label_;
   std::string value_;
   uint32_t begin_frame_{0};
