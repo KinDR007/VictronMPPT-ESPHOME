@@ -129,7 +129,7 @@ void VictronComponent::loop() {
       // The checksum is used as end of frame indicator
       if (begin_frame_ - this->last_publish_ >= this->throttle_) {
         // check checksum
-        if (c != 0) {
+        if (checksum_ != 0) {
           // invalid checksum, drop frame
           ESP_LOGW(TAG, "Received invalid checksum, dropping frame");
           return;
