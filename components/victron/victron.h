@@ -287,7 +287,6 @@ class VictronComponent : public uart::UARTDevice, public Component {
   int state_{0};
   std::string label_;
   std::string value_;
-  uint32_t begin_frame_{0};
   uint32_t last_transmission_{0};
   uint32_t last_publish_{0};
   uint32_t throttle_{0};
