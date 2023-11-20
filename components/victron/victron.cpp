@@ -138,6 +138,7 @@ void VictronComponent::loop() {
         this->publishing_ = true;
       } else {
         this->publishing_ = false;
+        checksum_ = 0;
       }
       return;
     }
@@ -145,8 +146,6 @@ void VictronComponent::loop() {
       if (this->publishing_) {
         handle_value_();
       }
-      state_ = 0;
-      checksum_ = 0;
     } else {
       value_.push_back(c);
     }
