@@ -146,6 +146,7 @@ void VictronComponent::loop() {
       if (this->publishing_) {
         handle_value_();
       }
+      state_ = 0;
     } else {
       value_.push_back(c);
     }
