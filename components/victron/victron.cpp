@@ -99,17 +99,17 @@ void VictronComponent::loop() {
   last_transmission_ = now;
   uint8_t c;
   read_byte(&c);
-  checksum_ += c;
   if (state_ == 0) {
     if (c == '\r' || c == '\n') {
       return;
     }
     label_.clear();
     value_.clear();
+    checksum_ = 0;
     state_ = 1;
     begin_frame_ = now;
-    return;
   }
+  checksum_ += c;
   if (state_ == 1) {
     // Start of a ve.direct hex frame
     if (c == ':') {
@@ -120,8 +120,8 @@ void VictronComponent::loop() {
       state_ = 2;
     } else {
       label_.push_back(c);
-      return;
     }
+    return;
   }
   if (state_ == 2) {
     if (label_ == "Checksum") {
@@ -145,7 +145,6 @@ void VictronComponent::loop() {
         handle_value_();
       }
       state_ = 0;
-      checksum_ = 0;
     } else {
       value_.push_back(c);
     }
