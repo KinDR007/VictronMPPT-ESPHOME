@@ -120,8 +120,8 @@ void VictronComponent::loop() {
       state_ = 2;
     } else {
       label_.push_back(c);
+      return;
     }
-    return;
   }
   if (state_ == 2) {
     if (label_ == "Checksum") {
