@@ -159,8 +159,8 @@ void VictronComponent::loop() {
         */
       } else {
         ESP_LOGD(TAG, "recv throttled, drop frame");
+        recv_buffer_.clear();
       }
-      recv_buffer_.clear();
       // reset checksum
       checksum_ = 0;
       begin_frame_ = now;
