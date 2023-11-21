@@ -11,7 +11,7 @@ CODEOWNERS = ["@KinDR007"]
 
 MULTI_CONF = True
 
-CONF_ASYNC_UART = 'async_uart'
+CONF_ASYNC_UART = "async_uart"
 
 victron_ns = cg.esphome_ns.namespace("victron")
 VictronComponent = victron_ns.class_("VictronComponent", uart.UARTDevice, cg.Component)
