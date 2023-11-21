@@ -87,6 +87,80 @@ void VictronComponent::dump_config() {  // NOLINT(google-readability-function-si
 }
 
 void VictronComponent::loop() {
+  if (async_uart_) {
+    async_loop();
+  } else {
+    blocking_loop();
+  }
+}
+
+void VictronComponent::blocking_loop() {
+  const uint32_t now = millis();
+  if ((state_ > 0) && (now - last_transmission_ >= 200)) {
+    // last transmission too long ago. Reset RX index.
+    ESP_LOGW(TAG, "Last transmission too long ago");
+    state_ = 0;
+  }
+
+  if (!available())
+    return;
+
+  last_transmission_ = now;
+  while (available()) {
+    uint8_t c;
+    read_byte(&c);
+    if (state_ == 0) {
+      if (c == '\r' || c == '\n') {
+        continue;
+      }
+      label_.clear();
+      value_.clear();
+      state_ = 1;
+    }
+    if (state_ == 1) {
+      // Start of a ve.direct hex frame
+      if (c == ':') {
+        state_ = 3;
+        continue;
+      }
+      if (c == '\t') {
+        state_ = 2;
+      } else {
+        label_.push_back(c);
+      }
+      continue;
+    }
+    if (state_ == 2) {
+      if (label_ == "Checksum") {
+        state_ = 0;
+        // The checksum is used as end of frame indicator
+        if (now - this->last_publish_ >= this->throttle_) {
+          this->last_publish_ = now;
+          this->publishing_ = true;
+        } else {
+          this->publishing_ = false;
+        }
+        continue;
+      }
+      if (c == '\r' || c == '\n') {
+        if (this->publishing_) {
+          handle_value_(label_, value_);
+        }
+        state_ = 0;
+      } else {
+        value_.push_back(c);
+      }
+    }
+    // Discard ve.direct hex frame
+    if (state_ == 3) {
+      if (c == '\r' || c == '\n') {
+        state_ = 0;
+      }
+    }
+  }
+}
+
+void VictronComponent::async_loop() {
   // publish one value at a time to yield to esphome between
   // each value and avoid blocking too long
   if (publishing_ && recv_buffer_.size() > 0) {

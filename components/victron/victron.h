@@ -14,6 +14,7 @@ namespace victron {
 class VictronComponent : public uart::UARTDevice, public Component {
  public:
   void set_throttle(uint32_t throttle) { this->throttle_ = throttle; }
+  void set_async_uart(bool async_uart) { this->async_uart_ = async_uart; }
   void set_load_state_binary_sensor(binary_sensor::BinarySensor *load_state_binary_sensor) {
     load_state_binary_sensor_ = load_state_binary_sensor;
   }
@@ -204,6 +205,8 @@ class VictronComponent : public uart::UARTDevice, public Component {
 
   void dump_config() override;
   void loop() override;
+  void async_loop();
+  void blocking_loop();
 
   float get_setup_priority() const override { return setup_priority::DATA; }
 
@@ -286,6 +289,7 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *model_description_text_sensor_{nullptr};
 
   int state_{0};
+  bool async_uart_{false};
   bool publishing_{false};
   std::string label_;
   std::string value_;
