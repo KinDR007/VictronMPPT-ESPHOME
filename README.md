@@ -53,12 +53,14 @@ If you are unsure about to pin order please measure the voltage between GND and 
 
 ### JST-PH jack
 
-| Pin     | Purpose      | ESP pin        |
-| :-----: | :----------- | :------------- |
-|  **1**  | **GND**      | GND            |
-|    2    | RX           |                |
-|  **3**  | **TX**       | D7 (RX)        |
-|    4    | 5V           |                |
+| Pin     | Purpose      | ESP8266 pin        | ESP32 pin        |
+| :-----: | :----------- | :------------- |:------------- |
+|  **1**  | **GND**      | **GND**          |**GND**           |
+|    2    | RX           |                |               |
+|  **3**  | **TX**       | D7 (**RX**)        | GPIO16 (**RX**)        |
+|    4    | 5V           |                |               |
+
+note: _Level shifter (5V<->3.3V)between esp32 and mppt is not necessary_ (tested on esp32 nodemcu v1 and MPPT 75/115 , MPPT 150/35 and smartshunt 500A)
 
 <a href="images/circuit.jpg" target="_blank">
 <img src="images/circuit_thumbnail.jpg" width="50%">
