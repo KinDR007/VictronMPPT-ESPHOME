@@ -1,0 +1,76 @@
+
+substitutions:
+  name: bluesmart-charger
+  external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
+
+esphome:
+  name: ${name}
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+external_components:
+  - source: ${external_components_source}
+    refresh: 0s
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+ota:
+# api:
+
+logger:
+  baud_rate: 0
+
+
+mqtt:
+  broker: !secret mqtt_host
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  id: mqtt_client
+
+uart:
+  id: uart_0
+  tx_pin: D8  # Not connected! The communication is read-only
+  rx_pin: D7  # Connect this this GPIO and GND to the charger
+  baud_rate: 19200
+  rx_buffer_size: 256
+
+victron:
+  uart_id: uart_0
+  id: victron0
+  throttle: 10s
+
+
+sensor:
+  - platform: victron
+    victron_id: victron0
+    battery_voltage:
+      name: "${name} output voltage"
+    battery_current:
+      name: "${name} current"
+    error_code:
+      name: "${name} error code"
+    charging_mode_id:
+      name: "${name} mode id"
+
+
+text_sensor:
+  - platform: victron
+    victron_id: victron0
+    device_type:
+      name: "${name} device type"
+    firmware_version:
+      name: "${name} Firmware Version"
+    serial_number:
+      name: "${name} serial number"
+    hardware_revision:
+      name: "${name} hardware number"
+    error:
+      name: "${name} error"
+    charging_mode:
+      name: "${name} Charging mode"
+

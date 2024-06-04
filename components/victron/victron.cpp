@@ -584,6 +584,10 @@ static std::string device_type_text(int value) {
       return "Phoenix Inverter 24V 3000VA 230V";
     case 0xA2A4:
       return "Phoenix Inverter 48V 3000VA 230V";
+    case 0xA30A:
+      return "Blue Smart IP65 Charger 12|25";
+    case 0xA334:
+      return "Blue Smart IP22 Charger 24|12";
     case 0xA340:
       return "Phoenix Smart IP43 Charger 12|50 (1+1)";
     case 0xA341:
@@ -972,6 +976,11 @@ void VictronComponent::handle_value_() {
 
   if (label_ == "SER#") {
     this->publish_state_once_(serial_number_text_sensor_, value_);
+    return;
+  }
+
+  if (label_ == "HC#") {
+    this->publish_state_once_(hardware_revision_text_sensor_, value_);
     return;
   }
 

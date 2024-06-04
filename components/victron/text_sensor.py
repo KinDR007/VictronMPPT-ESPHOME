@@ -18,6 +18,7 @@ CONF_FIRMWARE_VERSION = "firmware_version"
 CONF_FIRMWARE_VERSION_24BIT = "firmware_version_24bit"
 CONF_DEVICE_TYPE = "device_type"
 CONF_SERIAL_NUMBER = "serial_number"
+CONF_HARDWARE_REVISION = "hardware_revision"
 
 CONF_ALARM_CONDITION_ACTIVE = "alarm_condition_active"
 CONF_ALARM_REASON = "alarm_reason"
@@ -35,6 +36,7 @@ TEXT_SENSORS = [
     CONF_FIRMWARE_VERSION_24BIT,
     CONF_DEVICE_TYPE,
     CONF_SERIAL_NUMBER,
+    CONF_HARDWARE_REVISION,
     #
     CONF_ALARM_CONDITION_ACTIVE,
     CONF_ALARM_REASON,
@@ -72,6 +74,9 @@ CONFIG_SCHEMA = cv.Schema(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
         cv.Optional(CONF_SERIAL_NUMBER): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+            {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
+        ),
+        cv.Optional(CONF_HARDWARE_REVISION): text_sensor.TEXT_SENSOR_SCHEMA.extend(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
         cv.Optional(CONF_ALARM_CONDITION_ACTIVE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
