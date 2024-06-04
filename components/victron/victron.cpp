@@ -975,7 +975,7 @@ void VictronComponent::handle_value_() {
     return;
   }
 
-  if (label_ == "HC") {
+  if (label_ == "HC#") {
     this->publish_state_once_(hardware_number_text_sensor_, value_);
     return;
   }
