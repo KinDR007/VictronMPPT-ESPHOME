@@ -49,13 +49,13 @@ sensor:
   - platform: victron
     victron_id: victron0
     battery_voltage:
-      name: "charger output voltage"
+      name: "${name} output voltage"
     battery_current:
-      name: "charger current"
+      name: "${name} current"
     error_code:
-      name: "charger error code"
+      name: "${name} error code"
     charging_mode_id:
-      name: "charging mode id"
+      name: "${name} mode id"
 
 
 text_sensor:
