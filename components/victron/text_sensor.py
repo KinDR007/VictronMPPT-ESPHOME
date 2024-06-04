@@ -76,7 +76,7 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_SERIAL_NUMBER): text_sensor.TEXT_SENSOR_SCHEMA.extend(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
-        cv.Optional(CONF_HARDWARE_NUMBER): text_sensor.TEXT_SENSOR_SCHEMA.extend(
+        cv.Optional(CONF_HARDWARE_REVISION): text_sensor.TEXT_SENSOR_SCHEMA.extend(
             {cv.GenerateID(): cv.declare_id(text_sensor.TextSensor)}
         ),
         cv.Optional(CONF_ALARM_CONDITION_ACTIVE): text_sensor.TEXT_SENSOR_SCHEMA.extend(
