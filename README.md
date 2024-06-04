@@ -183,6 +183,7 @@ The available text sensors are:
 - `alarm_condition_active`
 - `alarm_reason`
 - `model_description`
+- `serial_number`
 
 Binary sensors:
 
