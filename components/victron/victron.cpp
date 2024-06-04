@@ -975,6 +975,11 @@ void VictronComponent::handle_value_() {
     return;
   }
 
+  if (label_ == "HC") {
+    this->publish_state_once_(hardware_number_text_sensor_, value_);
+    return;
+  }
+
   if (label_ == "HSDS") {
     this->publish_state_(day_number_sensor_, atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     return;
