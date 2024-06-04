@@ -18,7 +18,7 @@ CONF_FIRMWARE_VERSION = "firmware_version"
 CONF_FIRMWARE_VERSION_24BIT = "firmware_version_24bit"
 CONF_DEVICE_TYPE = "device_type"
 CONF_SERIAL_NUMBER = "serial_number"
-CONF_HARDWARE_NUMBER = "hardware_number"
+CONF_HARDWARE_REVISION = "hardware_revision"
 
 CONF_ALARM_CONDITION_ACTIVE = "alarm_condition_active"
 CONF_ALARM_REASON = "alarm_reason"
