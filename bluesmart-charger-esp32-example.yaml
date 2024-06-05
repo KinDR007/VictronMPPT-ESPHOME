@@ -1,4 +1,3 @@
-
 substitutions:
   name: bluesmart-charger
   external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
@@ -25,7 +24,6 @@ ota:
 logger:
   baud_rate: 0
 
-
 mqtt:
   broker: !secret mqtt_host
   username: !secret mqtt_username
@@ -34,8 +32,8 @@ mqtt:
 
 uart:
   id: uart_0
-  tx_pin: D8  # Not connected! The communication is read-only
-  rx_pin: D7  # Connect this this GPIO and GND to the charger
+  tx_pin: GPIO16  # Not connected! The communication is read-only
+  rx_pin: GPIO17  # Connect this this GPIO and GND to the charger
   baud_rate: 19200
   rx_buffer_size: 256
 
@@ -57,7 +55,6 @@ sensor:
     charging_mode_id:
       name: "${name} mode id"
 
-
 text_sensor:
   - platform: victron
     victron_id: victron0
@@ -73,4 +70,3 @@ text_sensor:
       name: "${name} error"
     charging_mode:
       name: "${name} Charging mode"
-
