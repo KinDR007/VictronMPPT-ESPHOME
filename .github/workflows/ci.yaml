@@ -188,6 +188,8 @@ jobs:
         shell: bash
         run: 'echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > secrets.yaml; cp secrets.yaml tests'
       - run: |
+          esphome -s external_components_source components config bluesmart-charger-esp32-example.yaml
+      - run: |
           esphome -s external_components_source components config smartsolar-mppt-esp8266-example.yaml
       - run: |
           esphome -s external_components_source components config smartsolar-mppt-esp8266-example-multiple-uarts.yaml
@@ -247,6 +249,8 @@ jobs:
       - name: Write secrets.yaml
         shell: bash
         run: 'echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > secrets.yaml'
+      - run: |
+          esphome -s external_components_source components compile bluesmart-charger-esp32-example.yaml
       - run: |
           esphome -s external_components_source components compile smartsolar-mppt-esp8266-example.yaml
       - run: |
