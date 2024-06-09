@@ -586,6 +586,8 @@ static std::string device_type_text(int value) {
       return "Phoenix Inverter 48V 3000VA 230V";
     case 0xA30A:
       return "Blue Smart IP65 Charger 12|25";
+    case 0xA332:
+      return "Blue Smart IP22 Charger 24|8";
     case 0xA334:
       return "Blue Smart IP22 Charger 24|12";
     case 0xA340:
