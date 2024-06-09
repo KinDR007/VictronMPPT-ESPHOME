@@ -4,8 +4,6 @@ substitutions:
 
 esphome:
   name: ${name}
-  platform: ESP8266
-  board: d1_mini
 
 esp32:
   board: esp32dev
