@@ -1,0 +1,80 @@
+substitutions:
+  name: fake-bluesmart-ip22
+  tx_pin: GPIO4
+  rx_pin: GPIO5
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+ota:
+logger:
+  level: DEBUG
+
+uart:
+  baud_rate: 19200
+  tx_pin: ${tx_pin}
+  rx_pin: ${rx_pin}
+  debug:
+    direction: BOTH
+    dummy_receiver: true
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
+
+interval:
+  - interval: 3s
+    then:
+      - uart.write: "PID\t0xA332\r\n"
+      - uart.write: "FWE\t0342FF\r\n"
+      - uart.write: "SER#\tHQ2249TNFVM\r\n"
+      - uart.write: "V\t26870\r\n"
+      - uart.write: "I\t2000\r\n"
+      - uart.write: "T\t---\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "CS\t3\r\n"
+      - uart.write: "HC#\t57825\r\n"
+      - uart.write: "Checksum\t\x18:A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A132000326900007D\n"
+      - uart.write: ":A0220007F0AA0\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A0A20001E6600009D\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A0220007F0AA0\n"
+      - uart.write: ":A8DED00800A47\n"
+      - uart.write: ":AD5ED00800AFF\n"
+      - uart.write: ":A16EE007F0ABE\n"
+      - uart.write: ":A20010077000000B3\n"
+      - uart.write: ":A30EC00052A\n"
+      - uart.write: ":A31EC000122D5569A32A300FF4203007FFFFFFFFFC5BEBD9A60A00063010000B9FFFFFFFFBF\n"
+      - uart.write: ":A32EC000122E2979989A30016040000BCFFFFFFFFB332EB9A60A00063010000BDFFFFFFFF73\n"
+      - uart.write: ":A33EC000129E3A49834A300FF420300CCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFFFF90\n"
+      - uart.write: ":A20EC00ECEDFFFFFFFFFFFF8DED000C22E297998CED000C22E297993EEC000FB332EB9A56\n"
+      - uart.write: ":A0A20001E6600009D\n"
+      - uart.write: ":A132000AA69000005\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: ":A0220007F0AA0\n"
+      - uart.write: ":A0920000022\n"
+      - uart.write: ":A0E200021FC\n"
+      - uart.write: "\r\n"

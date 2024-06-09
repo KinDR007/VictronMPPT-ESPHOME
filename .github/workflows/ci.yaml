@@ -213,6 +213,8 @@ jobs:
           esphome -s external_components_source components config tests/fake-multi-rs-solar.yaml
           esphome -s external_components_source components config tests/fake-phoenix-inverter.yaml
           esphome -s external_components_source components config tests/fake-smartsolar-mppt.yaml
+          esphome -s external_components_source components config tests/fake-bluesmart-ip65-0xa30a.yaml
+          esphome -s external_components_source components config tests/fake-bluesmart-ip22-0xa332.yaml
 
   esphome-compile:
     runs-on: ubuntu-latest
