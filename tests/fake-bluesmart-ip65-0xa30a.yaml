@@ -1,0 +1,65 @@
+substitutions:
+  name: fake-bluesmart-ip22
+  tx_pin: GPIO4
+  rx_pin: GPIO5
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+ota:
+logger:
+  level: DEBUG
+
+uart:
+  baud_rate: 19200
+  tx_pin: ${tx_pin}
+  rx_pin: ${rx_pin}
+  debug:
+    direction: BOTH
+    dummy_receiver: true
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
+
+interval:
+  - interval: 5s
+    then:
+      - uart.write: "PID\t0xA30A\r\n"
+      - uart.write: "FWE\t0325FF\r\n"
+      - uart.write: "SER#\tHQ2232GGMEH\r\n"
+      - uart.write: "V\t14200\r\n"
+      - uart.write: "I\t1000\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "CS\t4\r\n"
+      - uart.write: "HC#\t136663\r\n"
+      - uart.write: "Checksum\t\x13"
+      - uart.write: ":A8FED000D00C2\n"
+      - uart.write: ":A8CED001E050000AF\n"
+      - uart.write: ":AD7ED000D007A\n"
+      - uart.write: ":A200100560C0000C8\n"
+      - uart.write: "\r\n"
+      - delay: 1s
+
+      - uart.write: "PID\t0xA30A\r\n"
+      - uart.write: "FWE\t0325FF\r\n"
+      - uart.write: "SER#\tHQ2232GGMEH\r\n"
+      - uart.write: "V\t14190\r\n"
+      - uart.write: "I\t1000\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "CS\t4\r\n"
+      - uart.write: "HC#\t136663\r\n"
+      - uart.write: "Checksum\t\v:A8DED008C0540\n"
+      - uart.write: ":A8FED000800C7\n"
+      - uart.write: ":A8CED00EE020000E2\n"
+      - uart.write: ":AD5ED008C05F8\n"
+      - uart.write: ":AD7ED0008007F\n"
+      - uart.write: ":A2001005F0C0000BF\n"
+      - uart.write: "\r\n"
