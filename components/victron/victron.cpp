@@ -949,7 +949,7 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "FW") {
-    this->publish_state_once_(firmware_version_text_sensor_, value_.insert(value_.size() - 2, "."));
+    this->publish_state_(firmware_version_text_sensor_, value_.insert(value_.size() - 2, "."));
     return;
   }
 
@@ -963,26 +963,26 @@ void VictronComponent::handle_value_() {
       version_number = version_number.insert(version_number.size() - 2, ".");
       release_type = (release_type == "FF") ? "-official" : "-beta-" + release_type;
 
-      this->publish_state_once_(firmware_version_24bit_text_sensor_, version_number + release_type);
+      this->publish_state_(firmware_version_24bit_text_sensor_, version_number + release_type);
       return;
     }
 
-    this->publish_state_once_(firmware_version_24bit_text_sensor_, value_);
+    this->publish_state_(firmware_version_24bit_text_sensor_, value_);
     return;
   }
 
   if (label_ == "PID") {
-    this->publish_state_once_(device_type_text_sensor_, device_type_text(strtol(value_.c_str(), nullptr, 0)));
+    this->publish_state_(device_type_text_sensor_, device_type_text(strtol(value_.c_str(), nullptr, 0)));
     return;
   }
 
   if (label_ == "SER#") {
-    this->publish_state_once_(serial_number_text_sensor_, value_);
+    this->publish_state_(serial_number_text_sensor_, value_);
     return;
   }
 
   if (label_ == "HC#") {
-    this->publish_state_once_(hardware_revision_text_sensor_, value_);
+    this->publish_state_(hardware_revision_text_sensor_, value_);
     return;
   }
 
@@ -1053,16 +1053,6 @@ void VictronComponent::publish_state_(sensor::Sensor *sensor, float value) {
 
 void VictronComponent::publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state) {
   if (text_sensor == nullptr)
-    return;
-
-  text_sensor->publish_state(state);
-}
-
-void VictronComponent::publish_state_once_(text_sensor::TextSensor *text_sensor, const std::string &state) {
-  if (text_sensor == nullptr)
-    return;
-
-  if (text_sensor->has_state())
     return;
 
   text_sensor->publish_state(state);
