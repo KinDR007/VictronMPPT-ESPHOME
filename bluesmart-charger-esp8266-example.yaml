@@ -7,9 +7,6 @@ esphome:
   platform: ESP8266
   board: d1_mini
 
-esp32:
-  board: esp32dev
-
 external_components:
   - source: ${external_components_source}
     refresh: 0s
@@ -22,7 +19,6 @@ ota:
 # api:
 
 logger:
-  baud_rate: 0
 
 mqtt:
   broker: !secret mqtt_host
@@ -32,8 +28,8 @@ mqtt:
 
 uart:
   id: uart_0
-  tx_pin: GPIO4
-  rx_pin: GPIO5
+  tx_pin: D8  # Not connected! The communication is read-only
+  rx_pin: D7  # Connect this this GPIO and GND to the MPPT charger
   baud_rate: 19200
   rx_buffer_size: 256
 
