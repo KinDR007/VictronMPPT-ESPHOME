@@ -30,8 +30,8 @@ mqtt:
 
 uart:
   id: uart_0
-  tx_pin: GPIO4
-  rx_pin: GPIO5
+  tx_pin: GPIO16  # Not connected! The communication is read-only
+  rx_pin: GPIO17  # Connect this this GPIO and GND to the charger
   baud_rate: 19200
   rx_buffer_size: 256
 
