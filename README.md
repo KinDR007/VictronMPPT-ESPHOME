@@ -136,19 +136,22 @@ The available numeric sensors are:
 - `battery_voltage`
 - `battery_voltage_2`
 - `battery_voltage_3`
+- `auxiliary_battery_voltage`
+- `midpoint_voltage_of_the_battery_bank`
+- `midpoint_deviation_of_the_battery_bank`
 - `battery_current`
 - `battery_current_2`
 - `battery_current_3`
 - `day_number`
 - `charging_mode_id`
 - `error_code`
+- `warning_code`
 - `tracking_mode_id`
+- `device_mode_id`
 - `load_current`
 - `ac_out_voltage`
 - `ac_out_current`
 - `ac_out_apparent_power`
-- `device_mode_id`
-- `warning_code`
 - `battery_temperature`
 - `instantaneous_power`
 - `consumed_amp_hours`
@@ -172,19 +175,25 @@ The available numeric sensors are:
 - `max_auxiliary_battery_voltage`
 - `amount_of_discharged_energy`
 - `amount_of_charged_energy`
+- `dc_monitor_mode_id`
+- `off_reason_bitmask`
 
 The available text sensors are:
 - `charging_mode`
 - `error`
-- `tracking_mode`
-- `firmware_version`
-- `device_type`
-- `device_mode`
 - `warning`
+- `tracking_mode`
+- `device_mode`
+- `firmware_version`
+- `firmware_version_24bit`
+- `device_type`
+- `serial_number`
+- `hardware_revision`
 - `alarm_condition_active`
 - `alarm_reason`
 - `model_description`
-- `serial_number`
+- `dc_monitor_mode`
+- `off_reason`
 
 Binary sensors:
 
