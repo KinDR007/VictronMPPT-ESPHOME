@@ -561,6 +561,7 @@ static std::string device_type_text(int value) {
     case 0xA274:
       return "Phoenix Inverter 48V 1200VA 230V";
     case 0xA279:
+    case 0xA2F9:
       return "Phoenix Inverter 12V 1200VA 120V";
     case 0xA27A:
       return "Phoenix Inverter 24V 1200VA 120V";
