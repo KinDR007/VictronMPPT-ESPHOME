@@ -2,7 +2,7 @@ substitutions:
   external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
   lower_devicename: "victron"
   devicename: "SmartSolar_150_35"
-  config_version: "v2021.05.30"
+  config_version: "v2021.06.21"
   wifi_fast_connect: "false"
   accuracy: "2"
 
