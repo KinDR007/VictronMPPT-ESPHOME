@@ -23,6 +23,8 @@ ota:
 logger:
   baud_rate: 0
 
+# If you use Home Assistant please remove this `mqtt` section and uncomment the `api` component!
+# The native API has many advantages over MQTT: https://esphome.io/components/api.html#advantages-over-mqtt
 mqtt:
   broker: !secret mqtt_host
   username: !secret mqtt_username
