@@ -30,23 +30,27 @@ wifi:
 
 captive_portal:
 
+ota:
+  platform: esphome
+
 logger:
   baud_rate: 0
   # level: VERY_VERBOSE
   esp8266_store_log_strings_in_flash: false
 
-# Enable Home Assistant API
-api:
-  reboot_timeout: 0s
-
-ota:
-  platform: esphome
+# If you use Home Assistant please remove this `mqtt` section and uncomment the `api` component!
+# The native API has many advantages over MQTT: https://esphome.io/components/api.html#advantages-over-mqtt
+mqtt:
+  broker: !secret mqtt_host
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  id: mqtt_client
 
 web_server:
   port: 80
 
 time:
-  - platform: homeassistant
+  - platform: sntp
 
 uart:
   id: uart_bus

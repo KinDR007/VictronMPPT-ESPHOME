@@ -24,9 +24,10 @@ wifi:
 ota:
   platform: esphome
 
-api:
-
 logger:
+
+api:
+  reboot_timeout: 0s
 
 uart:
   id: uart_0

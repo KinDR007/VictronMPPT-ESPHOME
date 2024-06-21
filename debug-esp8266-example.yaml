@@ -21,11 +21,12 @@ wifi:
 ota:
   platform: esphome
 
-api:
-
 logger:
   baud_rate: 0
   esp8266_store_log_strings_in_flash: false
+
+api:
+  reboot_timeout: 0s
 
 uart:
   id: uart_0
