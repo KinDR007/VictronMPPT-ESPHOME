@@ -40,7 +40,7 @@ api:
   reboot_timeout: 0s
 
 ota:
-  - platform: esphome
+  platform: esphome
 
 web_server:
   port: 80
