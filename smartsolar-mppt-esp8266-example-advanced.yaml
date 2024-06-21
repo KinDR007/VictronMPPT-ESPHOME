@@ -11,6 +11,7 @@ esphome:
   platform: ESP8266
   board: d1_mini
   # board: nodemcuv2
+  min_version: 2024.6.0
 
 external_components:
   - source: ${external_components_source}
@@ -35,11 +36,10 @@ logger:
 
 # Enable Home Assistant API
 api:
-  password: "pass"
   reboot_timeout: 0s
 
 ota:
-  password: "pass"
+  - platform: esphome
 
 web_server:
   port: 80
