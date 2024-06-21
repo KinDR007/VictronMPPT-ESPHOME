@@ -50,7 +50,7 @@ web_server:
   port: 80
 
 time:
-  - platform: homeassistant
+  - platform: sntp
 
 uart:
   id: uart_bus
