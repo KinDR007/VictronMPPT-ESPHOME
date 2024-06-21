@@ -7,6 +7,7 @@ esphome:
 
 esp32:
   board: esp32dev
+  min_version: 2024.6.0
 
 external_components:
   - source: ${external_components_source}
@@ -17,7 +18,8 @@ wifi:
   password: !secret wifi_password
 
 ota:
-# api:
+  - platform: esphome
+#    api:
 
 logger:
   baud_rate: 0
