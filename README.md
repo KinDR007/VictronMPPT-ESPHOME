@@ -24,7 +24,7 @@ All Victron devices providing a ve.direct port.
 
 ## Requirements
 
-* [ESPHome 2021.10 or higher](https://github.com/esphome/esphome/releases).
+* [ESPHome 2026.6.0 or higher](https://github.com/esphome/esphome/releases).
 * Generic ESP32 or ESP8266 board
 
 ## Schematics
