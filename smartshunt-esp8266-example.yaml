@@ -18,7 +18,7 @@ wifi:
 
 ota:
   - platform: esphome
-# api:
+#    api:
 
 logger:
   baud_rate: 0
