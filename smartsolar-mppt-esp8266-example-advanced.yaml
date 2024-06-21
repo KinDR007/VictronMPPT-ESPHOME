@@ -29,6 +29,7 @@ wifi:
     password: !secret wifi_password
 
 captive_portal:
+
 logger:
   baud_rate: 0
   # level: VERY_VERBOSE
