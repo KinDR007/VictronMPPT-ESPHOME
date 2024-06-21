@@ -1,6 +1,5 @@
 substitutions:
   name: bluesmart-charger
-  config_version: "v2021.06.21"
   external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
 
 esphome:
