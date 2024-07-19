@@ -70,7 +70,7 @@ sensor:
   - platform: victron
     victron_id: victron1
     max_power_yesterday:
-      name: "${device0} max power yesterday"
+      name: "${device1} max power yesterday"
     panel_voltage:
       name: "${device1} panel voltage"
     panel_power:
