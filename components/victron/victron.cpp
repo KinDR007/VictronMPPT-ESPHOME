@@ -591,6 +591,8 @@ static std::string device_type_text(int value) {
       return "Blue Smart IP22 Charger 24|8";
     case 0xA334:
       return "Blue Smart IP22 Charger 24|12";
+    case 0xA336:
+      return "Blue Smart IP22 Charger 24|16";
     case 0xA340:
       return "Phoenix Smart IP43 Charger 12|50 (1+1)";
     case 0xA341:
