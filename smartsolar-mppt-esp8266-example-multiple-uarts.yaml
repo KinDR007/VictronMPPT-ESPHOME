@@ -33,6 +33,8 @@ mqtt:
   password: !secret mqtt_password
   id: mqtt_client
 
+# api:
+
 uart:
   - id: uart_0
     tx_pin: D8  # Not connected! The communication is read-only
