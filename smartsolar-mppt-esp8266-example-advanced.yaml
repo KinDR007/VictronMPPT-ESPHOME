@@ -46,6 +46,8 @@ mqtt:
   password: !secret mqtt_password
   id: mqtt_client
 
+# api:
+
 web_server:
   port: 80
 
