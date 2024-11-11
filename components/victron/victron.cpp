@@ -452,6 +452,8 @@ static std::string device_type_text(int value) {
       return "BlueSolar MPPT 150|60 rev2";
     case 0xA071:
       return "BlueSolar MPPT 150|70 rev2";
+    case 0xA07D:
+      return "BlueSolar MPPT 75|15";
     case 0xA102:
       return "SmartSolar MPPT VE.Can 150/70";
     case 0xA103:
