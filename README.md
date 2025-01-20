@@ -8,6 +8,7 @@ All Victron devices providing a ve.direct port.
 
 ## Tested devices
 
+  * Victron SmartSolar MPPT 75/10 rev2 (0xA074)
   * Victron SmartSolar MPPT 75/15
   * Victron SmartSolar MPPT 100/15
   * Victron SmartSolar MPPT 100/20
