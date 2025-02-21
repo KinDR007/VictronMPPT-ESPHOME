@@ -170,6 +170,7 @@ jobs:
         working-directory: ${{ env.esphome_directory }}
       - name: Suggest changes
         run: script/ci-suggest-changes
+        working-directory: ${{ env.esphome_directory }}
 
   esphome-config:
     runs-on: ubuntu-latest
