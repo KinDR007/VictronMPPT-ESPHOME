@@ -9,6 +9,7 @@ from esphome.const import (
     DEVICE_CLASS_POWER,
     DEVICE_CLASS_TEMPERATURE,
     DEVICE_CLASS_VOLTAGE,
+    DEVICE_CLASS_DURATION,
     ICON_CURRENT_AC,
     ICON_EMPTY,
     ICON_FLASH,
@@ -337,7 +338,8 @@ CONFIG_SCHEMA = cv.Schema(
             unit_of_measurement=UNIT_MINUTE,
             icon=ICON_TIMELAPSE,
             accuracy_decimals=0,
-            device_class=DEVICE_CLASS_EMPTY,
+            device_class=DEVICE_CLASS_DURATION,
+            state_class=STATE_CLASS_MEASUREMENT,
         ),
         cv.Optional(CONF_DEPTH_OF_THE_DEEPEST_DISCHARGE): sensor.sensor_schema(
             unit_of_measurement=UNIT_AMPERE_HOUR,
