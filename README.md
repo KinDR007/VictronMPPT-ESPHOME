@@ -70,6 +70,8 @@ note: _JST-PH connector on this image has lock downwards_
 <img width="70" alt="image" src="https://github.com/KinDR007/VictronMPPT-ESPHOME/assets/61905170/184607a8-4a18-437d-a859-d32b5c329a0b">
 
 
+As per the [VE.direct FAQ](https://www.victronenergy.com/live/vedirect_protocol:faq), the 5v/3v3 pin is current limited to 10mA average, with max 20mA/5ms bursts. Most ESPs will draw several hundred mA on startup, and another 100-150mA when transmitting, so it is impossible to post the ESP from these pins. 
+
 
 
 note: ~~_Level shifter (5V<->3.3V)between esp32 and mppt is not necessary_ (tested on esp32 nodemcu v1 and MPPT 75/115 , MPPT 150/35 and smartshunt 500A)~~ 
