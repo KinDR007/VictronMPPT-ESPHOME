@@ -1,0 +1,100 @@
+substitutions:
+  name: fake-smartsolar-mppt
+  tx_pin: GPIO4
+  rx_pin: GPIO5
+
+esphome:
+  name: ${name}
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+ota:
+  platform: esphome
+
+logger:
+  level: DEBUG
+
+api:
+  reboot_timeout: 0s
+
+uart:
+  baud_rate: 19200
+  tx_pin: ${tx_pin}
+  rx_pin: ${rx_pin}
+  debug:
+    direction: BOTH
+    dummy_receiver: true
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
+
+interval:
+  - interval: 10s
+    then:
+      - uart.write: "PID\t0xA06C\r\n"
+      - uart.write: "FWE\t316FF\r\n"
+      - uart.write: "SER#\tHQ2247EP3FN\r\n"
+      - uart.write: "V\t52700\r\n"
+      - uart.write: "I\t7600\r\n"
+      - uart.write: "VPV\t103870\r\n"
+      - uart.write: "PPV\t412\r\n"
+      - uart.write: "MPPT\t2\r\n"
+      - uart.write: "CS\t3\r\n"
+      - uart.write: "OR\t0x00000000\r\n"
+      - uart.write: "Checksum\t\xFA"
+      - uart.write: ":A2001002470030093\n"
+      - uart.write: ":ADBED00BF0ABA\n"
+      - uart.write: ":ABCED0045A10000BC\n"
+      - uart.write: ":ABBED008D28EE\n"
+      - uart.write: ":AB4ED000DA10000FC\n"
+      - uart.write: ":AB5ED00802801\n"
+      - uart.write: "\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "LOAD\tON\r\n"
+      - uart.write: "Relay\tOFF\r\n"
+      - uart.write: "H19\t1158\r\n"
+      - uart.write: "H20\t77\r\n"
+      - uart.write: "H21\t479\r\n"
+      - uart.write: "H22\t135\r\n"
+      - uart.write: "H23\t525\r\n"
+      - uart.write: "HSDS\t2\r\n"
+      - uart.write: "Checksum\t\x05"
+      - uart.write: "\r\n"
+
+      - delay: 2s
+
+      - uart.write: "PID\t0xA06C\r\n"
+      - uart.write: "FWE\t316FF\r\n"
+      - uart.write: "SER#\tHQ2247EP3FN\r\n"
+      - uart.write: "V\t52700\r\n"
+      - uart.write: "I\t7600\r\n"
+      - uart.write: "VPV\t103880\r\n"
+      - uart.write: "PPV\t412\r\n"
+      - uart.write: "MPPT\t2\r\n"
+      - uart.write: "CS\t3\r\n"
+      - uart.write: "OR\t0x00000000\r\n"
+      - uart.write: "Checksum\t\xF9:A2001002570030092\n"
+      - uart.write: ":ADBED00D10AA8\n"
+      - uart.write: ":ABCED0024A10000DD\n"
+      - uart.write: ":ABBED009C28DF\n"
+      - uart.write: ":AB4ED00BEA100004B\n"
+      - uart.write: ":AB5ED00802801\n"
+      - uart.write: ":AD5ED009714DE\n"
+      - uart.write: ":A8DED00971426\n"
+      - uart.write: "\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "LOAD\tON\r\n"
+      - uart.write: "Relay\tOFF\r\n"
+      - uart.write: "H19\t1158\r\n"
+      - uart.write: "H20\t77\r\n"
+      - uart.write: "H21\t479\r\n"
+      - uart.write: "H22\t135\r\n"
+      - uart.write: "H23\t525\r\n"
+      - uart.write: "HSDS\t2\r\n"
+      - uart.write: "Checksum\t\x05"
+      - uart.write: "\r\n"
