@@ -70,6 +70,8 @@ note: _JST-PH connector on this image has lock downwards_
 <img width="70" alt="image" src="https://github.com/KinDR007/VictronMPPT-ESPHOME/assets/61905170/184607a8-4a18-437d-a859-d32b5c329a0b">
 
 
+According to the [VE.direct FAQ](https://www.victronenergy.com/live/vedirect_protocol:faq), the 5V/3.3 pin has a strict current limitation, allowing only 10mA on average with occasional 20mA bursts lasting up to 5 milliseconds. ESP devices like the ESP8266 and ESP32 draw significantly more current than this limit, typically several hundred milliamperes during startup and an additional 100-150mA when transmitting, which would immediately overload and permanently damage the Victron device's power circuit. Therefore, powering an ESP directly from these pins is not possible.
+
 
 
 note: ~~_Level shifter (5V<->3.3V)between esp32 and mppt is not necessary_ (tested on esp32 nodemcu v1 and MPPT 75/115 , MPPT 150/35 and smartshunt 500A)~~ 
