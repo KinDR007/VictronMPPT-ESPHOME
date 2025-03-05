@@ -70,7 +70,7 @@ note: _JST-PH connector on this image has lock downwards_
 <img width="70" alt="image" src="https://github.com/KinDR007/VictronMPPT-ESPHOME/assets/61905170/184607a8-4a18-437d-a859-d32b5c329a0b">
 
 
-As per the [VE.direct FAQ](https://www.victronenergy.com/live/vedirect_protocol:faq), the 5v/3v3 pin is current limited to 10mA average, with max 20mA/5ms bursts. Most ESPs will draw several hundred mA on startup, and another 100-150mA when transmitting, so it is impossible to post the ESP from these pins. 
+According to the [VE.direct FAQ](https://www.victronenergy.com/live/vedirect_protocol:faq), the 5V/3.3 pin has a strict current limitation, allowing only 10mA on average with occasional 20mA bursts lasting up to 5 milliseconds. ESP devices like the ESP8266 and ESP32 draw significantly more current than this limit, typically several hundred milliamperes during startup and an additional 100-150mA when transmitting, which would immediately overload and permanently damage the Victron device's power circuit. Therefore, powering an ESP directly from these pins is not possible.
 
 
 
