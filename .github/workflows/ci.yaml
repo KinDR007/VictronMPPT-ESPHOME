@@ -427,7 +427,7 @@ jobs:
         run: |
           . venv/bin/activate
           echo -e "wifi_ssid: ssid\nwifi_password: password\nmqtt_host: host\nmqtt_username: username\nmqtt_password: password" > tests/secrets.yaml
-          for YAML in $(grep -l '^esphome:$' tests/*.yaml);; do
+          for YAML in $(grep -l '^esphome:$' tests/*.yaml); do
             esphome -s external_components_source ../components config $YAML >/dev/null
           done
 
