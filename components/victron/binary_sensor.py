@@ -1,6 +1,6 @@
 import esphome.codegen as cg
-import esphome.config_validation as cv
 from esphome.components import binary_sensor
+import esphome.config_validation as cv
 from esphome.const import CONF_ICON, CONF_ID, ICON_EMPTY
 
 from . import CONF_VICTRON_ID, VictronComponent
