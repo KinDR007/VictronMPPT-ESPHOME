@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 from esphome.components import binary_sensor
 import esphome.config_validation as cv
-from esphome.const import CONF_ICON, CONF_ID, ICON_EMPTY
+from esphome.const import CONF_ID, ICON_EMPTY
 
 from . import CONF_VICTRON_ID, VictronComponent
 
@@ -20,17 +20,13 @@ BINARY_SENSORS = [
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_VICTRON_ID): cv.use_id(VictronComponent),
-        cv.Optional(CONF_LOAD_STATE): binary_sensor.BINARY_SENSOR_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(binary_sensor.BinarySensor),
-                cv.Optional(CONF_ICON, default=ICON_EMPTY): cv.icon,
-            }
+        cv.Optional(CONF_LOAD_STATE): binary_sensor.binary_sensor_schema(
+            binary_sensor.BinarySensor,
+            icon=ICON_EMPTY,
         ),
-        cv.Optional(CONF_RELAY_STATE): binary_sensor.BINARY_SENSOR_SCHEMA.extend(
-            {
-                cv.GenerateID(): cv.declare_id(binary_sensor.BinarySensor),
-                cv.Optional(CONF_ICON, default=ICON_EMPTY): cv.icon,
-            }
+        cv.Optional(CONF_RELAY_STATE): binary_sensor.binary_sensor_schema(
+            binary_sensor.BinarySensor,
+            icon=ICON_EMPTY,
         ),
     }
 )
