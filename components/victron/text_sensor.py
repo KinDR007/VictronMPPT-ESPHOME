@@ -3,7 +3,7 @@ from esphome.components import text_sensor
 import esphome.config_validation as cv
 from esphome.const import CONF_ID
 
-from . import CONF_VICTRON_ID, VictronComponent
+from . import CONF_VICTRON_ID, VICTRON_COMPONENT_SCHEMA
 
 DEPENDENCIES = ["victron"]
 
@@ -46,9 +46,8 @@ TEXT_SENSORS = [
 ]
 
 
-CONFIG_SCHEMA = cv.Schema(
+CONFIG_SCHEMA = VICTRON_COMPONENT_SCHEMA.extend(
     {
-        cv.GenerateID(CONF_VICTRON_ID): cv.use_id(VictronComponent),
         cv.Optional(CONF_CHARGING_MODE): text_sensor.text_sensor_schema(
             text_sensor.TextSensor
         ),

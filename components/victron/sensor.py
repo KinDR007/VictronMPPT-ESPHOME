@@ -29,7 +29,7 @@ from esphome.const import (
     UNIT_WATT_HOURS,
 )
 
-from . import CONF_VICTRON_ID, VictronComponent
+from . import CONF_VICTRON_ID, VICTRON_COMPONENT_SCHEMA
 
 DEPENDENCIES = ["victron"]
 
@@ -146,9 +146,8 @@ SENSORS = [
 ]
 
 
-CONFIG_SCHEMA = cv.Schema(
+CONFIG_SCHEMA = VICTRON_COMPONENT_SCHEMA.extend(
     {
-        cv.GenerateID(CONF_VICTRON_ID): cv.use_id(VictronComponent),
         cv.Optional(CONF_MAX_POWER_YESTERDAY): sensor.sensor_schema(
             unit_of_measurement=UNIT_WATT,
             icon=ICON_POWER,
