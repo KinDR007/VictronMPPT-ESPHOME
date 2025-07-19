@@ -636,57 +636,57 @@ static std::string device_type_text(int value) {
       return "Phoenix Inverter Smart 24V 5000VA 230Vac 64k";
     case 0xA2B4:
       return "Phoenix Inverter Smart 48V 5000VA 230Vac 64k";
-    case 0xA2E1: 
+    case 0xA2E1:
       return "Phoenix Inverter 12V 800VA 230Vac 64k HS";
-    case 0xA2E2: 
+    case 0xA2E2:
       return "Phoenix Inverter 24V 800VA 230Vac 64k HS";
-    case 0xA2E4: 
+    case 0xA2E4:
       return "Phoenix Inverter 48V 800VA 230Vac 64k HS";
-    case 0xA2E9: 
+    case 0xA2E9:
       return "Phoenix Inverter 12V 800VA 120Vac 64k HS";
-    case 0xA2EA: 
+    case 0xA2EA:
       return "Phoenix Inverter 24V 800VA 120Vac 64k HS";
-    case 0xA2EC: 
+    case 0xA2EC:
       return "Phoenix Inverter 48V 800VA 120Vac 64k HS";
-    case 0xA2F1: 
+    case 0xA2F1:
       return "Phoenix Inverter 12V 1200VA 230Vac 64k HS";
-    case 0xA2F2: 
+    case 0xA2F2:
       return "Phoenix Inverter 24V 1200VA 230Vac 64k HS";
-    case 0xA2F4: 
+    case 0xA2F4:
       return "Phoenix Inverter 48V 1200VA 230Vac 64k HS";
-    case 0xA2FA: 
+    case 0xA2FA:
       return "Phoenix Inverter 24V 1200VA 120Vac 64k HS";
-    case 0xA2FC: 
+    case 0xA2FC:
       return "Phoenix Inverter 48V 1200VA 120Vac 64k HS";
-    case 0xA3F0: 
+    case 0xA3F0:
       return "Orion XS 12V/12V-50A";
-    case 0xA3F1: 
+    case 0xA3F1:
       return "Orion XS 1400";
-    case 0xA048: 
+    case 0xA048:
       return "BlueSolar MPPT 75|50 rev2";
-    case 0xA072: 
+    case 0xA072:
       return "BlueSolar MPPT 150|45 rev3";
-    case 0xA076: 
+    case 0xA076:
       return "BlueSolar MPPT 100|30 rev3";
-    case 0xA077: 
+    case 0xA077:
       return "BlueSolar MPPT 100|50 rev3";
-    case 0xA078: 
+    case 0xA078:
       return "BlueSolar MPPT 150|35 rev2";
-    case 0xA079: 
+    case 0xA079:
       return "BlueSolar MPPT 75|10 rev2";
-    case 0xA07A: 
+    case 0xA07A:
       return "BlueSolar MPPT 75|15 rev2";
-    case 0xA07B: 
+    case 0xA07B:
       return "BlueSolar MPPT 100|15 rev2";
-    case 0xA07C: 
+    case 0xA07C:
       return "BlueSolar MPPT 75/10 rev3";
-    case 0xA07E: 
+    case 0xA07E:
       return "SmartSolar Charger MPPT 100/30";
-    case 0xA110: 
+    case 0xA110:
       return "SmartSolar MPPT RS 450/100";
-    case 0xA111: 
+    case 0xA111:
       return "SmartSolar MPPT RS 450/200";
-    case 0xA117: 
+    case 0xA117:
       return "BlueSolar MPPT VE.Can 150|100";
     default:
       return "Unknown";
