@@ -629,7 +629,7 @@ static std::string device_type_text(int value) {
       return "SmartShunt 2000A/50mV";
     case 0xA442:
       return "Multi RS Solar 48V 6000VA 230V";
-    // additional devices mentioned in VE.Direct-HEX-Protocol specifications
+    // Additional PIDs mentioned in VE.Direct-HEX-Protocol specifications
     case 0xA2B1:
       return "Phoenix Inverter Smart 12V 5000VA 230Vac 64k";
     case 0xA2B2:
