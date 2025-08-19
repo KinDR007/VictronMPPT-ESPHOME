@@ -12,6 +12,7 @@ namespace victron {
 class VictronComponent : public uart::UARTDevice, public Component {
  public:
   void set_throttle(uint32_t throttle) { this->throttle_ = throttle; }
+  void set_checksum_validation(bool state) { this->validate_checksum_ = state; }
   void set_load_state_binary_sensor(binary_sensor::BinarySensor *load_state_binary_sensor) {
     load_state_binary_sensor_ = load_state_binary_sensor;
   }
