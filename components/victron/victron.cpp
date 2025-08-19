@@ -101,6 +101,7 @@ void VictronComponent::loop() {
   while (available()) {
     uint8_t c;
     read_byte(&c);
+    checksum_ =  (checksum_ + c) & 0xff;
     if (state_ == 0) {
       if (c == '\r' || c == '\n') {
         continue;
@@ -126,18 +127,31 @@ void VictronComponent::loop() {
       if (label_ == "Checksum") {
         state_ = 0;
         // The checksum is used as end of frame indicator
+        #if 0
+        // TOCHECK: move this to actual publishing code
         if (now - this->last_publish_ >= this->throttle_) {
           this->last_publish_ = now;
           this->publishing_ = true;
         } else {
           this->publishing_ = false;
         }
+        #else
+        publish_frame_();
+        frame_.clear();
+        #endif
+        checksum_ = 0;
         continue;
       }
       if (c == '\r' || c == '\n') {
+        #if 0
         if (this->publishing_) {
           handle_value_();
         }
+        #else
+        if (frame_.size() < 50) {
+          frame_.push_back(label_+"\t"+value_);
+        }
+        #endif
         state_ = 0;
       } else {
         value_.push_back(c);
@@ -711,6 +725,29 @@ static std::string off_reason_text(uint32_t mask) {
   }
 
   return value_list;
+}
+
+void VictronComponent::publish_frame_() {
+  if (checksum_ != 0) {
+    ESP_LOGW(TAG, "Checksum error on frame.");
+    if (validate_checksum_) {
+      return;
+    }
+  }
+
+  const uint32_t now = millis();
+  if (now - this->last_publish_ < this->throttle_) {
+    return;
+  }
+  this->last_publish_ = now;
+  
+  for(auto item : frame_) {
+    size_t dpos = item.find("\t");
+    label_ = item.substr(0, dpos);
+    value_ = item.substr(dpos+1);
+    ESP_LOGD(TAG, "Handle %s value %s", label_.c_str(), value_.c_str());
+    handle_value_();
+  }
 }
 
 void VictronComponent::handle_value_() {
