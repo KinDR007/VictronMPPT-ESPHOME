@@ -759,8 +759,13 @@ void VictronComponent::publish_frame_() {
   while ((next = block_buffer_.find("\r\n", last)) != std::string::npos) {
     std::string item = block_buffer_.substr(last, next - last);
     last = next + 2;
-
+    if (item.size() == 0) {
+      continue;
+    }
     size_t dpos = item.find("\t");
+    if (dpos == std::string::npos) {
+      continue;
+    }
     label_ = item.substr(0, dpos);
     value_ = item.substr(dpos + 1);
     ESP_LOGD(TAG, "Handle %s value %s", label_.c_str(), value_.c_str());
