@@ -3,6 +3,12 @@
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
 
+#define MAX_LABEL_LENGTH 9 
+#define MAX_VALUE_LENGTH 33
+#define MAX_FIELDS_PER_BLOCK 30  // allow for some headroom over the 22 according to protocol specs 
+
+#define MAX_BUF_SIZE ((2 + MAX_LABEL_LENGTH + 1 + MAX_VALUE_LENGTH) * MAX_FIELDS_PER_BLOCK)
+
 namespace esphome {
 namespace victron {
 
@@ -137,7 +143,7 @@ void VictronComponent::loop() {
         }
         #else
         publish_frame_();
-        frame_.clear();
+        block_buffer_.clear();
         #endif
         checksum_ = 0;
         continue;
@@ -148,8 +154,11 @@ void VictronComponent::loop() {
           handle_value_();
         }
         #else
-        if (frame_.size() < 50) {
-          frame_.push_back(label_+"\t"+value_);
+        if (block_buffer_.size() + label_.size() + value_.size() + 3 < MAX_BUF_SIZE) {
+          block_buffer_.append(label_.c_str());
+          block_buffer_.append("\t");
+          block_buffer_.append(value_.c_str());
+          block_buffer_.append("\r\n");
         }
         #endif
         state_ = 0;
@@ -743,7 +752,12 @@ void VictronComponent::publish_frame_() {
   }
   this->last_publish_ = now;
   
-  for(auto item : frame_) {
+  size_t last = 0; 
+  size_t next = 0; 
+  while ((next = block_buffer_.find("\r\n", last)) != std::string::npos) {
+    std::string item = block_buffer_.substr(last, next-last);
+    last = next + 2;
+
     size_t dpos = item.find("\t");
     label_ = item.substr(0, dpos);
     value_ = item.substr(dpos+1);
