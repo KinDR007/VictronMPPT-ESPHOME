@@ -127,45 +127,37 @@ void VictronComponent::loop() {
       if (c == '\t') {
         state_ = 2;
       } else {
-        label_.push_back(c);
+        // transmission errors may impact delimiters, leading to excess label length
+        if (label_.length() <= MAX_LABEL_LENGTH) {
+          label_.push_back(c);
+        }
       }
       continue;
     }
     if (state_ == 2) {
       if (label_ == "Checksum") {
         state_ = 0;
-// The checksum is used as end of frame indicator
-#if 0
-        // TOCHECK: move this to actual publishing code
-        if (now - this->last_publish_ >= this->throttle_) {
-          this->last_publish_ = now;
-          this->publishing_ = true;
-        } else {
-          this->publishing_ = false;
-        }
-#else
+        // The checksum is used as end of frame indicator, checksum_ should now be 0
         publish_frame_();
         block_buffer_.clear();
-#endif
         checksum_ = 0;
         continue;
       }
       if (c == '\r' || c == '\n') {
-#if 0
-        if (this->publishing_) {
-          handle_value_();
-        }
-#else
+        // a block/frame has up to 22 entries
+        // transmission errors could garble the end of frame indicator, leading to excess buffer length
         if (block_buffer_.size() + label_.size() + value_.size() + 3 < MAX_BUF_SIZE) {
           block_buffer_.append(label_.c_str());
           block_buffer_.append("\t");
           block_buffer_.append(value_.c_str());
           block_buffer_.append("\r\n");
         }
-#endif
         state_ = 0;
       } else {
-        value_.push_back(c);
+        // transmission errors may impact delimiters, leading to excess value length
+        if (value_.length() <= MAX_VALUE_LENGTH) {
+          value_.push_back(c);
+        }
       }
     }
     // Discard ve.direct hex frame
