@@ -163,7 +163,9 @@ void VictronComponent::loop() {
     // Discard ve.direct hex frame
     if (state_ == 3) {
       if (c == '\r' || c == '\n') {
+        // a hex frame ends with '\n' and has its own checksum; prepare to receive another text frame
         state_ = 0;
+        checksum_ = 0;  
       }
     }
   }
