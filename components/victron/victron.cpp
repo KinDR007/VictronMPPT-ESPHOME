@@ -147,9 +147,9 @@ void VictronComponent::loop() {
         // a block/frame has up to 22 entries
         // transmission errors could garble the end of frame indicator, leading to excess buffer length
         if (frame_buffer_.size() + label_.size() + value_.size() + 3 < MAX_BUF_SIZE) {
-          frame_buffer_.append(label_.c_str());
+          frame_buffer_.append(label_);
           frame_buffer_.append("\t");
-          frame_buffer_.append(value_.c_str());
+          frame_buffer_.append(value_);
           frame_buffer_.append("\r\n");
         }
         state_ = 0;
@@ -753,10 +753,10 @@ void VictronComponent::publish_frame_() {
   while ((next = frame_buffer_.find("\r\n", last)) != std::string::npos) {
     std::string item = frame_buffer_.substr(last, next - last);
     last = next + 2;
-    if (item.size() == 0) {
+    if (item.empty()) {
       continue;
     }
-    size_t dpos = item.find("\t");
+    size_t dpos = item.find('\t');
     if (dpos == std::string::npos) {
       continue;
     }
