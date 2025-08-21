@@ -28,7 +28,7 @@ CONFIG_SCHEMA = uart.UART_DEVICE_SCHEMA.extend(
     {
         cv.GenerateID(): cv.declare_id(VictronComponent),
         cv.Optional(CONF_THROTTLE, default="1s"): cv.positive_time_period_milliseconds,
-        cv.Optional(CONF_VALIDATE_CHECKSUM, default="false"): cv.boolean,
+        cv.Optional(CONF_VALIDATE_CHECKSUM, default="true"): cv.boolean,
     }
 )
 
