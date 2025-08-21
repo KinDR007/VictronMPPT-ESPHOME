@@ -3,9 +3,11 @@
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
 
-#define MAX_LABEL_LENGTH 9 
-#define MAX_VALUE_LENGTH 33
-#define MAX_FIELDS_PER_BLOCK 30  // allow for some headroom over the 22 according to protocol specs 
+// size contraints used for overflow checks
+static const uint8_t MAX_LABEL_LENGTH = 9;
+static const uint8_t MAX_VALUE_LENGTH = 33;
+// allow for some headroom over the 22 lines per frame according to protocol specs
+static const uint8_t MAX_FIELDS_PER_BLOCK = 30;
 
 #define MAX_BUF_SIZE ((2 + MAX_LABEL_LENGTH + 1 + MAX_VALUE_LENGTH) * MAX_FIELDS_PER_BLOCK)
 
@@ -107,7 +109,7 @@ void VictronComponent::loop() {
   while (available()) {
     uint8_t c;
     read_byte(&c);
-    checksum_ =  (checksum_ + c) & 0xff;
+    checksum_ = (checksum_ + c) & 0xff;
     if (state_ == 0) {
       if (c == '\r' || c == '\n') {
         continue;
@@ -132,8 +134,8 @@ void VictronComponent::loop() {
     if (state_ == 2) {
       if (label_ == "Checksum") {
         state_ = 0;
-        // The checksum is used as end of frame indicator
-        #if 0
+// The checksum is used as end of frame indicator
+#if 0
         // TOCHECK: move this to actual publishing code
         if (now - this->last_publish_ >= this->throttle_) {
           this->last_publish_ = now;
@@ -141,26 +143,26 @@ void VictronComponent::loop() {
         } else {
           this->publishing_ = false;
         }
-        #else
+#else
         publish_frame_();
         block_buffer_.clear();
-        #endif
+#endif
         checksum_ = 0;
         continue;
       }
       if (c == '\r' || c == '\n') {
-        #if 0
+#if 0
         if (this->publishing_) {
           handle_value_();
         }
-        #else
+#else
         if (block_buffer_.size() + label_.size() + value_.size() + 3 < MAX_BUF_SIZE) {
           block_buffer_.append(label_.c_str());
           block_buffer_.append("\t");
           block_buffer_.append(value_.c_str());
           block_buffer_.append("\r\n");
         }
-        #endif
+#endif
         state_ = 0;
       } else {
         value_.push_back(c);
@@ -751,16 +753,16 @@ void VictronComponent::publish_frame_() {
     return;
   }
   this->last_publish_ = now;
-  
-  size_t last = 0; 
-  size_t next = 0; 
+
+  size_t last = 0;
+  size_t next = 0;
   while ((next = block_buffer_.find("\r\n", last)) != std::string::npos) {
-    std::string item = block_buffer_.substr(last, next-last);
+    std::string item = block_buffer_.substr(last, next - last);
     last = next + 2;
 
     size_t dpos = item.find("\t");
     label_ = item.substr(0, dpos);
-    value_ = item.substr(dpos+1);
+    value_ = item.substr(dpos + 1);
     ESP_LOGD(TAG, "Handle %s value %s", label_.c_str(), value_.c_str());
     handle_value_();
   }
