@@ -733,7 +733,7 @@ static std::string off_reason_text(uint32_t mask) {
 void VictronComponent::publish_frame_() {
   if (checksum_ != 0) {
     if (validate_checksum_) {
-      ESP_LOGW(TAG, "Dropping frame due to checksum error.");
+      ESP_LOGW(TAG, "Dropping frame due to checksum error");
       return;
     } else {
       ESP_LOGW(TAG, "Processing frame with checksum error. Consider enabling option 'validate_checksum'");
