@@ -139,18 +139,18 @@ void VictronComponent::loop() {
         state_ = 0;
         // The checksum is used as end of frame indicator, checksum_ should now be 0
         publish_frame_();
-        block_buffer_.clear();
+        frame_buffer_.clear();
         checksum_ = 0;
         continue;
       }
       if (c == '\r' || c == '\n') {
         // a block/frame has up to 22 entries
         // transmission errors could garble the end of frame indicator, leading to excess buffer length
-        if (block_buffer_.size() + label_.size() + value_.size() + 3 < MAX_BUF_SIZE) {
-          block_buffer_.append(label_.c_str());
-          block_buffer_.append("\t");
-          block_buffer_.append(value_.c_str());
-          block_buffer_.append("\r\n");
+        if (frame_buffer_.size() + label_.size() + value_.size() + 3 < MAX_BUF_SIZE) {
+          frame_buffer_.append(label_.c_str());
+          frame_buffer_.append("\t");
+          frame_buffer_.append(value_.c_str());
+          frame_buffer_.append("\r\n");
         }
         state_ = 0;
       } else {
@@ -745,11 +745,11 @@ void VictronComponent::publish_frame_() {
     return;
   }
   this->last_publish_ = now;
-
-  size_t last = 0;
-  size_t next = 0;
-  while ((next = block_buffer_.find("\r\n", last)) != std::string::npos) {
-    std::string item = block_buffer_.substr(last, next - last);
+  
+  size_t last = 0; 
+  size_t next = 0; 
+  while ((next = frame_buffer_.find("\r\n", last)) != std::string::npos) {
+    std::string item = frame_buffer_.substr(last, next-last);
     last = next + 2;
     if (item.size() == 0) {
       continue;
