@@ -165,7 +165,7 @@ void VictronComponent::loop() {
       if (c == '\r' || c == '\n') {
         // a hex frame ends with '\n' and has its own checksum; prepare to receive another text frame
         state_ = 0;
-        checksum_ = 0;  
+        checksum_ = 0;
       }
     }
   }
@@ -747,11 +747,11 @@ void VictronComponent::publish_frame_() {
     return;
   }
   this->last_publish_ = now;
-  
-  size_t last = 0; 
-  size_t next = 0; 
+
+  size_t last = 0;
+  size_t next = 0;
   while ((next = frame_buffer_.find("\r\n", last)) != std::string::npos) {
-    std::string item = frame_buffer_.substr(last, next-last);
+    std::string item = frame_buffer_.substr(last, next - last);
     last = next + 2;
     if (item.size() == 0) {
       continue;
