@@ -86,6 +86,8 @@ note: ~~_Level shifter (5V<->3.3V)between esp32 and mppt is not necessary_ (test
 | _3_ |**3**  | **TX** (white) |<-  ->| **VIA**|  **VOA** |<-  ->|D7 (**RX**) | GPIO16 (**RX**)|**RX**|
 | _4_ |**4** | **5V** or **3V3** (yellow) |<-  ->|  **VDD2**  | **VDD1** |<-  ->| **3V3 or 5V**  | **3V3 or 5V** |**3V3 or 5V**|
 
+Note that if the VE.direct RX line is connected to VOB on the ADUM1201, the corresponding VIB needs to be connected to a valid signal, i.e. VDD1 or GND1. Depending on the RX pin configuration of the device, this might enable/disable the device. Check the device documentation for details. If unsure, best leave the RX line unconnected, in which case the VIB pin of the ADUM still should be tied to VDD1 or GND1 to not have it floating.
+
  ![adum1201_](https://github.com/KinDR007/VictronMPPT-ESPHOME/assets/61905170/9c7cf60c-fb19-404a-9c6e-7a17bc463ead)
 
 
