@@ -16,6 +16,8 @@ VictronComponent = victron_ns.class_("VictronComponent", uart.UARTDevice, cg.Com
 
 CONF_VICTRON_ID = "victron_id"
 
+CONF_VALIDATE_CHECKSUM = "validate_checksum"
+
 VICTRON_COMPONENT_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_VICTRON_ID): cv.use_id(VictronComponent),
@@ -26,6 +28,7 @@ CONFIG_SCHEMA = uart.UART_DEVICE_SCHEMA.extend(
     {
         cv.GenerateID(): cv.declare_id(VictronComponent),
         cv.Optional(CONF_THROTTLE, default="1s"): cv.positive_time_period_milliseconds,
+        cv.Optional(CONF_VALIDATE_CHECKSUM, default="true"): cv.boolean,
     }
 )
 
@@ -36,3 +39,4 @@ def to_code(config):
     yield uart.register_uart_device(var, config)
 
     cg.add(var.set_throttle(config[CONF_THROTTLE]))
+    cg.add(var.set_checksum_validation(config[CONF_VALIDATE_CHECKSUM]))

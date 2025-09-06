@@ -3,6 +3,14 @@
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
 
+// size contraints used for overflow checks
+static const uint8_t MAX_LABEL_LENGTH = 9;
+static const uint8_t MAX_VALUE_LENGTH = 33;
+// allow for some headroom over the 22 lines per frame according to protocol specs
+static const uint8_t MAX_FIELDS_PER_BLOCK = 30;
+
+#define MAX_BUF_SIZE ((2 + MAX_LABEL_LENGTH + 1 + MAX_VALUE_LENGTH) * MAX_FIELDS_PER_BLOCK)
+
 namespace esphome {
 namespace victron {
 
@@ -101,6 +109,7 @@ void VictronComponent::loop() {
   while (available()) {
     uint8_t c;
     read_byte(&c);
+    checksum_ = (checksum_ + c) & 0xff;
     if (state_ == 0) {
       if (c == '\r' || c == '\n') {
         continue;
@@ -118,35 +127,45 @@ void VictronComponent::loop() {
       if (c == '\t') {
         state_ = 2;
       } else {
-        label_.push_back(c);
+        // transmission errors may impact delimiters, leading to excess label length
+        if (label_.length() <= MAX_LABEL_LENGTH) {
+          label_.push_back(c);
+        }
       }
       continue;
     }
     if (state_ == 2) {
       if (label_ == "Checksum") {
         state_ = 0;
-        // The checksum is used as end of frame indicator
-        if (now - this->last_publish_ >= this->throttle_) {
-          this->last_publish_ = now;
-          this->publishing_ = true;
-        } else {
-          this->publishing_ = false;
-        }
+        // The checksum is used as end of frame indicator, checksum_ should now be 0
+        publish_frame_();
+        frame_buffer_.clear();
+        checksum_ = 0;
         continue;
       }
       if (c == '\r' || c == '\n') {
-        if (this->publishing_) {
-          handle_value_();
+        // a block/frame has up to 22 entries
+        // transmission errors could garble the end of frame indicator, leading to excess buffer length
+        if (frame_buffer_.size() + label_.size() + value_.size() + 3 < MAX_BUF_SIZE) {
+          frame_buffer_.append(label_);
+          frame_buffer_.append("\t");
+          frame_buffer_.append(value_);
+          frame_buffer_.append("\r\n");
         }
         state_ = 0;
       } else {
-        value_.push_back(c);
+        // transmission errors may impact delimiters, leading to excess value length
+        if (value_.length() <= MAX_VALUE_LENGTH) {
+          value_.push_back(c);
+        }
       }
     }
     // Discard ve.direct hex frame
     if (state_ == 3) {
       if (c == '\r' || c == '\n') {
+        // a hex frame ends with '\n' and has its own checksum; prepare to receive another text frame
         state_ = 0;
+        checksum_ = 0;
       }
     }
   }
@@ -711,6 +730,41 @@ static std::string off_reason_text(uint32_t mask) {
   }
 
   return value_list;
+}
+
+void VictronComponent::publish_frame_() {
+  if (checksum_ != 0) {
+    if (validate_checksum_) {
+      ESP_LOGW(TAG, "Dropping frame due to checksum error");
+      return;
+    } else {
+      ESP_LOGW(TAG, "Processing frame with checksum error. Consider enabling option 'validate_checksum'");
+    }
+  }
+
+  const uint32_t now = millis();
+  if (now - this->last_publish_ < this->throttle_) {
+    return;
+  }
+  this->last_publish_ = now;
+
+  size_t last = 0;
+  size_t next = 0;
+  while ((next = frame_buffer_.find("\r\n", last)) != std::string::npos) {
+    std::string item = frame_buffer_.substr(last, next - last);
+    last = next + 2;
+    if (item.empty()) {
+      continue;
+    }
+    size_t dpos = item.find('\t');
+    if (dpos == std::string::npos) {
+      continue;
+    }
+    label_ = item.substr(0, dpos);
+    value_ = item.substr(dpos + 1);
+    ESP_LOGD(TAG, "Handle %s value %s", label_.c_str(), value_.c_str());
+    handle_value_();
+  }
 }
 
 void VictronComponent::handle_value_() {
