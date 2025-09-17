@@ -280,14 +280,73 @@ static const char *charging_mode_text(int value) {
 }
 
 static const char *error_code_text(int value) {
-  for (size_t i = 0; i < sizeof(ERROR_CODE_TABLE) / sizeof(ERROR_CODE_TABLE[0]); i++) {
-    int code = pgm_read_dword(&ERROR_CODE_TABLE[i].code);
-    if (code == value) {
-      strcpy_P(buffer_error_code, (PGM_P)pgm_read_ptr(&ERROR_CODE_TABLE[i].msg));
-      return buffer_error_code;
-    }
+  const char *result;
+  switch (value) {
+    case 0:
+      result = ERROR_CODE_0;
+      break;
+    case 2:
+      result = ERROR_CODE_2;
+      break;
+    case 17:
+      result = ERROR_CODE_17;
+      break;
+    case 18:
+      result = ERROR_CODE_18;
+      break;
+    case 19:
+      result = ERROR_CODE_19;
+      break;
+    case 20:
+      result = ERROR_CODE_20;
+      break;
+    case 21:
+      result = ERROR_CODE_21;
+      break;
+    case 26:
+      result = ERROR_CODE_26;
+      break;
+    case 28:
+      result = ERROR_CODE_28;
+      break;
+    case 33:
+      result = ERROR_CODE_33;
+      break;
+    case 34:
+      result = ERROR_CODE_34;
+      break;
+    case 38:
+      result = ERROR_CODE_38;
+      break;
+    case 39:
+      result = ERROR_CODE_39;
+      break;
+    case 65:
+      result = ERROR_CODE_65;
+      break;
+    case 66:
+      result = ERROR_CODE_66;
+      break;
+    case 67:
+      result = ERROR_CODE_67;
+      break;
+    case 68:
+      result = ERROR_CODE_68;
+      break;
+    case 116:
+      result = ERROR_CODE_116;
+      break;
+    case 117:
+      result = ERROR_CODE_117;
+      break;
+    case 119:
+      result = ERROR_CODE_119;
+      break;
+    default:
+      result = ERROR_CODE_UNKNOWN;
+      break;
   }
-  strcpy_P(buffer_error_code, ERROR_CODE_UNKNOWN);
+  strcpy_P(buffer_error_code, result);
   return buffer_error_code;
 }
 
@@ -743,9 +802,13 @@ static const char *device_type_text(int value) {
       return "SmartSolar MPPT RS 450/200";
     case 0xA117:
       return "BlueSolar MPPT VE.Can 150|100";
+
     default:
-      return "Unknown";
+      result = DEVICE_TYPE_UNKNOWN;
+      break;
   }
+  strcpy_P(buffer_device_type, result);
+  return buffer_device_type;
 }
 
 static std::string off_reason_text(uint32_t mask) {
