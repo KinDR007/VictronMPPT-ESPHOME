@@ -67,6 +67,8 @@ static const char ERROR_CODE_117[] PROGMEM = "Invalid/incompatible firmware";
 static const char ERROR_CODE_119[] PROGMEM = "User settings invalid";
 static const char ERROR_CODE_UNKNOWN[] PROGMEM = "Unknown";
 
+static char buffer_error_code[53];
+
 struct ErrorCodeEntry {
   int code;
   const char *msg;
@@ -111,6 +113,8 @@ static const char CHARGING_MODE_247[] PROGMEM = "Auto equalize / Recondition";
 static const char CHARGING_MODE_248[] PROGMEM = "BatterySafe";
 static const char CHARGING_MODE_252[] PROGMEM = "External control";
 static const char CHARGING_MODE_UNKNOWN[] PROGMEM = "Unknown";
+
+static char buffer_charging_mode[30];
 
 struct ChargingModeEntry {
   int code;
@@ -261,29 +265,29 @@ void VictronComponent::loop() {
 }
 
 static const char *charging_mode_text(int value) {
-static char buffer[30];
+const char *result = CHARGING_MODE_UNKNOWN;
+
   for (size_t i = 0; i < sizeof(CHARGING_MODE_TABLE) / sizeof(CHARGING_MODE_TABLE[0]); i++) {
     int code = pgm_read_dword(&CHARGING_MODE_TABLE[i].code);
     if (code == value) {
-      strcpy_P(buffer, (PGM_P)pgm_read_ptr(&CHARGING_MODE_TABLE[i].msg));
-      return strdup(buffer);
+      result = CHARGING_MODE_TABLE[i].msg;
+      break;
     }
   }
-  strcpy_P(buffer, CHARGING_MODE_UNKNOWN);
-  return buffer;
+  strcpy_P(buffer_charging_mode, result);
+  return buffer_charging_mode;
 }
 
 static const char *error_code_text(int value) {
-static char buffer[55];
   for (size_t i = 0; i < sizeof(ERROR_CODE_TABLE) / sizeof(ERROR_CODE_TABLE[0]); i++) {
     int code = pgm_read_dword(&ERROR_CODE_TABLE[i].code);
     if (code == value) {
-      strcpy_P(buffer, (PGM_P)pgm_read_ptr(&ERROR_CODE_TABLE[i].msg));
-      return strdup(buffer);
+      strcpy_P(buffer_error_code, (PGM_P)pgm_read_ptr(&ERROR_CODE_TABLE[i].msg));
+      return buffer_error_code;
     }
   }
-  strcpy_P(buffer, ERROR_CODE_UNKNOWN);
-  return buffer;
+  strcpy_P(buffer_error_code, ERROR_CODE_UNKNOWN);
+  return buffer_error_code;
 }
 
 static const char *warning_code_text(int value) {
@@ -746,7 +750,7 @@ static const char *device_type_text(int value) {
 static std::string off_reason_text(uint32_t mask) {
   bool first = true;
   std::string value_list = "";
-  char buffer[48];
+  char buffer[36];
   if (mask) {
     for (uint8_t i = 0; i < OFF_REASONS_SIZE; i++) {
       if (mask & (1 << i)) {
