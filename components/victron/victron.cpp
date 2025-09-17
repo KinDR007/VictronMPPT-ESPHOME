@@ -45,6 +45,96 @@ static const char *const OFF_REASONS[OFF_REASONS_SIZE] PROGMEM = {
     OFF_REASONS_15
 };
 
+static const char ERROR_CODE_0[] PROGMEM = "No error";
+static const char ERROR_CODE_2[] PROGMEM = "Battery voltage too high";
+static const char ERROR_CODE_17[] PROGMEM = "Charger temperature too high";
+static const char ERROR_CODE_18[] PROGMEM = "Charger over current";
+static const char ERROR_CODE_19[] PROGMEM = "Charger current reversed";
+static const char ERROR_CODE_20[] PROGMEM = "Bulk time limit exceeded";
+static const char ERROR_CODE_21[] PROGMEM = "Current sensor issue";
+static const char ERROR_CODE_26[] PROGMEM = "Terminals overheated";
+static const char ERROR_CODE_28[] PROGMEM = "Converter issue";
+static const char ERROR_CODE_33[] PROGMEM = "Input voltage too high (solar panel)";
+static const char ERROR_CODE_34[] PROGMEM = "Input current too high (solar panel)";
+static const char ERROR_CODE_38[] PROGMEM = "Input shutdown (excessive battery voltage)";
+static const char ERROR_CODE_39[] PROGMEM = "Input shutdown (due to current flow during off mode)";
+static const char ERROR_CODE_65[] PROGMEM = "Lost communication with one of devices";
+static const char ERROR_CODE_66[] PROGMEM = "Synchronised charging device configuration issue";
+static const char ERROR_CODE_67[] PROGMEM = "BMS connection lost";
+static const char ERROR_CODE_68[] PROGMEM = "Network misconfigured";
+static const char ERROR_CODE_116[] PROGMEM = "Factory calibration data lost";
+static const char ERROR_CODE_117[] PROGMEM = "Invalid/incompatible firmware";
+static const char ERROR_CODE_119[] PROGMEM = "User settings invalid";
+static const char ERROR_CODE_UNKNOWN[] PROGMEM = "Unknown";
+
+struct ErrorCodeEntry {
+  int code;
+  const char *msg;
+};
+
+static const ErrorCodeEntry ERROR_CODE_TABLE[] PROGMEM = {
+  {0, ERROR_CODE_0},
+  {2, ERROR_CODE_2},
+  {17, ERROR_CODE_17},
+  {18, ERROR_CODE_18},
+  {19, ERROR_CODE_19},
+  {20, ERROR_CODE_20},
+  {21, ERROR_CODE_21},
+  {26, ERROR_CODE_26},
+  {28, ERROR_CODE_28},
+  {33, ERROR_CODE_33},
+  {34, ERROR_CODE_34},
+  {38, ERROR_CODE_38},
+  {39, ERROR_CODE_39},
+  {65, ERROR_CODE_65},
+  {66, ERROR_CODE_66},
+  {67, ERROR_CODE_67},
+  {68, ERROR_CODE_68},
+  {116, ERROR_CODE_116},
+  {117, ERROR_CODE_117},
+  {119, ERROR_CODE_119}
+};
+
+static const char CHARGING_MODE_0[] PROGMEM = "Off";
+static const char CHARGING_MODE_1[] PROGMEM = "Low power";
+static const char CHARGING_MODE_2[] PROGMEM = "Fault";
+static const char CHARGING_MODE_3[] PROGMEM = "Bulk";
+static const char CHARGING_MODE_4[] PROGMEM = "Absorption";
+static const char CHARGING_MODE_5[] PROGMEM = "Float";
+static const char CHARGING_MODE_6[] PROGMEM = "Storage";
+static const char CHARGING_MODE_7[] PROGMEM = "Equalize (manual)";
+static const char CHARGING_MODE_9[] PROGMEM = "Inverting";
+static const char CHARGING_MODE_11[] PROGMEM = "Power supply";
+static const char CHARGING_MODE_245[] PROGMEM = "Starting-up";
+static const char CHARGING_MODE_246[] PROGMEM = "Repeated absorption";
+static const char CHARGING_MODE_247[] PROGMEM = "Auto equalize / Recondition";
+static const char CHARGING_MODE_248[] PROGMEM = "BatterySafe";
+static const char CHARGING_MODE_252[] PROGMEM = "External control";
+static const char CHARGING_MODE_UNKNOWN[] PROGMEM = "Unknown";
+
+struct ChargingModeEntry {
+  int code;
+  const char *msg;
+};
+
+static const ChargingModeEntry CHARGING_MODE_TABLE[] PROGMEM = {
+  {0, CHARGING_MODE_0},
+  {1, CHARGING_MODE_1},
+  {2, CHARGING_MODE_2},
+  {3, CHARGING_MODE_3},
+  {4, CHARGING_MODE_4},
+  {5, CHARGING_MODE_5},
+  {6, CHARGING_MODE_6},
+  {7, CHARGING_MODE_7},
+  {9, CHARGING_MODE_9},
+  {11, CHARGING_MODE_11},
+  {245, CHARGING_MODE_245},
+  {246, CHARGING_MODE_246},
+  {247, CHARGING_MODE_247},
+  {248, CHARGING_MODE_248},
+  {252, CHARGING_MODE_252}
+};
+
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
 static const char *prefix = "  ";
   ESP_LOGCONFIG(TAG, "Victron:");
@@ -171,87 +261,29 @@ void VictronComponent::loop() {
 }
 
 static const char *charging_mode_text(int value) {
-  switch (value) {
-    case 0:
-      return "Off";
-    case 1:
-      return "Low power";
-    case 2:
-      return "Fault";
-    case 3:
-      return "Bulk";
-    case 4:
-      return "Absorption";
-    case 5:
-      return "Float";
-    case 6:
-      return "Storage";
-    case 7:
-      return "Equalize (manual)";
-    case 9:
-      return "Inverting";
-    case 11:
-      return "Power supply";
-    case 245:
-      return "Starting-up";
-    case 246:
-      return "Repeated absorption";
-    case 247:
-      return "Auto equalize / Recondition";
-    case 248:
-      return "BatterySafe";
-    case 252:
-      return "External control";
-    default:
-      return "Unknown";
+static char buffer[30];
+  for (size_t i = 0; i < sizeof(CHARGING_MODE_TABLE) / sizeof(CHARGING_MODE_TABLE[0]); i++) {
+    int code = pgm_read_dword(&CHARGING_MODE_TABLE[i].code);
+    if (code == value) {
+      strcpy_P(buffer, (PGM_P)pgm_read_ptr(&CHARGING_MODE_TABLE[i].msg));
+      return strdup(buffer);
+    }
   }
+  strcpy_P(buffer, CHARGING_MODE_UNKNOWN);
+  return buffer;
 }
 
 static const char *error_code_text(int value) {
-  switch (value) {
-    case 0:
-      return "No error";
-    case 2:
-      return "Battery voltage too high";
-    case 17:
-      return "Charger temperature too high";
-    case 18:
-      return "Charger over current";
-    case 19:
-      return "Charger current reversed";
-    case 20:
-      return "Bulk time limit exceeded";
-    case 21:
-      return "Current sensor issue";
-    case 26:
-      return "Terminals overheated";
-    case 28:
-      return "Converter issue";
-    case 33:
-      return "Input voltage too high (solar panel)";
-    case 34:
-      return "Input current too high (solar panel)";
-    case 38:
-      return "Input shutdown (excessive battery voltage)";
-    case 39:
-      return "Input shutdown (due to current flow during off mode)";
-    case 65:
-      return "Lost communication with one of devices";
-    case 66:
-      return "Synchronised charging device configuration issue";
-    case 67:
-      return "BMS connection lost";
-    case 68:
-      return "Network misconfigured";
-    case 116:
-      return "Factory calibration data lost";
-    case 117:
-      return "Invalid/incompatible firmware";
-    case 119:
-      return "User settings invalid";
-    default:
-      return "Unknown";
+static char buffer[55];
+  for (size_t i = 0; i < sizeof(ERROR_CODE_TABLE) / sizeof(ERROR_CODE_TABLE[0]); i++) {
+    int code = pgm_read_dword(&ERROR_CODE_TABLE[i].code);
+    if (code == value) {
+      strcpy_P(buffer, (PGM_P)pgm_read_ptr(&ERROR_CODE_TABLE[i].msg));
+      return strdup(buffer);
+    }
   }
+  strcpy_P(buffer, ERROR_CODE_UNKNOWN);
+  return buffer;
 }
 
 static const char *warning_code_text(int value) {
