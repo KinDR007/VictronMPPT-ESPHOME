@@ -2,6 +2,7 @@
 #include "esphome/core/log.h"
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
+#include <Arduino.h>
 
 namespace esphome {
 namespace victron {
@@ -9,23 +10,39 @@ namespace victron {
 static const char *const TAG = "victron";
 
 static const uint8_t OFF_REASONS_SIZE = 16;
-static const char *const OFF_REASONS[OFF_REASONS_SIZE] = {
-    "No input power",                       // 0000 0000 0000 0001
-    "Switched off (power switch)",          // 0000 0000 0000 0010
-    "Switched off (device mode register)",  // 0000 0000 0000 0100
-    "Remote input",                         // 0000 0000 0000 1000
-    "Protection active",                    // 0000 0000 0001 0000
-    "Paygo",                                // 0000 0000 0010 0000
-    "BMS",                                  // 0000 0000 0100 0000
-    "Engine shutdown detection",            // 0000 0000 1000 0000
-    "Analysing input voltage",              // 0000 0001 0000 0000
-    "Unknown: Bit 10",                      // 0000 0010 0000 0000
-    "Unknown: Bit 11",                      // 0000 0100 0000 0000
-    "Unknown: Bit 12",                      // 0000 1000 0000 0000
-    "Unknown: Bit 13",                      // 0001 0000 0000 0000
-    "Unknown: Bit 14",                      // 0010 0000 0000 0000
-    "Unknown: Bit 15",                      // 0100 0000 0000 0000
-    "Unknown: Bit 16",                      // 1000 0000 0000 0000
+static const char OFF_REASONS_0[] PROGMEM = "No input power";
+static const char OFF_REASONS_1[] PROGMEM = "Switched off (power switch)";
+static const char OFF_REASONS_2[] PROGMEM = "Switched off (device mode register)";
+static const char OFF_REASONS_3[] PROGMEM = "Remote input";
+static const char OFF_REASONS_4[] PROGMEM = "Protection active";
+static const char OFF_REASONS_5[] PROGMEM = "Paygo";
+static const char OFF_REASONS_6[] PROGMEM = "BMS";
+static const char OFF_REASONS_7[] PROGMEM = "Engine shutdown detection";
+static const char OFF_REASONS_8[] PROGMEM = "Analysing input voltage";
+static const char OFF_REASONS_9[] PROGMEM = "Unknown: Bit 10";
+static const char OFF_REASONS_10[] PROGMEM = "Unknown: Bit 11";
+static const char OFF_REASONS_11[] PROGMEM = "Unknown: Bit 12";
+static const char OFF_REASONS_12[] PROGMEM = "Unknown: Bit 13";
+static const char OFF_REASONS_13[] PROGMEM = "Unknown: Bit 14";
+static const char OFF_REASONS_14[] PROGMEM = "Unknown: Bit 15";
+static const char OFF_REASONS_15[] PROGMEM = "Unknown: Bit 16";
+static const char *const OFF_REASONS[OFF_REASONS_SIZE] PROGMEM = {
+    OFF_REASONS_0,
+    OFF_REASONS_1,
+    OFF_REASONS_2,
+    OFF_REASONS_3,
+    OFF_REASONS_4,
+    OFF_REASONS_5,
+    OFF_REASONS_6,
+    OFF_REASONS_7,
+    OFF_REASONS_8,
+    OFF_REASONS_9,
+    OFF_REASONS_10,
+    OFF_REASONS_11,
+    OFF_REASONS_12,
+    OFF_REASONS_13,
+    OFF_REASONS_14,
+    OFF_REASONS_15
 };
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
@@ -697,7 +714,7 @@ static const char *device_type_text(int value) {
 static std::string off_reason_text(uint32_t mask) {
   bool first = true;
   std::string value_list = "";
-
+  char buffer[48];
   if (mask) {
     for (uint8_t i = 0; i < OFF_REASONS_SIZE; i++) {
       if (mask & (1 << i)) {
@@ -706,7 +723,8 @@ static std::string off_reason_text(uint32_t mask) {
         } else {
           value_list.append(";");
         }
-        value_list.append(OFF_REASONS[i]);
+        strcpy_P(buffer, (PGM_P)pgm_read_ptr(&OFF_REASONS[i]));
+        value_list.append(buffer);
       }
     }
   }
