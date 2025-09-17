@@ -30,7 +30,7 @@ static const char *const OFF_REASONS[OFF_REASONS_SIZE] = {
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
   ESP_LOGCONFIG(TAG, "Victron:");
-  LOG_BINARY_SENSOR("  ", F("Load state"), load_state_binary_sensor_);
+  LOG_BINARY_SENSOR("  ", "Load state", load_state_binary_sensor_);
   LOG_BINARY_SENSOR("  ", "Relay state", relay_state_binary_sensor_);
   LOG_SENSOR("  ", "Max Power Yesterday", max_power_yesterday_sensor_);
   LOG_SENSOR("  ", "Max Power Today", max_power_today_sensor_);
