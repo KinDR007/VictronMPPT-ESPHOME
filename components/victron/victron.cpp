@@ -454,295 +454,588 @@ static std::string dc_monitor_mode_text(int value) {
   }
 }
 
+// Device type strings in PROGMEM
+static const char DEVICE_TYPE_BMV_700[] PROGMEM = "BMV-700";
+static const char DEVICE_TYPE_BMV_702[] PROGMEM = "BMV-702";
+static const char DEVICE_TYPE_BMV_700H[] PROGMEM = "BMV-700H";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_70_15[] PROGMEM = "BlueSolar MPPT 70|15";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_75_50[] PROGMEM = "BlueSolar MPPT 75|50";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_35[] PROGMEM = "BlueSolar MPPT 150|35";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_75_15[] PROGMEM = "BlueSolar MPPT 75|15";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_100_15[] PROGMEM = "BlueSolar MPPT 100|15";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_100_30[] PROGMEM = "BlueSolar MPPT 100|30";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_100_50[] PROGMEM = "BlueSolar MPPT 100|50";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_70[] PROGMEM = "BlueSolar MPPT 150|70";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_100[] PROGMEM = "BlueSolar MPPT 150|100";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_100_50_REV2[] PROGMEM = "BlueSolar MPPT 100|50 rev2";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_100_30_REV2[] PROGMEM = "BlueSolar MPPT 100|30 rev2";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_35_REV2[] PROGMEM = "BlueSolar MPPT 150|35 rev2";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_75_10[] PROGMEM = "BlueSolar MPPT 75|10";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_45[] PROGMEM = "BlueSolar MPPT 150|45";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_60[] PROGMEM = "BlueSolar MPPT 150|60";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_85[] PROGMEM = "BlueSolar MPPT 150|85";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_100[] PROGMEM = "SmartSolar MPPT 250|100";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_100[] PROGMEM = "SmartSolar MPPT 150|100";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_85[] PROGMEM = "SmartSolar MPPT 150|85";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_75_15[] PROGMEM = "SmartSolar MPPT 75|15";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_75_15_REV2[] PROGMEM = "SmartSolar MPPT 75|15 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_75_10[] PROGMEM = "SmartSolar MPPT 75|10";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_75_10_REV2[] PROGMEM = "SmartSolar MPPT 75|10 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_100_15[] PROGMEM = "SmartSolar MPPT 100|15";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_100_30[] PROGMEM = "SmartSolar MPPT 100|30";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_45_REV3[] PROGMEM = "SmartSolar MPPT 150|45 rev3";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_100_50[] PROGMEM = "SmartSolar MPPT 100|50";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_35[] PROGMEM = "SmartSolar MPPT 150|35";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_100_REV2[] PROGMEM = "SmartSolar MPPT 150|100 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_85_REV2[] PROGMEM = "SmartSolar MPPT 150|85 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_70[] PROGMEM = "SmartSolar MPPT 250|70";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_85[] PROGMEM = "SmartSolar MPPT 250|85";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_60[] PROGMEM = "SmartSolar MPPT 250|60";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_45[] PROGMEM = "SmartSolar MPPT 250|45";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_100_20[] PROGMEM = "SmartSolar MPPT 100|20";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_100_20_48V[] PROGMEM = "SmartSolar MPPT 100|20 48V";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_45[] PROGMEM = "SmartSolar MPPT 150|45";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_60[] PROGMEM = "SmartSolar MPPT 150|60";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_70[] PROGMEM = "SmartSolar MPPT 150|70";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_85_REV2[] PROGMEM = "SmartSolar MPPT 250|85 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_100_REV2[] PROGMEM = "SmartSolar MPPT 250|100 rev2";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_100_20[] PROGMEM = "BlueSolar MPPT 100|20";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_100_20_48V[] PROGMEM = "BlueSolar MPPT 100|20 48V";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_60_REV2[] PROGMEM = "SmartSolar MPPT 250|60 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_250_70_REV2[] PROGMEM = "SmartSolar MPPT 250|70 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_45_REV2[] PROGMEM = "SmartSolar MPPT 150|45 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_60_REV2[] PROGMEM = "SmartSolar MPPT 150|60 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_70_REV2[] PROGMEM = "SmartSolar MPPT 150|70 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_85_REV3[] PROGMEM = "SmartSolar MPPT 150|85 rev3";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_150_100_REV3[] PROGMEM = "SmartSolar MPPT 150|100 rev3";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_45_REV2[] PROGMEM = "BlueSolar MPPT 150|45 rev2";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_60_REV2[] PROGMEM = "BlueSolar MPPT 150|60 rev2";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_150_70_REV2[] PROGMEM = "BlueSolar MPPT 150|70 rev2";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_75_15_REV3[] PROGMEM = "BlueSolar MPPT 75|15 rev3";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_70[] PROGMEM = "SmartSolar MPPT VE.Can 150/70";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_45[] PROGMEM = "SmartSolar MPPT VE.Can 150/45";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_60[] PROGMEM = "SmartSolar MPPT VE.Can 150/60";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_85[] PROGMEM = "SmartSolar MPPT VE.Can 150/85";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_100[] PROGMEM = "SmartSolar MPPT VE.Can 150/100";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_45[] PROGMEM = "SmartSolar MPPT VE.Can 250/45";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_60[] PROGMEM = "SmartSolar MPPT VE.Can 250/60";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_70[] PROGMEM = "SmartSolar MPPT VE.Can 250/70";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_85[] PROGMEM = "SmartSolar MPPT VE.Can 250/85";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_100[] PROGMEM = "SmartSolar MPPT VE.Can 250/100";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_70_REV2[] PROGMEM = "SmartSolar MPPT VE.Can 150/70 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_85_REV2[] PROGMEM = "SmartSolar MPPT VE.Can 150/85 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_100_REV2[] PROGMEM = "SmartSolar MPPT VE.Can 150/100 rev2";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_VE_CAN_150_100[] PROGMEM = "BlueSolar MPPT VE.Can 150/100";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_VE_CAN_250_70[] PROGMEM = "BlueSolar MPPT VE.Can 250/70";
+static const char DEVICE_TYPE_BLUESOLAR_MPPT_VE_CAN_250_100[] PROGMEM = "BlueSolar MPPT VE.Can 250/100";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_70_REV2[] PROGMEM = "SmartSolar MPPT VE.Can 250/70 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_100_REV2[] PROGMEM = "SmartSolar MPPT VE.Can 250/100 rev2";
+static const char DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_85_REV2[] PROGMEM = "SmartSolar MPPT VE.Can 250/85 rev2";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_250VA_230V[] PROGMEM = "Phoenix Inverter 12V 250VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_250VA_230V[] PROGMEM = "Phoenix Inverter 24V 250VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_250VA_230V[] PROGMEM = "Phoenix Inverter 48V 250VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_375VA_230V[] PROGMEM = "Phoenix Inverter 12V 375VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_375VA_230V[] PROGMEM = "Phoenix Inverter 24V 375VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_375VA_230V[] PROGMEM = "Phoenix Inverter 48V 375VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_500VA_230V[] PROGMEM = "Phoenix Inverter 12V 500VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_500VA_230V[] PROGMEM = "Phoenix Inverter 24V 500VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_500VA_230V[] PROGMEM = "Phoenix Inverter 48V 500VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_250VA_230V[] PROGMEM = "Phoenix Inverter 12V 250VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_250VA_230V[] PROGMEM = "Phoenix Inverter 24V 250VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_250VA_230V[] PROGMEM = "Phoenix Inverter 48V 250VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_250VA_120V[] PROGMEM = "Phoenix Inverter 12V 250VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_250VA_120V[] PROGMEM = "Phoenix Inverter 24V 250VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_250VA_120V[] PROGMEM = "Phoenix Inverter 48V 250VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_375VA_230V[] PROGMEM = "Phoenix Inverter 12V 375VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_375VA_230V[] PROGMEM = "Phoenix Inverter 24V 375VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_375VA_230V[] PROGMEM = "Phoenix Inverter 48V 375VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_375VA_120V[] PROGMEM = "Phoenix Inverter 12V 375VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_375VA_120V[] PROGMEM = "Phoenix Inverter 24V 375VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_375VA_120V[] PROGMEM = "Phoenix Inverter 48V 375VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_500VA_230V[] PROGMEM = "Phoenix Inverter 12V 500VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_500VA_230V[] PROGMEM = "Phoenix Inverter 24V 500VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_500VA_230V[] PROGMEM = "Phoenix Inverter 48V 500VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_500VA_120V[] PROGMEM = "Phoenix Inverter 12V 500VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_500VA_120V[] PROGMEM = "Phoenix Inverter 24V 500VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_500VA_120V[] PROGMEM = "Phoenix Inverter 48V 500VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_800VA_230V[] PROGMEM = "Phoenix Inverter 12V 800VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_800VA_230V[] PROGMEM = "Phoenix Inverter 24V 800VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_800VA_230V[] PROGMEM = "Phoenix Inverter 48V 800VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_800VA_120V[] PROGMEM = "Phoenix Inverter 12V 800VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_800VA_120V[] PROGMEM = "Phoenix Inverter 24V 800VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_800VA_120V[] PROGMEM = "Phoenix Inverter 48V 800VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_1200VA_230V[] PROGMEM = "Phoenix Inverter 12V 1200VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_1200VA_230V[] PROGMEM = "Phoenix Inverter 24V 1200VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_1200VA_230V[] PROGMEM = "Phoenix Inverter 48V 1200VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_1200VA_120V[] PROGMEM = "Phoenix Inverter 12V 1200VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_1200VA_120V[] PROGMEM = "Phoenix Inverter 24V 1200VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_1200VA_120V[] PROGMEM = "Phoenix Inverter 48V 1200VA 120V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_1600VA_230V[] PROGMEM = "Phoenix Inverter 12V 1600VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_1600VA_230V[] PROGMEM = "Phoenix Inverter 24V 1600VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_1600VA_230V[] PROGMEM = "Phoenix Inverter 48V 1600VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_2000VA_230V[] PROGMEM = "Phoenix Inverter 12V 2000VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_2000VA_230V[] PROGMEM = "Phoenix Inverter 24V 2000VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_2000VA_230V[] PROGMEM = "Phoenix Inverter 48V 2000VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_3000VA_230V[] PROGMEM = "Phoenix Inverter 12V 3000VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_3000VA_230V[] PROGMEM = "Phoenix Inverter 24V 3000VA 230V";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_3000VA_230V[] PROGMEM = "Phoenix Inverter 48V 3000VA 230V";
+static const char DEVICE_TYPE_BLUE_SMART_IP65_CHARGER_12_25[] PROGMEM = "Blue Smart IP65 Charger 12|25";
+static const char DEVICE_TYPE_BLUE_SMART_IP22_CHARGER_24_8[] PROGMEM = "Blue Smart IP22 Charger 24|8";
+static const char DEVICE_TYPE_BLUE_SMART_IP22_CHARGER_24_12[] PROGMEM = "Blue Smart IP22 Charger 24|12";
+static const char DEVICE_TYPE_BLUE_SMART_IP22_CHARGER_24_16[] PROGMEM = "Blue Smart IP22 Charger 24|16";
+static const char DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_12_50_1_1[] PROGMEM = "Phoenix Smart IP43 Charger 12|50 (1+1)";
+static const char DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_12_50_3[] PROGMEM = "Phoenix Smart IP43 Charger 12|50 (3)";
+static const char DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_24_25_1_1[] PROGMEM = "Phoenix Smart IP43 Charger 24|25 (1+1)";
+static const char DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_24_25_3[] PROGMEM = "Phoenix Smart IP43 Charger 24|25 (3)";
+static const char DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_12_30_1_1[] PROGMEM = "Phoenix Smart IP43 Charger 12|30 (1+1)";
+static const char DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_12_30_3[] PROGMEM = "Phoenix Smart IP43 Charger 12|30 (3)";
+static const char DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_24_16_1_1[] PROGMEM = "Phoenix Smart IP43 Charger 24|16 (1+1)";
+static const char DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_24_16_3[] PROGMEM = "Phoenix Smart IP43 Charger 24|16 (3)";
+static const char DEVICE_TYPE_BMV_712_SMART[] PROGMEM = "BMV-712 Smart";
+static const char DEVICE_TYPE_BMV_710H_SMART[] PROGMEM = "BMV-710H Smart";
+static const char DEVICE_TYPE_BMV_712_SMART_REV2[] PROGMEM = "BMV-712 Smart Rev2";
+static const char DEVICE_TYPE_SMARTSHUNT_500A_50MV[] PROGMEM = "SmartShunt 500A/50mV";
+static const char DEVICE_TYPE_SMARTSHUNT_1000A_50MV[] PROGMEM = "SmartShunt 1000A/50mV";
+static const char DEVICE_TYPE_SMARTSHUNT_2000A_50MV[] PROGMEM = "SmartShunt 2000A/50mV";
+static const char DEVICE_TYPE_MULTI_RS_SOLAR_48V_6000VA_230V[] PROGMEM = "Multi RS Solar 48V 6000VA 230V";
+static const char DEVICE_TYPE_UNKNOWN[] PROGMEM = "Unknown";
+
+static char buffer_device_type[48];
+
 static const char *device_type_text(int value) {
+  const char *result;
   switch (value) {
     case 0x203:
-      return "BMV-700";
+      result = DEVICE_TYPE_BMV_700;
+      break;
     case 0x204:
-      return "BMV-702";
+      result = DEVICE_TYPE_BMV_702;
+      break;
     case 0x205:
-      return "BMV-700H";
+      result = DEVICE_TYPE_BMV_700H;
+      break;
     case 0x0300:
-      return "BlueSolar MPPT 70|15";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_70_15;
+      break;
     case 0xA040:
-      return "BlueSolar MPPT 75|50";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_75_50;
+      break;
     case 0xA041:
-      return "BlueSolar MPPT 150|35";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_35;
+      break;
     case 0xA042:
-      return "BlueSolar MPPT 75|15";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_75_15;
+      break;
     case 0xA043:
-      return "BlueSolar MPPT 100|15";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_100_15;
+      break;
     case 0xA044:
-      return "BlueSolar MPPT 100|30";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_100_30;
+      break;
     case 0xA045:
-      return "BlueSolar MPPT 100|50";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_100_50;
+      break;
     case 0xA046:
-      return "BlueSolar MPPT 150|70";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_70;
+      break;
     case 0xA047:
-      return "BlueSolar MPPT 150|100";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_100;
+      break;
     case 0xA049:
-      return "BlueSolar MPPT 100|50 rev2";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_100_50_REV2;
+      break;
     case 0xA04A:
-      return "BlueSolar MPPT 100|30 rev2";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_100_30_REV2;
+      break;
     case 0xA04B:
-      return "BlueSolar MPPT 150|35 rev2";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_35_REV2;
+      break;
     case 0xA04C:
-      return "BlueSolar MPPT 75|10";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_75_10;
+      break;
     case 0xA04D:
-      return "BlueSolar MPPT 150|45";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_45;
+      break;
     case 0xA04E:
-      return "BlueSolar MPPT 150|60";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_60;
+      break;
     case 0xA04F:
-      return "BlueSolar MPPT 150|85";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_85;
+      break;
     case 0xA050:
-      return "SmartSolar MPPT 250|100";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_100;
+      break;
     case 0xA051:
-      return "SmartSolar MPPT 150|100";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_100;
+      break;
     case 0xA052:
-      return "SmartSolar MPPT 150|85";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_85;
+      break;
     case 0xA053:
-      return "SmartSolar MPPT 75|15";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_75_15;
+      break;
     case 0xA075:
-      return "SmartSolar MPPT 75|15 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_75_15_REV2;
+      break;
     case 0xA054:
-      return "SmartSolar MPPT 75|10";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_75_10;
+      break;
     case 0xA074:
-      return "SmartSolar MPPT 75|10 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_75_10_REV2;
+      break;
     case 0xA055:
-      return "SmartSolar MPPT 100|15";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_100_15;
+      break;
     case 0xA056:
-      return "SmartSolar MPPT 100|30";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_100_30;
+      break;
     case 0xA073:
-      return "SmartSolar MPPT 150|45 rev3";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_45_REV3;
+      break;
     case 0xA057:
-      return "SmartSolar MPPT 100|50";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_100_50;
+      break;
     case 0xA058:
-      return "SmartSolar MPPT 150|35";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_35;
+      break;
     case 0xA059:
-      return "SmartSolar MPPT 150|100 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_100_REV2;
+      break;
     case 0xA05A:
-      return "SmartSolar MPPT 150|85 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_85_REV2;
+      break;
     case 0xA05B:
-      return "SmartSolar MPPT 250|70";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_70;
+      break;
     case 0xA05C:
-      return "SmartSolar MPPT 250|85";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_85;
+      break;
     case 0xA05D:
-      return "SmartSolar MPPT 250|60";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_60;
+      break;
     case 0xA05E:
-      return "SmartSolar MPPT 250|45";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_45;
+      break;
     case 0xA05F:
-      return "SmartSolar MPPT 100|20";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_100_20;
+      break;
     case 0xA060:
-      return "SmartSolar MPPT 100|20 48V";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_100_20_48V;
+      break;
     case 0xA061:
-      return "SmartSolar MPPT 150|45";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_45;
+      break;
     case 0xA062:
-      return "SmartSolar MPPT 150|60";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_60;
+      break;
     case 0xA063:
-      return "SmartSolar MPPT 150|70";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_70;
+      break;
     case 0xA064:
-      return "SmartSolar MPPT 250|85 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_85_REV2;
+      break;
     case 0xA065:
-      return "SmartSolar MPPT 250|100 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_100_REV2;
+      break;
     case 0xA066:
-      return "BlueSolar MPPT 100|20";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_100_20;
+      break;
     case 0xA067:
-      return "BlueSolar MPPT 100|20 48V";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_100_20_48V;
+      break;
     case 0xA068:
-      return "SmartSolar MPPT 250|60 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_60_REV2;
+      break;
     case 0xA069:
-      return "SmartSolar MPPT 250|70 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_250_70_REV2;
+      break;
     case 0xA06A:
-      return "SmartSolar MPPT 150|45 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_45_REV2;
+      break;
     case 0xA06B:
-      return "SmartSolar MPPT 150|60 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_60_REV2;
+      break;
     case 0xA06C:
-      return "SmartSolar MPPT 150|70 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_70_REV2;
+      break;
     case 0xA06D:
-      return "SmartSolar MPPT 150|85 rev3";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_85_REV3;
+      break;
     case 0xA06E:
-      return "SmartSolar MPPT 150|100 rev3";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_150_100_REV3;
+      break;
     case 0xA06F:
-      return "BlueSolar MPPT 150|45 rev2";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_45_REV2;
+      break;
     case 0xA070:
-      return "BlueSolar MPPT 150|60 rev2";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_60_REV2;
+      break;
     case 0xA071:
-      return "BlueSolar MPPT 150|70 rev2";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_150_70_REV2;
+      break;
     case 0xA07D:
-      return "BlueSolar MPPT 75|15 rev3";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_75_15_REV3;
+      break;
     case 0xA102:
-      return "SmartSolar MPPT VE.Can 150/70";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_70;
+      break;
     case 0xA103:
-      return "SmartSolar MPPT VE.Can 150/45";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_45;
+      break;
     case 0xA104:
-      return "SmartSolar MPPT VE.Can 150/60";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_60;
+      break;
     case 0xA105:
-      return "SmartSolar MPPT VE.Can 150/85";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_85;
+      break;
     case 0xA106:
-      return "SmartSolar MPPT VE.Can 150/100";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_100;
+      break;
     case 0xA107:
-      return "SmartSolar MPPT VE.Can 250/45";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_45;
+      break;
     case 0xA108:
-      return "SmartSolar MPPT VE.Can 250/60";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_60;
+      break;
     case 0xA109:
-      return "SmartSolar MPPT VE.Can 250/70";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_70;
+      break;
     case 0xA10A:
-      return "SmartSolar MPPT VE.Can 250/85";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_85;
+      break;
     case 0xA10B:
-      return "SmartSolar MPPT VE.Can 250/100";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_100;
+      break;
     case 0xA10C:
-      return "SmartSolar MPPT VE.Can 150/70 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_70_REV2;
+      break;
     case 0xA10D:
-      return "SmartSolar MPPT VE.Can 150/85 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_85_REV2;
+      break;
     case 0xA10E:
-      return "SmartSolar MPPT VE.Can 150/100 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_150_100_REV2;
+      break;
     case 0xA10F:
-      return "BlueSolar MPPT VE.Can 150/100";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_VE_CAN_150_100;
+      break;
     case 0xA112:
-      return "BlueSolar MPPT VE.Can 250/70";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_VE_CAN_250_70;
+      break;
     case 0xA113:
-      return "BlueSolar MPPT VE.Can 250/100";
+      result = DEVICE_TYPE_BLUESOLAR_MPPT_VE_CAN_250_100;
+      break;
     case 0xA114:
-      return "SmartSolar MPPT VE.Can 250/70 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_70_REV2;
+      break;
     case 0xA115:
-      return "SmartSolar MPPT VE.Can 250/100 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_100_REV2;
+      break;
     case 0xA116:
-      return "SmartSolar MPPT VE.Can 250/85 rev2";
+      result = DEVICE_TYPE_SMARTSOLAR_MPPT_VE_CAN_250_85_REV2;
+      break;
     case 0xA201:
-      return "Phoenix Inverter 12V 250VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_250VA_230V;
+      break;
     case 0xA202:
-      return "Phoenix Inverter 24V 250VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_250VA_230V;
+      break;
     case 0xA204:
-      return "Phoenix Inverter 48V 250VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_250VA_230V;
+      break;
     case 0xA211:
-      return "Phoenix Inverter 12V 375VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_375VA_230V;
+      break;
     case 0xA212:
-      return "Phoenix Inverter 24V 375VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_375VA_230V;
+      break;
     case 0xA214:
-      return "Phoenix Inverter 48V 375VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_375VA_230V;
+      break;
     case 0xA221:
-      return "Phoenix Inverter 12V 500VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_500VA_230V;
+      break;
     case 0xA222:
-      return "Phoenix Inverter 24V 500VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_500VA_230V;
+      break;
     case 0xA224:
-      return "Phoenix Inverter 48V 500VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_500VA_230V;
+      break;
     case 0xA231:
-      return "Phoenix Inverter 12V 250VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_250VA_230V;
+      break;
     case 0xA232:
-      return "Phoenix Inverter 24V 250VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_250VA_230V;
+      break;
     case 0xA234:
-      return "Phoenix Inverter 48V 250VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_250VA_230V;
+      break;
     case 0xA239:
-      return "Phoenix Inverter 12V 250VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_250VA_120V;
+      break;
     case 0xA23A:
-      return "Phoenix Inverter 24V 250VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_250VA_120V;
+      break;
     case 0xA23C:
-      return "Phoenix Inverter 48V 250VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_250VA_120V;
+      break;
     case 0xA241:
-      return "Phoenix Inverter 12V 375VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_375VA_230V;
+      break;
     case 0xA242:
-      return "Phoenix Inverter 24V 375VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_375VA_230V;
+      break;
     case 0xA244:
-      return "Phoenix Inverter 48V 375VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_375VA_230V;
+      break;
     case 0xA249:
-      return "Phoenix Inverter 12V 375VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_375VA_120V;
+      break;
     case 0xA24A:
-      return "Phoenix Inverter 24V 375VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_375VA_120V;
+      break;
     case 0xA24C:
-      return "Phoenix Inverter 48V 375VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_375VA_120V;
+      break;
     case 0xA251:
-      return "Phoenix Inverter 12V 500VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_500VA_230V;
+      break;
     case 0xA252:
-      return "Phoenix Inverter 24V 500VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_500VA_230V;
+      break;
     case 0xA254:
-      return "Phoenix Inverter 48V 500VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_500VA_230V;
+      break;
     case 0xA259:
-      return "Phoenix Inverter 12V 500VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_500VA_120V;
+      break;
     case 0xA25A:
-      return "Phoenix Inverter 24V 500VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_500VA_120V;
+      break;
     case 0xA25C:
-      return "Phoenix Inverter 48V 500VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_500VA_120V;
+      break;
     case 0xA261:
-      return "Phoenix Inverter 12V 800VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_800VA_230V;
+      break;
     case 0xA262:
-      return "Phoenix Inverter 24V 800VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_800VA_230V;
+      break;
     case 0xA264:
-      return "Phoenix Inverter 48V 800VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_800VA_230V;
+      break;
     case 0xA269:
-      return "Phoenix Inverter 12V 800VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_800VA_120V;
+      break;
     case 0xA26A:
-      return "Phoenix Inverter 24V 800VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_800VA_120V;
+      break;
     case 0xA26C:
-      return "Phoenix Inverter 48V 800VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_800VA_120V;
+      break;
     case 0xA271:
-      return "Phoenix Inverter 12V 1200VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_1200VA_230V;
+      break;
     case 0xA272:
-      return "Phoenix Inverter 24V 1200VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_1200VA_230V;
+      break;
     case 0xA274:
-      return "Phoenix Inverter 48V 1200VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_1200VA_230V;
+      break;
     case 0xA279:
     case 0xA2F9:
-      return "Phoenix Inverter 12V 1200VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_1200VA_120V;
+      break;
     case 0xA27A:
-      return "Phoenix Inverter 24V 1200VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_1200VA_120V;
+      break;
     case 0xA27C:
-      return "Phoenix Inverter 48V 1200VA 120V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_1200VA_120V;
+      break;
     case 0xA281:
-      return "Phoenix Inverter 12V 1600VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_1600VA_230V;
+      break;
     case 0xA282:
-      return "Phoenix Inverter 24V 1600VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_1600VA_230V;
+      break;
     case 0xA284:
-      return "Phoenix Inverter 48V 1600VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_1600VA_230V;
+      break;
     case 0xA291:
-      return "Phoenix Inverter 12V 2000VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_2000VA_230V;
+      break;
     case 0xA292:
-      return "Phoenix Inverter 24V 2000VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_2000VA_230V;
+      break;
     case 0xA294:
-      return "Phoenix Inverter 48V 2000VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_2000VA_230V;
+      break;
     case 0xA2A1:
-      return "Phoenix Inverter 12V 3000VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_12V_3000VA_230V;
+      break;
     case 0xA2A2:
-      return "Phoenix Inverter 24V 3000VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_24V_3000VA_230V;
+      break;
     case 0xA2A4:
-      return "Phoenix Inverter 48V 3000VA 230V";
+      result = DEVICE_TYPE_PHOENIX_INVERTER_48V_3000VA_230V;
+      break;
     case 0xA30A:
-      return "Blue Smart IP65 Charger 12|25";
+      result = DEVICE_TYPE_BLUE_SMART_IP65_CHARGER_12_25;
+      break;
     case 0xA332:
-      return "Blue Smart IP22 Charger 24|8";
+      result = DEVICE_TYPE_BLUE_SMART_IP22_CHARGER_24_8;
+      break;
     case 0xA334:
-      return "Blue Smart IP22 Charger 24|12";
+      result = DEVICE_TYPE_BLUE_SMART_IP22_CHARGER_24_12;
+      break;
     case 0xA336:
-      return "Blue Smart IP22 Charger 24|16";
+      result = DEVICE_TYPE_BLUE_SMART_IP22_CHARGER_24_16;
+      break;
     case 0xA340:
-      return "Phoenix Smart IP43 Charger 12|50 (1+1)";
+      result = DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_12_50_1_1;
+      break;
     case 0xA341:
-      return "Phoenix Smart IP43 Charger 12|50 (3)";
+      result = DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_12_50_3;
+      break;
     case 0xA342:
-      return "Phoenix Smart IP43 Charger 24|25 (1+1)";
+      result = DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_24_25_1_1;
+      break;
     case 0xA343:
-      return "Phoenix Smart IP43 Charger 24|25 (3)";
+      result = DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_24_25_3;
+      break;
     case 0xA344:
-      return "Phoenix Smart IP43 Charger 12|30 (1+1)";
+      result = DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_12_30_1_1;
+      break;
     case 0xA345:
-      return "Phoenix Smart IP43 Charger 12|30 (3)";
+      result = DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_12_30_3;
+      break;
     case 0xA346:
-      return "Phoenix Smart IP43 Charger 24|16 (1+1)";
+      result = DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_24_16_1_1;
+      break;
     case 0xA347:
-      return "Phoenix Smart IP43 Charger 24|16 (3)";
+      result = DEVICE_TYPE_PHOENIX_SMART_IP43_CHARGER_24_16_3;
+      break;
     case 0xA381:
-      return "BMV-712 Smart";
+      result = DEVICE_TYPE_BMV_712_SMART;
+      break;
     case 0xA382:
-      return "BMV-710H Smart";
+      result = DEVICE_TYPE_BMV_710H_SMART;
+      break;
     case 0xA383:
-      return "BMV-712 Smart Rev2";
+      result = DEVICE_TYPE_BMV_712_SMART_REV2;
+      break;
     case 0xA389:
-      return "SmartShunt 500A/50mV";
+      result = DEVICE_TYPE_SMARTSHUNT_500A_50MV;
+      break;
     case 0xA38A:
-      return "SmartShunt 1000A/50mV";
+      result = DEVICE_TYPE_SMARTSHUNT_1000A_50MV;
+      break;
     case 0xA38B:
-      return "SmartShunt 2000A/50mV";
+      result = DEVICE_TYPE_SMARTSHUNT_2000A_50MV;
+      break;
     case 0xA442:
-      return "Multi RS Solar 48V 6000VA 230V";
+      result = DEVICE_TYPE_MULTI_RS_SOLAR_48V_6000VA_230V;
+      break;
+
     // Additional PIDs mentioned in VE.Direct-HEX-Protocol specifications
     case 0xA2B1:
       return "Phoenix Inverter Smart 12V 5000VA 230Vac 64k";
