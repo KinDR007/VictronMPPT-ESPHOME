@@ -74,29 +74,6 @@ struct ErrorCodeEntry {
   const char *msg;
 };
 
-static const ErrorCodeEntry ERROR_CODE_TABLE[] PROGMEM = {
-  {0, ERROR_CODE_0},
-  {2, ERROR_CODE_2},
-  {17, ERROR_CODE_17},
-  {18, ERROR_CODE_18},
-  {19, ERROR_CODE_19},
-  {20, ERROR_CODE_20},
-  {21, ERROR_CODE_21},
-  {26, ERROR_CODE_26},
-  {28, ERROR_CODE_28},
-  {33, ERROR_CODE_33},
-  {34, ERROR_CODE_34},
-  {38, ERROR_CODE_38},
-  {39, ERROR_CODE_39},
-  {65, ERROR_CODE_65},
-  {66, ERROR_CODE_66},
-  {67, ERROR_CODE_67},
-  {68, ERROR_CODE_68},
-  {116, ERROR_CODE_116},
-  {117, ERROR_CODE_117},
-  {119, ERROR_CODE_119}
-};
-
 static const char CHARGING_MODE_0[] PROGMEM = "Off";
 static const char CHARGING_MODE_1[] PROGMEM = "Low power";
 static const char CHARGING_MODE_2[] PROGMEM = "Fault";
@@ -119,24 +96,6 @@ static char buffer_charging_mode[30];
 struct ChargingModeEntry {
   int code;
   const char *msg;
-};
-
-static const ChargingModeEntry CHARGING_MODE_TABLE[] PROGMEM = {
-  {0, CHARGING_MODE_0},
-  {1, CHARGING_MODE_1},
-  {2, CHARGING_MODE_2},
-  {3, CHARGING_MODE_3},
-  {4, CHARGING_MODE_4},
-  {5, CHARGING_MODE_5},
-  {6, CHARGING_MODE_6},
-  {7, CHARGING_MODE_7},
-  {9, CHARGING_MODE_9},
-  {11, CHARGING_MODE_11},
-  {245, CHARGING_MODE_245},
-  {246, CHARGING_MODE_246},
-  {247, CHARGING_MODE_247},
-  {248, CHARGING_MODE_248},
-  {252, CHARGING_MODE_252}
 };
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
