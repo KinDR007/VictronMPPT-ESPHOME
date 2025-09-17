@@ -214,6 +214,8 @@ class VictronComponent : public uart::UARTDevice, public Component {
   void publish_state_(sensor::Sensor *sensor, float value);
   void publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state);
   void publish_state_once_(text_sensor::TextSensor *text_sensor, const std::string &state);
+  void publish_state_(text_sensor::TextSensor *text_sensor, const char *state);
+  void publish_state_once_(text_sensor::TextSensor *text_sensor, const char *state);
 
   binary_sensor::BinarySensor *load_state_binary_sensor_;
   binary_sensor::BinarySensor *relay_state_binary_sensor_;
