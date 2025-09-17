@@ -224,14 +224,56 @@ void VictronComponent::loop() {
 }
 
 static const char *charging_mode_text(int value) {
-const char *result = CHARGING_MODE_UNKNOWN;
-
-  for (size_t i = 0; i < sizeof(CHARGING_MODE_TABLE) / sizeof(CHARGING_MODE_TABLE[0]); i++) {
-    int code = pgm_read_dword(&CHARGING_MODE_TABLE[i].code);
-    if (code == value) {
-      result = CHARGING_MODE_TABLE[i].msg;
+  const char *result;
+  switch (value) {
+    case 0:
+      result = CHARGING_MODE_0;
       break;
-    }
+    case 1:
+      result = CHARGING_MODE_1;
+      break;
+    case 2:
+      result = CHARGING_MODE_2;
+      break;
+    case 3:
+      result = CHARGING_MODE_3;
+      break;
+    case 4:
+      result = CHARGING_MODE_4;
+      break;
+    case 5:
+      result = CHARGING_MODE_5;
+      break;
+    case 6:
+      result = CHARGING_MODE_6;
+      break;
+    case 7:
+      result = CHARGING_MODE_7;
+      break;
+    case 9:
+      result = CHARGING_MODE_9;
+      break;
+    case 11:
+      result = CHARGING_MODE_11;
+      break;
+    case 245:
+      result = CHARGING_MODE_245;
+      break;
+    case 246:
+      result = CHARGING_MODE_246;
+      break;
+    case 247:
+      result = CHARGING_MODE_247;
+      break;
+    case 248:
+      result = CHARGING_MODE_248;
+      break;
+    case 252:
+      result = CHARGING_MODE_252;
+      break;
+    default:
+      result = CHARGING_MODE_UNKNOWN;
+      break;
   }
   strcpy_P(buffer_charging_mode, result);
   return buffer_charging_mode;
