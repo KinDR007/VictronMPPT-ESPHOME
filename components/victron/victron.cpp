@@ -1291,15 +1291,25 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "AR") {
-    this->publish_state_(alarm_reason_text_sensor_, error_code_text(atoi(value_.c_str())));  // NOLINT(cert-err34-c)
+    static uint16_t last_error = UINT16_MAX;
+    uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    if( value != last_error ) {
+      last_error = value;
+      this->publish_state_(alarm_reason_text_sensor_, error_code_text(value));  // NOLINT(cert-err34-c)
+    }
     return;
   }
 
   if (label_ == "OR") {
     auto off_reason_bitmask = parse_hex<uint32_t>(value_.substr(2, value_.size() - 2));
     if (off_reason_bitmask) {
+    static uint32_t last_off_mask = UINT32_MAX;
       this->publish_state_(off_reason_bitmask_sensor_, *off_reason_bitmask);
-      this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
+      // Load the string only if it has changed.
+      if (*off_reason_bitmask != last_off_mask){
+        last_off_mask = *off_reason_bitmask;
+        this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
+      }
     }
     return;
   }
@@ -1453,16 +1463,24 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "ERR") {
-    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    static uint16_t last_error = UINT16_MAX;
+    uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     this->publish_state_(error_code_sensor_, value);
-    this->publish_state_(error_text_sensor_, error_code_text(value));
+    if (value != last_error){
+        last_error = value;
+        this->publish_state_(error_text_sensor_, error_code_text(value));
+    }
     return;
   }
 
   if (label_ == "CS") {
+  static uint16_t last_charging_mode = 0;
     value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     this->publish_state_(charging_mode_id_sensor_, (float) value);
-    this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
+    if( value != last_charging_mode ){
+        last_charging_mode = value;
+        this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
+    }
     return;
   }
 
@@ -1496,7 +1514,12 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "PID") {
-    this->publish_state_once_(device_type_text_sensor_, device_type_text(strtol(value_.c_str(), nullptr, 0)));
+    static uint32_t last_pid = UINT32_MAX;
+    uint32_t value = strtol(value_.c_str(), nullptr, 0);
+    if (value != last_pid) {
+      last_pid = value;
+      this->publish_state_(device_type_text_sensor_, device_type_text(value));
+    }
     return;
   }
 
