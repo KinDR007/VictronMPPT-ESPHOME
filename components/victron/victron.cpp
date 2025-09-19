@@ -71,11 +71,6 @@ static const char ERROR_CODE_UNKNOWN[] PROGMEM = "Unknown";
 
 static char buffer_error_code[53];
 
-struct ErrorCodeEntry {
-  int code;
-  const char *msg;
-};
-
 static const char CHARGING_MODE_0[] PROGMEM = "Off";
 static const char CHARGING_MODE_1[] PROGMEM = "Low power";
 static const char CHARGING_MODE_2[] PROGMEM = "Fault";
