@@ -69,7 +69,8 @@ static const char ERROR_CODE_117[] PROGMEM = "Invalid/incompatible firmware";
 static const char ERROR_CODE_119[] PROGMEM = "User settings invalid";
 static const char ERROR_CODE_UNKNOWN[] PROGMEM = "Unknown";
 
-static char buffer_error_code[53];
+static char buffer_error_code_ERR[53];
+static char buffer_error_code_AR[53];
 
 static const char CHARGING_MODE_0[] PROGMEM = "Off";
 static const char CHARGING_MODE_1[] PROGMEM = "Low power";
@@ -445,7 +446,7 @@ static const char *charging_mode_text(int value) {
   return buffer_charging_mode;
 }
 
-static const char *error_code_text(int value) {
+static const char *error_code_text(char * const buffer, int value) {
   const char *result;
   switch (value) {
     case 0:
@@ -512,8 +513,8 @@ static const char *error_code_text(int value) {
       result = ERROR_CODE_UNKNOWN;
       break;
   }
-  strcpy_P(buffer_error_code, result);
-  return buffer_error_code;
+  strcpy_P(buffer, result);
+  return buffer;
 }
 
 static const char *warning_code_text(int value) {
@@ -1297,8 +1298,9 @@ void VictronComponent::handle_value_() {
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     if( value != last_error ) {
       last_error = value;
-      this->publish_state_(alarm_reason_text_sensor_, error_code_text(value));  // NOLINT(cert-err34-c)
+      error_code_text(buffer_error_code_AR, value);
     }
+    this->publish_state_(alarm_reason_text_sensor_, buffer_error_code_AR);  // NOLINT(cert-err34-c)
     return;
   }
 
@@ -1470,8 +1472,9 @@ void VictronComponent::handle_value_() {
     this->publish_state_(error_code_sensor_, value);
     if (value != last_error){
         last_error = value;
-        this->publish_state_(error_text_sensor_, error_code_text(value));
+        error_code_text(buffer_error_code_ERR, value);
     }
+    this->publish_state_(error_text_sensor_, buffer_error_code_ERR);
     return;
   }
 
