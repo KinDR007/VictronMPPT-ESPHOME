@@ -330,11 +330,10 @@ void VictronComponent::loop() {
     ESP_LOGE(TAG, "Too old data: %ldms", elapsed_time);
     state_ = 0;
   }
+  last_transmission_ = now;
 
   if (!available())
     return;
-
-  last_transmission_ = now;
 
   while (available()) {
     available_data = true;
