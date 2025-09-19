@@ -323,9 +323,11 @@ static const char *prefix = "  ";
 
 void VictronComponent::loop() {
   const uint32_t now = millis();
-  if ((state_ > 0) && (now - last_transmission_ >= 200)) {
+  const uint32_t elapsed_time = now - last_transmission_;
+  bool available_data = false;
+  if ((state_ > 0) && (elapsed_time >= 200)) {
     // last transmission too long ago. Reset RX index.
-    ESP_LOGW(TAG, "Last transmission too long ago");
+    ESP_LOGE(TAG, "Too old data: %ldms", elapsed_time);
     state_ = 0;
   }
 
@@ -333,7 +335,9 @@ void VictronComponent::loop() {
     return;
 
   last_transmission_ = now;
+
   while (available()) {
+    available_data = true;
     uint8_t c;
     read_byte(&c);
     if (state_ == 0) {
@@ -385,6 +389,10 @@ void VictronComponent::loop() {
       }
     }
   }
+    uint32_t loop_time = millis() - now;
+    if (available_data && loop_time > 10){
+        ESP_LOGD(TAG, "Loop: %ldms", loop_time);
+    }
 }
 
 static const char *charging_mode_text(int value) {
