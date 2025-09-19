@@ -9,44 +9,7 @@ namespace victron {
 
 static const char *const TAG = "victron";
 
-static const uint8_t OFF_REASONS_SIZE = 16;
-static const char OFF_REASONS_0[] PROGMEM = "No input power";
-static const char OFF_REASONS_1[] PROGMEM = "Switched off (power switch)";
-static const char OFF_REASONS_2[] PROGMEM = "Switched off (device mode register)";
-static const char OFF_REASONS_3[] PROGMEM = "Remote input";
-static const char OFF_REASONS_4[] PROGMEM = "Protection active";
-static const char OFF_REASONS_5[] PROGMEM = "Paygo";
-static const char OFF_REASONS_6[] PROGMEM = "BMS";
-static const char OFF_REASONS_7[] PROGMEM = "Engine shutdown detection";
-static const char OFF_REASONS_8[] PROGMEM = "Analysing input voltage";
-static const char OFF_REASONS_9[] PROGMEM = "Unknown: Bit 10";
-static const char OFF_REASONS_10[] PROGMEM = "Unknown: Bit 11";
-static const char OFF_REASONS_11[] PROGMEM = "Unknown: Bit 12";
-static const char OFF_REASONS_12[] PROGMEM = "Unknown: Bit 13";
-static const char OFF_REASONS_13[] PROGMEM = "Unknown: Bit 14";
-static const char OFF_REASONS_14[] PROGMEM = "Unknown: Bit 15";
-static const char OFF_REASONS_15[] PROGMEM = "Unknown: Bit 16";
-static const char *const OFF_REASONS[OFF_REASONS_SIZE] PROGMEM = {
-    OFF_REASONS_0,
-    OFF_REASONS_1,
-    OFF_REASONS_2,
-    OFF_REASONS_3,
-    OFF_REASONS_4,
-    OFF_REASONS_5,
-    OFF_REASONS_6,
-    OFF_REASONS_7,
-    OFF_REASONS_8,
-    OFF_REASONS_9,
-    OFF_REASONS_10,
-    OFF_REASONS_11,
-    OFF_REASONS_12,
-    OFF_REASONS_13,
-    OFF_REASONS_14,
-    OFF_REASONS_15
-};
-
-static char buffer_off_reason[36];
-
+// Error code strings in PROGMEM
 static const char ERROR_CODE_0[] PROGMEM = "No error";
 static const char ERROR_CODE_2[] PROGMEM = "Battery voltage too high";
 static const char ERROR_CODE_17[] PROGMEM = "Charger temperature too high";
@@ -72,6 +35,7 @@ static const char ERROR_CODE_UNKNOWN[] PROGMEM = "Unknown";
 static char buffer_error_code_ERR[53];
 static char buffer_error_code_AR[53];
 
+// Charging mode strings in PROGMEM
 static const char CHARGING_MODE_0[] PROGMEM = "Off";
 static const char CHARGING_MODE_1[] PROGMEM = "Low power";
 static const char CHARGING_MODE_2[] PROGMEM = "Fault";
@@ -90,6 +54,64 @@ static const char CHARGING_MODE_252[] PROGMEM = "External control";
 static const char CHARGING_MODE_UNKNOWN[] PROGMEM = "Unknown";
 
 static char buffer_charging_mode[30];
+
+// Warning code strings in PROGMEM
+static const char WARNING_CODE_0[] PROGMEM = "No warning";
+static const char WARNING_CODE_1[] PROGMEM = "Low Voltage";
+static const char WARNING_CODE_2[] PROGMEM = "High Voltage";
+static const char WARNING_CODE_4[] PROGMEM = "Low SOC";
+static const char WARNING_CODE_8[] PROGMEM = "Low Starter Voltage";
+static const char WARNING_CODE_16[] PROGMEM = "High Starter Voltage";
+static const char WARNING_CODE_32[] PROGMEM = "Low Temperature";
+static const char WARNING_CODE_64[] PROGMEM = "High Temperature";
+static const char WARNING_CODE_128[] PROGMEM = "Mid Voltage";
+static const char WARNING_CODE_256[] PROGMEM = "Overload";
+static const char WARNING_CODE_512[] PROGMEM = "DC-ripple";
+static const char WARNING_CODE_1024[] PROGMEM = "Low V AC out";
+static const char WARNING_CODE_2048[] PROGMEM = "High V AC out";
+static const char WARNING_CODE_MULTIPLE[] PROGMEM = "Multiple warnings";
+
+static char buffer_warning_code[22];
+
+// Tracking mode strings in PROGMEM
+static const char TRACKING_MODE_0[] PROGMEM = "Off";
+static const char TRACKING_MODE_1[] PROGMEM = "Limited";
+static const char TRACKING_MODE_2[] PROGMEM = "Active";
+static const char TRACKING_MODE_UNKNOWN[] PROGMEM = "Unknown";
+
+static char buffer_tracking_mode[9];
+
+// Device mode strings in PROGMEM
+static const char DEVICE_MODE_0[] PROGMEM = "Off";
+static const char DEVICE_MODE_2[] PROGMEM = "On";
+static const char DEVICE_MODE_4[] PROGMEM = "Off";
+static const char DEVICE_MODE_5[] PROGMEM = "Eco";
+static const char DEVICE_MODE_UNKNOWN[] PROGMEM = "Unknown";
+
+static char buffer_device_mode[9];
+
+// DC monitor mode strings in PROGMEM
+static const char DC_MONITOR_MODE_SOLAR_CHARGER[] PROGMEM = "Solar charger";
+static const char DC_MONITOR_MODE_WIND_TURBINE[] PROGMEM = "Wind turbine";
+static const char DC_MONITOR_MODE_SHAFT_GENERATOR[] PROGMEM = "Shaft generator";
+static const char DC_MONITOR_MODE_ALTERNATOR[] PROGMEM = "Alternator";
+static const char DC_MONITOR_MODE_FUEL_CELL[] PROGMEM = "Fuel cell";
+static const char DC_MONITOR_MODE_WATER_GENERATOR[] PROGMEM = "Water generator";
+static const char DC_MONITOR_MODE_DC_DC_CHARGER[] PROGMEM = "DC/DC charger";
+static const char DC_MONITOR_MODE_AC_CHARGER[] PROGMEM = "AC charger";
+static const char DC_MONITOR_MODE_GENERIC_SOURCE[] PROGMEM = "Generic source";
+static const char DC_MONITOR_MODE_BATTERY_MONITOR[] PROGMEM = "Battery monitor (BMV)";
+static const char DC_MONITOR_MODE_GENERIC_LOAD[] PROGMEM = "Generic load";
+static const char DC_MONITOR_MODE_ELECTRIC_DRIVE[] PROGMEM = "Electric drive";
+static const char DC_MONITOR_MODE_FRIDGE[] PROGMEM = "Fridge";
+static const char DC_MONITOR_MODE_WATER_PUMP[] PROGMEM = "Water pump";
+static const char DC_MONITOR_MODE_BILGE_PUMP[] PROGMEM = "Bilge pump";
+static const char DC_MONITOR_MODE_DC_SYSTEM[] PROGMEM = "DC system";
+static const char DC_MONITOR_MODE_INVERTER[] PROGMEM = "Inverter";
+static const char DC_MONITOR_MODE_WATER_HEATER[] PROGMEM = "Water heater";
+static const char DC_MONITOR_MODE_UNKNOWN[] PROGMEM = "Unknown";
+
+static char buffer_dc_monitor_mode[22];
 
 // Device type strings in PROGMEM
 static const char DEVICE_TYPE_BMV_700[] PROGMEM = "BMV-700";
@@ -257,6 +279,45 @@ static const char DEVICE_TYPE_SMARTSOLAR_MPPT_RS_450_200[] PROGMEM = "SmartSolar
 static const char DEVICE_TYPE_UNKNOWN[] PROGMEM = "Unknown";
 
 static char buffer_device_type[48];
+
+// Off reason strings in PROGMEM
+static const uint8_t OFF_REASONS_SIZE = 16;
+static const char OFF_REASONS_0[] PROGMEM = "No input power";
+static const char OFF_REASONS_1[] PROGMEM = "Switched off (power switch)";
+static const char OFF_REASONS_2[] PROGMEM = "Switched off (device mode register)";
+static const char OFF_REASONS_3[] PROGMEM = "Remote input";
+static const char OFF_REASONS_4[] PROGMEM = "Protection active";
+static const char OFF_REASONS_5[] PROGMEM = "Paygo";
+static const char OFF_REASONS_6[] PROGMEM = "BMS";
+static const char OFF_REASONS_7[] PROGMEM = "Engine shutdown detection";
+static const char OFF_REASONS_8[] PROGMEM = "Analysing input voltage";
+static const char OFF_REASONS_9[] PROGMEM = "Unknown: Bit 10";
+static const char OFF_REASONS_10[] PROGMEM = "Unknown: Bit 11";
+static const char OFF_REASONS_11[] PROGMEM = "Unknown: Bit 12";
+static const char OFF_REASONS_12[] PROGMEM = "Unknown: Bit 13";
+static const char OFF_REASONS_13[] PROGMEM = "Unknown: Bit 14";
+static const char OFF_REASONS_14[] PROGMEM = "Unknown: Bit 15";
+static const char OFF_REASONS_15[] PROGMEM = "Unknown: Bit 16";
+static const char *const OFF_REASONS[OFF_REASONS_SIZE] PROGMEM = {
+    OFF_REASONS_0,
+    OFF_REASONS_1,
+    OFF_REASONS_2,
+    OFF_REASONS_3,
+    OFF_REASONS_4,
+    OFF_REASONS_5,
+    OFF_REASONS_6,
+    OFF_REASONS_7,
+    OFF_REASONS_8,
+    OFF_REASONS_9,
+    OFF_REASONS_10,
+    OFF_REASONS_11,
+    OFF_REASONS_12,
+    OFF_REASONS_13,
+    OFF_REASONS_14,
+    OFF_REASONS_15
+};
+
+static char buffer_off_reason[36];
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
 static const char *prefix = "  ";
@@ -518,107 +579,161 @@ static const char *error_code_text(char * const buffer, int value) {
 }
 
 static const char *warning_code_text(int value) {
+  const char *result;
   switch (value) {
     case 0:
-      return "No warning";
+      result = WARNING_CODE_0;
+      break;
     case 1:
-      return "Low Voltage";
+      result = WARNING_CODE_1;
+      break;
     case 2:
-      return "High Voltage";
+      result = WARNING_CODE_2;
+      break;
     case 4:
-      return "Low SOC";
+      result = WARNING_CODE_4;
+      break;
     case 8:
-      return "Low Starter Voltage";
+      result = WARNING_CODE_8;
+      break;
     case 16:
-      return "High Starter Voltage";
+      result = WARNING_CODE_16;
+      break;
     case 32:
-      return "Low Temperature";
+      result = WARNING_CODE_32;
+      break;
     case 64:
-      return "High Temperature";
+      result = WARNING_CODE_64;
+      break;
     case 128:
-      return "Mid Voltage";
+      result = WARNING_CODE_128;
+      break;
     case 256:
-      return "Overload";
+      result = WARNING_CODE_256;
+      break;
     case 512:
-      return "DC-ripple";
+      result = WARNING_CODE_512;
+      break;
     case 1024:
-      return "Low V AC out";
+      result = WARNING_CODE_1024;
+      break;
     case 2048:
-      return "High V AC out";
+      result = WARNING_CODE_2048;
+      break;
     default:
-      return "Multiple warnings";
+      result = WARNING_CODE_MULTIPLE;
+      break;
   }
+  strcpy_P(buffer_warning_code, result);
+  return buffer_warning_code;
 }
 
 static const char *tracking_mode_text(int value) {
+  const char *result;
   switch (value) {
     case 0:
-      return "Off";
+      result = TRACKING_MODE_0;
+      break;
     case 1:
-      return "Limited";
+      result = TRACKING_MODE_1;
+      break;
     case 2:
-      return "Active";
+      result = TRACKING_MODE_2;
+      break;
     default:
-      return "Unknown";
+      result = TRACKING_MODE_UNKNOWN;
+      break;
   }
+  strcpy_P(buffer_tracking_mode, result);
+  return buffer_tracking_mode;
 }
 
 static const char *device_mode_text(int value) {
+  const char *result;
   switch (value) {
     case 0:
-      return "Off";
+      result = DEVICE_MODE_0;
+      break;
     case 2:
-      return "On";
+      result = DEVICE_MODE_2;
+      break;
     case 4:
-      return "Off";
+      result = DEVICE_MODE_4;
+      break;
     case 5:
-      return "Eco";
+      result = DEVICE_MODE_5;
+      break;
     default:
-      return "Unknown";
+      result = DEVICE_MODE_UNKNOWN;
+      break;
   }
+  strcpy_P(buffer_device_mode, result);
+  return buffer_device_mode;
 }
 
-static std::string dc_monitor_mode_text(int value) {
+static const char *dc_monitor_mode_text(int value) {
+  const char *result;
   switch (value) {
     case -9:
-      return "Solar charger";
+      result = DC_MONITOR_MODE_SOLAR_CHARGER;
+      break;
     case -8:
-      return "Wind turbine";
+      result = DC_MONITOR_MODE_WIND_TURBINE;
+      break;
     case -7:
-      return "Shaft generator";
+      result = DC_MONITOR_MODE_SHAFT_GENERATOR;
+      break;
     case -6:
-      return "Alternator";
+      result = DC_MONITOR_MODE_ALTERNATOR;
+      break;
     case -5:
-      return "Fuel cell";
+      result = DC_MONITOR_MODE_FUEL_CELL;
+      break;
     case -4:
-      return "Water generator";
+      result = DC_MONITOR_MODE_WATER_GENERATOR;
+      break;
     case -3:
-      return "DC/DC charger";
+      result = DC_MONITOR_MODE_DC_DC_CHARGER;
+      break;
     case -2:
-      return "AC charger";
+      result = DC_MONITOR_MODE_AC_CHARGER;
+      break;
     case -1:
-      return "Generic source";
+      result = DC_MONITOR_MODE_GENERIC_SOURCE;
+      break;
     case 0:
-      return "Battery monitor (BMV)";
+      result = DC_MONITOR_MODE_BATTERY_MONITOR;
+      break;
     case 1:
-      return "Generic load";
+      result = DC_MONITOR_MODE_GENERIC_LOAD;
+      break;
     case 2:
-      return "Electric drive";
+      result = DC_MONITOR_MODE_ELECTRIC_DRIVE;
+      break;
     case 3:
-      return "Fridge";
+      result = DC_MONITOR_MODE_FRIDGE;
+      break;
     case 4:
-      return "Water pump";
+      result = DC_MONITOR_MODE_WATER_PUMP;
+      break;
     case 5:
-      return "Bilge pump";
+      result = DC_MONITOR_MODE_BILGE_PUMP;
+      break;
     case 6:
-      return "DC system";
+      result = DC_MONITOR_MODE_DC_SYSTEM;
+      break;
     case 7:
-      return "Inverter";
+      result = DC_MONITOR_MODE_INVERTER;
+      break;
     case 8:
-      return "Water heater";
+      result = DC_MONITOR_MODE_WATER_HEATER;
+      break;
     default:
-      return "Unknown";
+      result = DC_MONITOR_MODE_UNKNOWN;
+      break;
   }
+  strcpy_P(buffer_dc_monitor_mode, result);
+  return buffer_dc_monitor_mode;
 }
 
 static const char *device_type_text(int value) {
