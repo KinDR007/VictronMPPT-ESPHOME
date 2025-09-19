@@ -1482,8 +1482,8 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "CS") {
-  static uint16_t last_charging_mode = 0;
-    value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+  static uint16_t last_charging_mode = UINT16_MAX;
+    value = static_cast<uint16_t>(atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     this->publish_state_(charging_mode_id_sensor_, (float) value);
     if( value != last_charging_mode ){
         last_charging_mode = value;
