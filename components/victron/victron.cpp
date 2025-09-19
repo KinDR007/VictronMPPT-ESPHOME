@@ -1151,7 +1151,7 @@ static const char *device_type_text(int value) {
 
 static std::string off_reason_text(uint32_t mask) {
   bool first = true;
-  std::string value_list = "";
+  static std::string value_list = "";
   if (mask) {
     for (uint8_t i = 0; i < OFF_REASONS_SIZE; i++) {
       if (mask & (1 << i)) {
@@ -1293,10 +1293,12 @@ void VictronComponent::handle_value_() {
   if (label_ == "AR") {
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
+    // Flash memory is slow, so only load the string if the value has changed.
     if( value != last_error ) {
       last_error = value;
-      this->publish_state_(alarm_reason_text_sensor_, error_code_text(value));  // NOLINT(cert-err34-c)
+      error_code_text(value);
     }
+    this->publish_state_(alarm_reason_text_sensor_, buffer_error_code);  // NOLINT(cert-err34-c)
     return;
   }
 
@@ -1304,12 +1306,14 @@ void VictronComponent::handle_value_() {
     auto off_reason_bitmask = parse_hex<uint32_t>(value_.substr(2, value_.size() - 2));
     if (off_reason_bitmask) {
     static uint32_t last_off_mask = UINT32_MAX;
+    static std::string last_off_text = "";
       this->publish_state_(off_reason_bitmask_sensor_, *off_reason_bitmask);
-      // Load the string only if it has changed.
+      // Flash memory is slow, so only load the string if the value has changed.
       if (*off_reason_bitmask != last_off_mask){
         last_off_mask = *off_reason_bitmask;
-        this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
+        last_off_text = std::move(off_reason_text(*off_reason_bitmask));
       }
+      this->publish_state_(off_reason_text_sensor_, last_off_text);
     }
     return;
   }
@@ -1466,10 +1470,12 @@ void VictronComponent::handle_value_() {
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     this->publish_state_(error_code_sensor_, value);
+    // Flash memory is slow, so only load the string if the value has changed.
     if (value != last_error){
         last_error = value;
-        this->publish_state_(error_text_sensor_, error_code_text(value));
+        error_code_text(value);
     }
+    this->publish_state_(error_text_sensor_, buffer_error_code);
     return;
   }
 
@@ -1477,10 +1483,12 @@ void VictronComponent::handle_value_() {
   static uint16_t last_charging_mode = 0;
     value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     this->publish_state_(charging_mode_id_sensor_, (float) value);
+    // Flash memory is slow, so only load the string if the value has changed.
     if( value != last_charging_mode ){
         last_charging_mode = value;
-        this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
+        charging_mode_text(value);
     }
+    this->publish_state_(charging_mode_text_sensor_, buffer_charging_mode);
     return;
   }
 
@@ -1516,10 +1524,12 @@ void VictronComponent::handle_value_() {
   if (label_ == "PID") {
     static uint32_t last_pid = UINT32_MAX;
     uint32_t value = strtol(value_.c_str(), nullptr, 0);
+    // Flash memory is slow, so only load the string if the value has changed.
     if (value != last_pid) {
       last_pid = value;
-      this->publish_state_(device_type_text_sensor_, device_type_text(value));
+      device_type_text(value);
     }
+    this->publish_state_(device_type_text_sensor_, buffer_device_type);
     return;
   }
 
