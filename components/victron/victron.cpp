@@ -2,7 +2,6 @@
 #include "esphome/core/log.h"
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
-#include <Arduino.h>
 
 namespace esphome {
 namespace victron {
