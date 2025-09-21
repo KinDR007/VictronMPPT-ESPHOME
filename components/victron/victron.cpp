@@ -489,8 +489,9 @@ static const char *charging_mode_text(int value) {
       result = CHARGING_MODE_UNKNOWN;
       break;
   }
-  // Use strlcpy instead of strcpy
-  strlcpy(buffer_charging_mode, result, sizeof(buffer_charging_mode));
+  // Use strncpy instead of strcpy
+  memset(buffer_charging_mode, 0, sizeof(buffer_charging_mode));
+  strncpy(buffer_charging_mode, result, sizeof(buffer_charging_mode));
   return buffer_charging_mode;
 }
 
@@ -561,8 +562,9 @@ static const char *error_code_text(char *const buffer, int value) {
       result = ERROR_CODE_UNKNOWN;
       break;
   }
-  // Use strlcpy instead of strcpy
-  strlcpy(buffer, result, MAX_ERROR_BUFFER);
+  // Use strncpy instead of strcpy
+  memset(buffer, 0, MAX_ERROR_BUFFER);
+  strncpy(buffer, result, MAX_ERROR_BUFFER);
   return buffer;
 }
 
@@ -613,8 +615,9 @@ static const char *warning_code_text(int value) {
       result = WARNING_CODE_MULTIPLE;
       break;
   }
-  // Use strlcpy instead of strcpy
-  strlcpy(buffer_warning_code, result, sizeof(buffer_warning_code));
+  // Use strncpy instead of strcpy
+  memset(buffer_warning_code, 0, sizeof(buffer_warning_code));
+  strncpy(buffer_warning_code, result, sizeof(buffer_warning_code));
   return buffer_warning_code;
 }
 
@@ -635,8 +638,9 @@ static const char *tracking_mode_text(int value) {
       result = TRACKING_MODE_UNKNOWN;
       break;
   }
-  // Use strlcpy instead of strcpy
-  strlcpy(buffer_tracking_mode, result, sizeof(buffer_tracking_mode));
+  // Use strncpy instead of strcpy
+  memset(buffer_tracking_mode, 0, sizeof(buffer_tracking_mode));
+  strncpy(buffer_tracking_mode, result, sizeof(buffer_tracking_mode));
   return buffer_tracking_mode;
 }
 
@@ -660,8 +664,9 @@ static const char *device_mode_text(int value) {
       result = DEVICE_MODE_UNKNOWN;
       break;
   }
-  // Use strlcpy instead of strcpy
-  strlcpy(buffer_device_mode, result, sizeof(buffer_device_mode));
+  // Use strncpy instead of strcpy
+  memset(buffer_device_mode, 0, sizeof(buffer_device_mode));
+  strncpy(buffer_device_mode, result, sizeof(buffer_device_mode));
   return buffer_device_mode;
 }
 
@@ -727,8 +732,9 @@ static const char *dc_monitor_mode_text(int value) {
       result = DC_MONITOR_MODE_UNKNOWN;
       break;
   }
-  // Use strlcpy instead of strcpy
-  strlcpy(buffer_dc_monitor_mode, result, sizeof(buffer_dc_monitor_mode));
+  // Use strncpy instead of strcpy
+  memset(buffer_dc_monitor_mode, 0, sizeof(buffer_dc_monitor_mode));
+  strncpy(buffer_dc_monitor_mode, result, sizeof(buffer_dc_monitor_mode));
   return buffer_dc_monitor_mode;
 }
 
@@ -1260,8 +1266,9 @@ static const char *device_type_text(int value) {
       result = DEVICE_TYPE_UNKNOWN;
       break;
   }
-  // Use strlcpy instead of strcpy
-  strlcpy(buffer_device_type, result, sizeof(buffer_device_type));
+  // Use strncpy instead of strcpy
+  memset(buffer_device_type, 0, sizeof(buffer_device_type));
+  strncpy(buffer_device_type, result, sizeof(buffer_device_type));
   return buffer_device_type;
 }
 
@@ -1277,8 +1284,9 @@ static std::string off_reason_text(uint32_t mask) {
         } else {
           value_list.append(";");
         }
-        // Use strlcpy instead of strcpy
-        strlcpy(buffer_off_reason, OFF_REASONS[i], sizeof(buffer_off_reason));
+        // Use strncpy instead of strcpy
+        memset(buffer_off_reason, 0, sizeof(buffer_off_reason));
+        strncpy(buffer_off_reason, OFF_REASONS[i], sizeof(buffer_off_reason));
         value_list.append(buffer_off_reason);
       }
     }
