@@ -1,6 +1,7 @@
 #include "victron.h"
 #include "esphome/core/log.h"
 #include <algorithm>  // std::min
+#include <pgmspace.h>
 #include "esphome/core/helpers.h"
 
 namespace esphome {
