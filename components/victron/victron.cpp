@@ -8,6 +8,9 @@ namespace victron {
 
 static const char *const TAG = "victron";
 
+// Use a constant for error buffer size
+static const size_t MAX_ERROR_BUFFER = 53;
+
 // Error code strings in PROGMEM
 static const char ERROR_CODE_0[] PROGMEM = "No error";
 static const char ERROR_CODE_2[] PROGMEM = "Battery voltage too high";
@@ -559,7 +562,7 @@ static const char *error_code_text(char *const buffer, int value) {
       break;
   }
   // Use strlcpy instead of strcpy
-  strlcpy(buffer, result, 53);
+  strlcpy(buffer, result, MAX_ERROR_BUFFER);
   return buffer;
 }
 
@@ -1406,14 +1409,14 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "AR") {
-    static char buffer_error_code_AR[53];
+    static char buffer_error_code_ar[MAX_ERROR_BUFFER];
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     if (value != last_error) {
       last_error = value;
-      error_code_text(buffer_error_code_AR, value);
+      error_code_text(buffer_error_code_ar, value);
     }
-    this->publish_state_(alarm_reason_text_sensor_, buffer_error_code_AR);  // NOLINT(cert-err34-c)
+    this->publish_state_(alarm_reason_text_sensor_, buffer_error_code_ar);  // NOLINT(cert-err34-c)
     return;
   }
 
@@ -1580,15 +1583,15 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "ERR") {
-    static char buffer_error_code_ERR[53];
+    static char buffer_error_code_err[MAX_ERROR_BUFFER];
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     this->publish_state_(error_code_sensor_, value);
     if (value != last_error) {
       last_error = value;
-      error_code_text(buffer_error_code_ERR, value);
+      error_code_text(buffer_error_code_err, value);
     }
-    this->publish_state_(error_text_sensor_, buffer_error_code_ERR);
+    this->publish_state_(error_text_sensor_, buffer_error_code_err);
     return;
   }
 
