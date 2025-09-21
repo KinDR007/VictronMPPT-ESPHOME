@@ -1277,7 +1277,7 @@ static std::string off_reason_text(uint32_t mask) {
         } else {
           value_list.append(";");
         }
-        strcpy(buffer_off_reason, (const char *) pgm_read_ptr(&OFF_REASONS[i]));
+        strcpy(buffer_off_reason, OFF_REASONS[i]);
         value_list.append(buffer_off_reason);
       }
     }
