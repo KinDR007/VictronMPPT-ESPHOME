@@ -2,7 +2,7 @@
 #include "esphome/core/log.h"
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
-#include "esphome/core/log.h"
+
 
 namespace esphome {
 namespace victron {
@@ -503,7 +503,7 @@ static const char *charging_mode_text(int value) {
       result = CHARGING_MODE_UNKNOWN;
       break;
   }
-  strcpy_P(buffer_charging_mode, result);
+  strcpy(buffer_charging_mode, result);
   return buffer_charging_mode;
 }
 
@@ -574,7 +574,7 @@ static const char *error_code_text(char *const buffer, int value) {
       result = ERROR_CODE_UNKNOWN;
       break;
   }
-  strcpy_P(buffer, result);
+  strcpy(buffer, result);
   return buffer;
 }
 
@@ -624,7 +624,7 @@ static const char *warning_code_text(int value) {
       result = WARNING_CODE_MULTIPLE;
       break;
   }
-  strcpy_P(buffer_warning_code, result);
+  strcpy(buffer_warning_code, result);
   return buffer_warning_code;
 }
 
@@ -644,7 +644,7 @@ static const char *tracking_mode_text(int value) {
       result = TRACKING_MODE_UNKNOWN;
       break;
   }
-  strcpy_P(buffer_tracking_mode, result);
+  strcpy(buffer_tracking_mode, result);
   return buffer_tracking_mode;
 }
 
@@ -667,7 +667,7 @@ static const char *device_mode_text(int value) {
       result = DEVICE_MODE_UNKNOWN;
       break;
   }
-  strcpy_P(buffer_device_mode, result);
+  strcpy(buffer_device_mode, result);
   return buffer_device_mode;
 }
 
@@ -732,7 +732,7 @@ static const char *dc_monitor_mode_text(int value) {
       result = DC_MONITOR_MODE_UNKNOWN;
       break;
   }
-  strcpy_P(buffer_dc_monitor_mode, result);
+  strcpy(buffer_dc_monitor_mode, result);
   return buffer_dc_monitor_mode;
 }
 
@@ -1263,7 +1263,7 @@ static const char *device_type_text(int value) {
       result = DEVICE_TYPE_UNKNOWN;
       break;
   }
-  strcpy_P(buffer_device_type, result);
+  strcpy(buffer_device_type, result);
   return buffer_device_type;
 }
 
@@ -1278,7 +1278,7 @@ static std::string off_reason_text(uint32_t mask) {
         } else {
           value_list.append(";");
         }
-        strcpy_P(buffer_off_reason, (PGM_P) pgm_read_ptr(&OFF_REASONS[i]));
+        strcpy(buffer_off_reason, (PGM_P) pgm_read_ptr(&OFF_REASONS[i]));
         value_list.append(buffer_off_reason);
       }
     }
