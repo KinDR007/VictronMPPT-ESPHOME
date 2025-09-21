@@ -486,7 +486,8 @@ static const char *charging_mode_text(int value) {
       result = CHARGING_MODE_UNKNOWN;
       break;
   }
-  strcpy(buffer_charging_mode, result);
+  // Use strlcpy instead of strcpy
+  strlcpy(buffer_charging_mode, result, sizeof(buffer_charging_mode));
   return buffer_charging_mode;
 }
 
@@ -557,7 +558,8 @@ static const char *error_code_text(char *const buffer, int value) {
       result = ERROR_CODE_UNKNOWN;
       break;
   }
-  strcpy(buffer, result);
+  // Use strlcpy instead of strcpy
+  strlcpy(buffer, result, 53);
   return buffer;
 }
 
@@ -608,7 +610,8 @@ static const char *warning_code_text(int value) {
       result = WARNING_CODE_MULTIPLE;
       break;
   }
-  strcpy(buffer_warning_code, result);
+  // Use strlcpy instead of strcpy
+  strlcpy(buffer_warning_code, result, sizeof(buffer_warning_code));
   return buffer_warning_code;
 }
 
@@ -629,7 +632,8 @@ static const char *tracking_mode_text(int value) {
       result = TRACKING_MODE_UNKNOWN;
       break;
   }
-  strcpy(buffer_tracking_mode, result);
+  // Use strlcpy instead of strcpy
+  strlcpy(buffer_tracking_mode, result, sizeof(buffer_tracking_mode));
   return buffer_tracking_mode;
 }
 
@@ -653,7 +657,8 @@ static const char *device_mode_text(int value) {
       result = DEVICE_MODE_UNKNOWN;
       break;
   }
-  strcpy(buffer_device_mode, result);
+  // Use strlcpy instead of strcpy
+  strlcpy(buffer_device_mode, result, sizeof(buffer_device_mode));
   return buffer_device_mode;
 }
 
@@ -719,7 +724,8 @@ static const char *dc_monitor_mode_text(int value) {
       result = DC_MONITOR_MODE_UNKNOWN;
       break;
   }
-  strcpy(buffer_dc_monitor_mode, result);
+  // Use strlcpy instead of strcpy
+  strlcpy(buffer_dc_monitor_mode, result, sizeof(buffer_dc_monitor_mode));
   return buffer_dc_monitor_mode;
 }
 
@@ -1251,7 +1257,8 @@ static const char *device_type_text(int value) {
       result = DEVICE_TYPE_UNKNOWN;
       break;
   }
-  strcpy(buffer_device_type, result);
+  // Use strlcpy instead of strcpy
+  strlcpy(buffer_device_type, result, sizeof(buffer_device_type));
   return buffer_device_type;
 }
 
@@ -1267,7 +1274,8 @@ static std::string off_reason_text(uint32_t mask) {
         } else {
           value_list.append(";");
         }
-        strcpy(buffer_off_reason, OFF_REASONS[i]);
+        // Use strlcpy instead of strcpy
+        strlcpy(buffer_off_reason, OFF_REASONS[i], sizeof(buffer_off_reason));
         value_list.append(buffer_off_reason);
       }
     }
