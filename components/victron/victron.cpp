@@ -31,9 +31,6 @@ static const char ERROR_CODE_117[] PROGMEM = "Invalid/incompatible firmware";
 static const char ERROR_CODE_119[] PROGMEM = "User settings invalid";
 static const char ERROR_CODE_UNKNOWN[] PROGMEM = "Unknown";
 
-static char buffer_error_code_ERR[53];
-static char buffer_error_code_AR[53];
-
 // Charging mode strings in PROGMEM
 static const char CHARGING_MODE_0[] PROGMEM = "Off";
 static const char CHARGING_MODE_1[] PROGMEM = "Low power";
@@ -52,8 +49,6 @@ static const char CHARGING_MODE_248[] PROGMEM = "BatterySafe";
 static const char CHARGING_MODE_252[] PROGMEM = "External control";
 static const char CHARGING_MODE_UNKNOWN[] PROGMEM = "Unknown";
 
-static char buffer_charging_mode[30];
-
 // Warning code strings in PROGMEM
 static const char WARNING_CODE_0[] PROGMEM = "No warning";
 static const char WARNING_CODE_1[] PROGMEM = "Low Voltage";
@@ -70,15 +65,11 @@ static const char WARNING_CODE_1024[] PROGMEM = "Low V AC out";
 static const char WARNING_CODE_2048[] PROGMEM = "High V AC out";
 static const char WARNING_CODE_MULTIPLE[] PROGMEM = "Multiple warnings";
 
-static char buffer_warning_code[22];
-
 // Tracking mode strings in PROGMEM
 static const char TRACKING_MODE_0[] PROGMEM = "Off";
 static const char TRACKING_MODE_1[] PROGMEM = "Limited";
 static const char TRACKING_MODE_2[] PROGMEM = "Active";
 static const char TRACKING_MODE_UNKNOWN[] PROGMEM = "Unknown";
-
-static char buffer_tracking_mode[9];
 
 // Device mode strings in PROGMEM
 static const char DEVICE_MODE_0[] PROGMEM = "Off";
@@ -86,8 +77,6 @@ static const char DEVICE_MODE_2[] PROGMEM = "On";
 static const char DEVICE_MODE_4[] PROGMEM = "Off";
 static const char DEVICE_MODE_5[] PROGMEM = "Eco";
 static const char DEVICE_MODE_UNKNOWN[] PROGMEM = "Unknown";
-
-static char buffer_device_mode[9];
 
 // DC monitor mode strings in PROGMEM
 static const char DC_MONITOR_MODE_SOLAR_CHARGER[] PROGMEM = "Solar charger";
@@ -109,8 +98,6 @@ static const char DC_MONITOR_MODE_DC_SYSTEM[] PROGMEM = "DC system";
 static const char DC_MONITOR_MODE_INVERTER[] PROGMEM = "Inverter";
 static const char DC_MONITOR_MODE_WATER_HEATER[] PROGMEM = "Water heater";
 static const char DC_MONITOR_MODE_UNKNOWN[] PROGMEM = "Unknown";
-
-static char buffer_dc_monitor_mode[22];
 
 // Device type strings in PROGMEM
 static const char DEVICE_TYPE_BMV_700[] PROGMEM = "BMV-700";
@@ -291,8 +278,6 @@ static const char DEVICE_TYPE_SMARTSOLAR_MPPT_RS_450_200[] PROGMEM = "SmartSolar
 
 static const char DEVICE_TYPE_UNKNOWN[] PROGMEM = "Unknown";
 
-static char buffer_device_type[48];
-
 // Off reason strings in PROGMEM
 static const uint8_t OFF_REASONS_SIZE = 16;
 static const char OFF_REASONS_0[] PROGMEM = "No input power";
@@ -315,8 +300,6 @@ static const char *const OFF_REASONS[OFF_REASONS_SIZE] PROGMEM = {
     OFF_REASONS_0,  OFF_REASONS_1,  OFF_REASONS_2,  OFF_REASONS_3, OFF_REASONS_4,  OFF_REASONS_5,
     OFF_REASONS_6,  OFF_REASONS_7,  OFF_REASONS_8,  OFF_REASONS_9, OFF_REASONS_10, OFF_REASONS_11,
     OFF_REASONS_12, OFF_REASONS_13, OFF_REASONS_14, OFF_REASONS_15};
-
-static char buffer_off_reason[36];
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
   static const char *prefix = "  ";
@@ -451,6 +434,7 @@ void VictronComponent::loop() {
 }
 
 static const char *charging_mode_text(int value) {
+  static char buffer_charging_mode[30];
   const char *result;
   switch (value) {
     case 0:
@@ -578,6 +562,7 @@ static const char *error_code_text(char *const buffer, int value) {
 }
 
 static const char *warning_code_text(int value) {
+  static char buffer_warning_code[22];
   const char *result;
   switch (value) {
     case 0:
@@ -628,6 +613,7 @@ static const char *warning_code_text(int value) {
 }
 
 static const char *tracking_mode_text(int value) {
+  static char buffer_tracking_mode[9];
   const char *result;
   switch (value) {
     case 0:
@@ -648,6 +634,7 @@ static const char *tracking_mode_text(int value) {
 }
 
 static const char *device_mode_text(int value) {
+  static char buffer_device_mode[9];
   const char *result;
   switch (value) {
     case 0:
@@ -671,6 +658,7 @@ static const char *device_mode_text(int value) {
 }
 
 static const char *dc_monitor_mode_text(int value) {
+  static char buffer_dc_monitor_mode[22];
   const char *result;
   switch (value) {
     case -9:
@@ -736,6 +724,7 @@ static const char *dc_monitor_mode_text(int value) {
 }
 
 static const char *device_type_text(int value) {
+  static char buffer_device_type[48];
   const char *result;
   switch (value) {
     case 0x203:
@@ -1267,6 +1256,7 @@ static const char *device_type_text(int value) {
 }
 
 static std::string off_reason_text(uint32_t mask) {
+  static char buffer_off_reason[36];
   bool first = true;
   std::string value_list = "";
   if (mask) {
@@ -1408,6 +1398,7 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "AR") {
+    static char buffer_error_code_AR[53];
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     if (value != last_error) {
@@ -1581,6 +1572,7 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "ERR") {
+    static char buffer_error_code_ERR[53];
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     this->publish_state_(error_code_sensor_, value);
