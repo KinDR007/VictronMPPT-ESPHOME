@@ -1,8 +1,8 @@
 #include "victron.h"
 #include "esphome/core/log.h"
 #include <algorithm>  // std::min
-#include <pgmspace.h>
 #include "esphome/core/helpers.h"
+#include "esphome/core/log.h"
 
 namespace esphome {
 namespace victron {
@@ -446,7 +446,7 @@ void VictronComponent::loop() {
     }
   }
   uint32_t loop_time = millis() - now;
-  if (available_data && loop_time > 20){
+  if (available_data && loop_time > 20) {
     ESP_LOGD(TAG, "Loop: %ums", loop_time);
   }
 }
