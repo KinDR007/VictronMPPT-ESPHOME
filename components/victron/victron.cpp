@@ -3,7 +3,6 @@
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
 
-
 namespace esphome {
 namespace victron {
 
