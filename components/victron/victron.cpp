@@ -248,20 +248,34 @@ static const char DEVICE_TYPE_SMARTSHUNT_500A_50MV[] PROGMEM = "SmartShunt 500A/
 static const char DEVICE_TYPE_SMARTSHUNT_1000A_50MV[] PROGMEM = "SmartShunt 1000A/50mV";
 static const char DEVICE_TYPE_SMARTSHUNT_2000A_50MV[] PROGMEM = "SmartShunt 2000A/50mV";
 static const char DEVICE_TYPE_MULTI_RS_SOLAR_48V_6000VA_230V[] PROGMEM = "Multi RS Solar 48V 6000VA 230V";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_SMART_12V_5000VA_230VAC_64K[] PROGMEM = "Phoenix Inverter Smart 12V 5000VA 230Vac 64k";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_SMART_24V_5000VA_230VAC_64K[] PROGMEM = "Phoenix Inverter Smart 24V 5000VA 230Vac 64k";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_SMART_48V_5000VA_230VAC_64K[] PROGMEM = "Phoenix Inverter Smart 48V 5000VA 230Vac 64k";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_800VA_230VAC_64K_HS[] PROGMEM = "Phoenix Inverter 12V 800VA 230Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_800VA_230VAC_64K_HS[] PROGMEM = "Phoenix Inverter 24V 800VA 230Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_800VA_230VAC_64K_HS[] PROGMEM = "Phoenix Inverter 48V 800VA 230Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_800VA_120VAC_64K_HS[] PROGMEM = "Phoenix Inverter 12V 800VA 120Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_800VA_120VAC_64K_HS[] PROGMEM = "Phoenix Inverter 24V 800VA 120Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_800VA_120VAC_64K_HS[] PROGMEM = "Phoenix Inverter 48V 800VA 120Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_1200VA_230VAC_64K_HS[] PROGMEM = "Phoenix Inverter 12V 1200VA 230Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_1200VA_230VAC_64K_HS[] PROGMEM = "Phoenix Inverter 24V 1200VA 230Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_1200VA_230VAC_64K_HS[] PROGMEM = "Phoenix Inverter 48V 1200VA 230Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_1200VA_120VAC_64K_HS[] PROGMEM = "Phoenix Inverter 24V 1200VA 120Vac 64k HS";
-static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_1200VA_120VAC_64K_HS[] PROGMEM = "Phoenix Inverter 48V 1200VA 120Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_SMART_12V_5000VA_230VAC_64K[] PROGMEM =
+    "Phoenix Inverter Smart 12V 5000VA 230Vac 64k";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_SMART_24V_5000VA_230VAC_64K[] PROGMEM =
+    "Phoenix Inverter Smart 24V 5000VA 230Vac 64k";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_SMART_48V_5000VA_230VAC_64K[] PROGMEM =
+    "Phoenix Inverter Smart 48V 5000VA 230Vac 64k";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_800VA_230VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 12V 800VA 230Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_800VA_230VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 24V 800VA 230Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_800VA_230VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 48V 800VA 230Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_800VA_120VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 12V 800VA 120Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_800VA_120VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 24V 800VA 120Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_800VA_120VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 48V 800VA 120Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_12V_1200VA_230VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 12V 1200VA 230Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_1200VA_230VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 24V 1200VA 230Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_1200VA_230VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 48V 1200VA 230Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_24V_1200VA_120VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 24V 1200VA 120Vac 64k HS";
+static const char DEVICE_TYPE_PHOENIX_INVERTER_48V_1200VA_120VAC_64K_HS[] PROGMEM =
+    "Phoenix Inverter 48V 1200VA 120Vac 64k HS";
 static const char DEVICE_TYPE_ORION_XS_12V_12V_50A[] PROGMEM = "Orion XS 12V/12V-50A";
 static const char DEVICE_TYPE_ORION_XS_1400[] PROGMEM = "Orion XS 1400";
 static const char DEVICE_TYPE_BLUESOLAR_MPPT_75_50_REV2[] PROGMEM = "BlueSolar MPPT 75|50 rev2";
@@ -299,28 +313,14 @@ static const char OFF_REASONS_13[] PROGMEM = "Unknown: Bit 14";
 static const char OFF_REASONS_14[] PROGMEM = "Unknown: Bit 15";
 static const char OFF_REASONS_15[] PROGMEM = "Unknown: Bit 16";
 static const char *const OFF_REASONS[OFF_REASONS_SIZE] PROGMEM = {
-    OFF_REASONS_0,
-    OFF_REASONS_1,
-    OFF_REASONS_2,
-    OFF_REASONS_3,
-    OFF_REASONS_4,
-    OFF_REASONS_5,
-    OFF_REASONS_6,
-    OFF_REASONS_7,
-    OFF_REASONS_8,
-    OFF_REASONS_9,
-    OFF_REASONS_10,
-    OFF_REASONS_11,
-    OFF_REASONS_12,
-    OFF_REASONS_13,
-    OFF_REASONS_14,
-    OFF_REASONS_15
-};
+    OFF_REASONS_0, OFF_REASONS_1, OFF_REASONS_2, OFF_REASONS_3, OFF_REASONS_4, OFF_REASONS_5,
+    OFF_REASONS_6, OFF_REASONS_7, OFF_REASONS_8, OFF_REASONS_9, OFF_REASONS_10, OFF_REASONS_11,
+    OFF_REASONS_12, OFF_REASONS_13, OFF_REASONS_14, OFF_REASONS_15 };
 
 static char buffer_off_reason[36];
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
-static const char *prefix = "  ";
+  static const char *prefix = "  ";
   ESP_LOGCONFIG(TAG, "Victron:");
   LOG_BINARY_SENSOR(prefix, "Load state", load_state_binary_sensor_);
   LOG_BINARY_SENSOR(prefix, "Relay state", relay_state_binary_sensor_);
@@ -384,7 +384,7 @@ void VictronComponent::loop() {
   bool available_data = false;
   if ((state_ > 0) && (elapsed_time >= 200)) {
     // last transmission too long ago. Reset RX index.
-    ESP_LOGE(TAG, "Too old data: %ldms", elapsed_time);
+    ESP_LOGW(TAG, "Too old data: %ums", elapsed_time);
     state_ = 0;
   }
   last_transmission_ = now;
@@ -445,10 +445,10 @@ void VictronComponent::loop() {
       }
     }
   }
-    uint32_t loop_time = millis() - now;
-    if (available_data && loop_time > 10){
-        ESP_LOGD(TAG, "Loop: %ldms", loop_time);
-    }
+  uint32_t loop_time = millis() - now;
+  if (available_data && loop_time > 10){
+      ESP_LOGD(TAG, "Loop: %ums", loop_time);
+  }
 }
 
 static const char *charging_mode_text(int value) {
@@ -507,7 +507,7 @@ static const char *charging_mode_text(int value) {
   return buffer_charging_mode;
 }
 
-static const char *error_code_text(char * const buffer, int value) {
+static const char *error_code_text(char *const buffer, int value) {
   const char *result;
   switch (value) {
     case 0:
@@ -1278,7 +1278,7 @@ static std::string off_reason_text(uint32_t mask) {
         } else {
           value_list.append(";");
         }
-        strcpy_P(buffer_off_reason, (PGM_P)pgm_read_ptr(&OFF_REASONS[i]));
+        strcpy_P(buffer_off_reason, (PGM_P) pgm_read_ptr(&OFF_REASONS[i]));
         value_list.append(buffer_off_reason);
       }
     }
@@ -1411,7 +1411,7 @@ void VictronComponent::handle_value_() {
   if (label_ == "AR") {
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
-    if( value != last_error ) {
+    if(value != last_error) {
       last_error = value;
       error_code_text(buffer_error_code_AR, value);
     }
@@ -1422,10 +1422,10 @@ void VictronComponent::handle_value_() {
   if (label_ == "OR") {
     auto off_reason_bitmask = parse_hex<uint32_t>(value_.substr(2, value_.size() - 2));
     if (off_reason_bitmask) {
-    static uint32_t last_off_mask = UINT32_MAX;
+      static uint32_t last_off_mask = UINT32_MAX;
       this->publish_state_(off_reason_bitmask_sensor_, *off_reason_bitmask);
       // Load the string only if it has changed.
-      if (*off_reason_bitmask != last_off_mask){
+      if (*off_reason_bitmask != last_off_mask) {
         last_off_mask = *off_reason_bitmask;
         this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
       }
@@ -1597,9 +1597,9 @@ void VictronComponent::handle_value_() {
   static uint16_t last_charging_mode = UINT16_MAX;
     value = static_cast<uint16_t>(atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     this->publish_state_(charging_mode_id_sensor_, (float) value);
-    if( value != last_charging_mode ){
-        last_charging_mode = value;
-        this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
+    if(value != last_charging_mode) {
+      last_charging_mode = value;
+      this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
     }
     return;
   }
@@ -1719,11 +1719,11 @@ void VictronComponent::publish_state_(sensor::Sensor *sensor, float value) {
 }
 
 void VictronComponent::publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state) {
-    publish_state_(text_sensor, state.c_str());
+  publish_state_(text_sensor, state.c_str());
 }
 
 void VictronComponent::publish_state_once_(text_sensor::TextSensor *text_sensor, const std::string &state) {
-    publish_state_once_(text_sensor, state.c_str());
+  publish_state_once_(text_sensor, state.c_str());
 }
 
 void VictronComponent::publish_state_(text_sensor::TextSensor *text_sensor, const char *state) {
