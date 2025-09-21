@@ -312,9 +312,9 @@ static const char OFF_REASONS_13[] PROGMEM = "Unknown: Bit 14";
 static const char OFF_REASONS_14[] PROGMEM = "Unknown: Bit 15";
 static const char OFF_REASONS_15[] PROGMEM = "Unknown: Bit 16";
 static const char *const OFF_REASONS[OFF_REASONS_SIZE] PROGMEM = {
-    OFF_REASONS_0, OFF_REASONS_1, OFF_REASONS_2, OFF_REASONS_3, OFF_REASONS_4, OFF_REASONS_5,
-    OFF_REASONS_6, OFF_REASONS_7, OFF_REASONS_8, OFF_REASONS_9, OFF_REASONS_10, OFF_REASONS_11,
-    OFF_REASONS_12, OFF_REASONS_13, OFF_REASONS_14, OFF_REASONS_15 };
+    OFF_REASONS_0,  OFF_REASONS_1,  OFF_REASONS_2,  OFF_REASONS_3, OFF_REASONS_4,  OFF_REASONS_5,
+    OFF_REASONS_6,  OFF_REASONS_7,  OFF_REASONS_8,  OFF_REASONS_9, OFF_REASONS_10, OFF_REASONS_11,
+    OFF_REASONS_12, OFF_REASONS_13, OFF_REASONS_14, OFF_REASONS_15};
 
 static char buffer_off_reason[36];
 
@@ -445,8 +445,8 @@ void VictronComponent::loop() {
     }
   }
   uint32_t loop_time = millis() - now;
-  if (available_data && loop_time > 10){
-      ESP_LOGD(TAG, "Loop: %ums", loop_time);
+  if (available_data && loop_time > 20){
+    ESP_LOGD(TAG, "Loop: %ums", loop_time);
   }
 }
 
@@ -1410,7 +1410,7 @@ void VictronComponent::handle_value_() {
   if (label_ == "AR") {
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
-    if(value != last_error) {
+    if (value != last_error) {
       last_error = value;
       error_code_text(buffer_error_code_AR, value);
     }
@@ -1584,19 +1584,19 @@ void VictronComponent::handle_value_() {
     static uint16_t last_error = UINT16_MAX;
     uint16_t value = atoi(value_.c_str());  // NOLINT(cert-err34-c)
     this->publish_state_(error_code_sensor_, value);
-    if (value != last_error){
-        last_error = value;
-        error_code_text(buffer_error_code_ERR, value);
+    if (value != last_error) {
+      last_error = value;
+      error_code_text(buffer_error_code_ERR, value);
     }
     this->publish_state_(error_text_sensor_, buffer_error_code_ERR);
     return;
   }
 
   if (label_ == "CS") {
-  static uint16_t last_charging_mode = UINT16_MAX;
+    static uint16_t last_charging_mode = UINT16_MAX;
     value = static_cast<uint16_t>(atoi(value_.c_str()));  // NOLINT(cert-err34-c)
     this->publish_state_(charging_mode_id_sensor_, (float) value);
-    if(value != last_charging_mode) {
+    if (value != last_charging_mode) {
       last_charging_mode = value;
       this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
     }
