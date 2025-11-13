@@ -8,7 +8,8 @@ namespace victron {
 
 static const char *const TAG = "victron";
 
-// Use a constant for error buffer size
+// Use a constant for error buffer size.
+// The longest error string is 52 characters plus null terminator.
 static const size_t MAX_ERROR_BUFFER = 53;
 
 // Error code strings in PROGMEM
