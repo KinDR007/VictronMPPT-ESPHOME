@@ -20,6 +20,7 @@ All Victron devices providing a ve.direct port.
   * Victron SmartSolar MPPT 250/70
   * Victron Phoenix Inverter 12/500
   * Victron Blue Smart IP65 Charger 12|25
+  * Victron Orion XS 12|12
    
   * Victron SmartShunt 500A/50mV
 
