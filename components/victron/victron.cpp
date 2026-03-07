@@ -688,6 +688,8 @@ static std::string device_type_text(int value) {
       return "SmartSolar MPPT RS 450/200";
     case 0xA117:
       return "BlueSolar MPPT VE.Can 150|100";
+    case 0xA3F0:
+      return "Orion XS 12/12-50";
     default:
       return "Unknown";
   }
