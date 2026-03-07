@@ -1103,13 +1103,11 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "DC_IN_V") {
-    // cV to V
     this->publish_state_(dc_input_voltage_sensor_, atoi(value_.c_str()) / 100.0f);  // NOLINT(cert-err34-c)
     return;
   }
 
   if (label_ == "DC_IN_I") {
-    // Orion XS appears to report input current in 0.1 A units
     this->publish_state_(dc_input_current_sensor_, atoi(value_.c_str()) / 10.0f);  // NOLINT(cert-err34-c)
     return;
   }
