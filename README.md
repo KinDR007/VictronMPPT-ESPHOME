@@ -222,9 +222,9 @@ The victron device pushs one status message per second. To reduce the update int
 | H21      | `max_power_today`                         |
 | H22      | `yield_yesterday`                         |
 | H23      | `max_power_yesterday`                     |
-|DC_IN_V	  | `dc_input_voltage`                        |
-|DC_IN_I	  | `dc_input_current`                        |
-|DC_IN_P	  | `dc_input_power`                          |
+| DC_IN_V  | `dc_input_voltage`                        |
+| DC_IN_I  | `dc_input_current`                        |
+| DC_IN_P  | `dc_input_power`                          |
 
 ### Text sensors
 
