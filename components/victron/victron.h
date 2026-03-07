@@ -203,6 +203,18 @@ class VictronComponent : public uart::UARTDevice, public Component {
     off_reason_text_sensor_ = off_reason_text_sensor;
   }
 
+  // --- ADDED FOR ORION XS ---
+  void set_dc_input_voltage_sensor(sensor::Sensor *dc_input_voltage_sensor) {
+    dc_input_voltage_sensor_ = dc_input_voltage_sensor;
+  }
+  void set_dc_input_current_sensor(sensor::Sensor *dc_input_current_sensor) {
+    dc_input_current_sensor_ = dc_input_current_sensor;
+  }
+  void set_dc_input_power_sensor(sensor::Sensor *dc_input_power_sensor) {
+    dc_input_power_sensor_ = dc_input_power_sensor;
+  }
+  // --- END ADDED ---
+
   void dump_config() override;
   void loop() override;
 
@@ -247,6 +259,11 @@ class VictronComponent : public uart::UARTDevice, public Component {
   sensor::Sensor *device_mode_id_sensor_{nullptr};
   sensor::Sensor *dc_monitor_mode_id_sensor_{nullptr};
   sensor::Sensor *off_reason_bitmask_sensor_{nullptr};
+  // --- ADDED FOR ORION XS ---
+  sensor::Sensor *dc_input_voltage_sensor_{nullptr};
+  sensor::Sensor *dc_input_current_sensor_{nullptr};
+  sensor::Sensor *dc_input_power_sensor_{nullptr};
+  // --- END ADDED ---
   text_sensor::TextSensor *charging_mode_text_sensor_{nullptr};
   text_sensor::TextSensor *error_text_sensor_{nullptr};
   text_sensor::TextSensor *warning_text_sensor_{nullptr};
