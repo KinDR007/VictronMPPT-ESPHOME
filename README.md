@@ -157,6 +157,8 @@ The `uart_id` and `victron_id` is optional if you use a single UART / victron de
 
 The victron device pushs one status message per second. To reduce the update interval of the ESPHome entities please use the `throttle` parameter to discard some messages.
 
+Transmission integrity is validated through a checksum. Checksum validation can be switched off with the `validate_checksum` parameter set to `false`.
+
 ## Entities
 
 ### Binary sensors
