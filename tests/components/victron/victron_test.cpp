@@ -899,7 +899,7 @@ TEST(VictronLookupTest, AllChargingModes) {
     const char *value;
     const char *text;
   };
-  static const TestCase cases[] = {
+  static const TestCase CASES[] = {
       {"0", "Off"},
       {"1", "Low power"},
       {"2", "Fault"},
@@ -917,7 +917,7 @@ TEST(VictronLookupTest, AllChargingModes) {
       {"252", "External control"},
       {"99", "Unknown"},
   };
-  for (const auto &tc : cases) {
+  for (const auto &tc : CASES) {
     TestableVictron v;
     text_sensor::TextSensor cs_text;
     v.set_charging_mode_text_sensor(&cs_text);
@@ -933,7 +933,7 @@ TEST(VictronLookupTest, AllErrorCodes) {
     const char *value;
     const char *text;
   };
-  static const TestCase cases[] = {
+  static const TestCase CASES[] = {
       {"0", "No error"},
       {"2", "Battery voltage too high"},
       {"17", "Charger temperature too high"},
@@ -956,7 +956,7 @@ TEST(VictronLookupTest, AllErrorCodes) {
       {"119", "User settings invalid"},
       {"99", "Unknown"},
   };
-  for (const auto &tc : cases) {
+  for (const auto &tc : CASES) {
     TestableVictron v;
     text_sensor::TextSensor err_text;
     v.set_error_text_sensor(&err_text);
@@ -972,14 +972,14 @@ TEST(VictronLookupTest, AllWarningCodes) {
     const char *value;
     const char *text;
   };
-  static const TestCase cases[] = {
+  static const TestCase CASES[] = {
       {"0", "No warning"},       {"1", "Low Voltage"},         {"2", "High Voltage"},
       {"4", "Low SOC"},          {"8", "Low Starter Voltage"}, {"16", "High Starter Voltage"},
       {"32", "Low Temperature"}, {"64", "High Temperature"},   {"128", "Mid Voltage"},
       {"256", "Overload"},       {"512", "DC-ripple"},         {"1024", "Low V AC out"},
       {"2048", "High V AC out"}, {"3", "Multiple warnings"},
   };
-  for (const auto &tc : cases) {
+  for (const auto &tc : CASES) {
     TestableVictron v;
     text_sensor::TextSensor warn_text;
     v.set_warning_text_sensor(&warn_text);
@@ -995,7 +995,7 @@ TEST(VictronLookupTest, AllDcMonitorModes) {
     const char *value;
     const char *text;
   };
-  static const TestCase cases[] = {
+  static const TestCase CASES[] = {
       {"-9", "Solar charger"},   {"-8", "Wind turbine"},
       {"-7", "Shaft generator"}, {"-6", "Alternator"},
       {"-5", "Fuel cell"},       {"-4", "Water generator"},
@@ -1007,7 +1007,7 @@ TEST(VictronLookupTest, AllDcMonitorModes) {
       {"7", "Inverter"},         {"8", "Water heater"},
       {"99", "Unknown"},
   };
-  for (const auto &tc : cases) {
+  for (const auto &tc : CASES) {
     TestableVictron v;
     text_sensor::TextSensor mon_text;
     v.set_dc_monitor_mode_text_sensor(&mon_text);
@@ -1023,10 +1023,10 @@ TEST(VictronLookupTest, AllDeviceModes) {
     const char *value;
     const char *text;
   };
-  static const TestCase cases[] = {
+  static const TestCase CASES[] = {
       {"0", "Off"}, {"2", "On"}, {"4", "Off"}, {"5", "Eco"}, {"9", "Unknown"},
   };
-  for (const auto &tc : cases) {
+  for (const auto &tc : CASES) {
     TestableVictron v;
     text_sensor::TextSensor mode_text;
     v.set_device_mode_text_sensor(&mode_text);
@@ -1042,13 +1042,13 @@ TEST(VictronLookupTest, AllTrackingModes) {
     const char *value;
     const char *text;
   };
-  static const TestCase cases[] = {
+  static const TestCase CASES[] = {
       {"0", "Off"},
       {"1", "Limited"},
       {"2", "Active"},
       {"9", "Unknown"},
   };
-  for (const auto &tc : cases) {
+  for (const auto &tc : CASES) {
     TestableVictron v;
     text_sensor::TextSensor mppt_text;
     v.set_tracking_mode_text_sensor(&mppt_text);
