@@ -309,8 +309,6 @@ jobs:
     needs:
       - bundle
       - common
-    env:
-      GH_TOKEN: ${{ github.token }}
     defaults:
       run:
         working-directory: esphome
