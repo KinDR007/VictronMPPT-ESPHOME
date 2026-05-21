@@ -22,11 +22,16 @@ VICTRON_COMPONENT_SCHEMA = cv.Schema(
     }
 )
 
-CONFIG_SCHEMA = uart.UART_DEVICE_SCHEMA.extend(
-    {
-        cv.GenerateID(): cv.declare_id(VictronComponent),
-        cv.Optional(CONF_THROTTLE, default="1s"): cv.positive_time_period_milliseconds,
-    }
+CONFIG_SCHEMA = cv.All(
+    cv.require_esphome_version(2024, 6, 0),
+    uart.UART_DEVICE_SCHEMA.extend(
+        {
+            cv.GenerateID(): cv.declare_id(VictronComponent),
+            cv.Optional(
+                CONF_THROTTLE, default="1s"
+            ): cv.positive_time_period_milliseconds,
+        }
+    ),
 )
 
 

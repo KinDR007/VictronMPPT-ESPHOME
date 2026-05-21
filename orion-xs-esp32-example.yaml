@@ -1,13 +1,15 @@
 substitutions:
-  name: phoenix-inverter
+  name: orion-xs
   external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
 
 esphome:
   name: ${name}
   friendly_name: ${name}
 
-esp8266:
-  board: d1_mini
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
 
 external_components:
   - source: ${external_components_source}
@@ -16,14 +18,12 @@ external_components:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  min_auth_mode: WPA2
 
 ota:
   platform: esphome
 
 logger:
   baud_rate: 0
-  esp8266_store_log_strings_in_flash: false
 
 # If you use Home Assistant please remove this `mqtt` section and uncomment the `api` component!
 # The native API has many advantages over MQTT: https://esphome.io/components/api.html#advantages-over-mqtt
@@ -37,8 +37,8 @@ mqtt:
 
 uart:
   id: uart_0
-  tx_pin: D8  # Not connected! The communication is read-only
-  rx_pin: D7  # Connect this GPIO and GND to the MPPT charger
+  tx_pin: GPIO16  # Not connected! The communication is read-only
+  rx_pin: GPIO17  # Connect this GPIO and GND to the MPPT charger
   baud_rate: 19200
   rx_buffer_size: 256
 
@@ -51,47 +51,36 @@ sensor:
   - platform: victron
     victron_id: victron0
     battery_voltage:
-      name: "battery voltage"
+      name: "output voltage"
     battery_current:
-      name: "battery current"
+      name: "output current"
+    instantaneous_power:
+      name: "output power"
+    dc_input_voltage:
+      name: "input voltage"
+    dc_input_current:
+      name: "input current"
+    dc_input_power:
+      name: "input power"
     charging_mode_id:
       name: "charging mode id"
-    device_mode_id:
-      name: "device mode id"
-    ac_out_voltage:
-      name: "ac out voltage"
-    ac_out_current:
-      name: "ac out current"
-    ac_out_apparent_power:
-      name: "ac out apparent power"
-    warning_code:
-      name: "warning code"
     off_reason_bitmask:
       name: "off reason bitmask"
+    error_code:
+      name: "error code"
 
 text_sensor:
   - platform: victron
     victron_id: victron0
-    alarm_reason:
-      name: "alarm reason"
-    # TODO: "OR"
-    charging_mode:
-      name: "charging mode"
-    firmware_version:
-      name: "firmware version"
     device_type:
       name: "device type"
+    firmware_version_24bit:
+      name: "firmware version"
     serial_number:
       name: "serial number"
-    device_mode:
-      name: "device mode"
-    warning:
-      name: "warning"
+    charging_mode:
+      name: "charging mode"
     off_reason:
       name: "off reason"
-
-binary_sensor:
-  - platform: victron
-    victron_id: victron0
-    relay_state:
-      name: "relay state"
+    error:
+      name: "error"

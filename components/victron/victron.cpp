@@ -5,10 +5,10 @@
 
 namespace esphome::victron {
 
-static const char *const TAG = "victron";
+static constexpr char TAG[] = "victron";
 
-static const uint8_t OFF_REASONS_SIZE = 16;
-static const char *const OFF_REASONS[OFF_REASONS_SIZE] = {
+static constexpr uint8_t OFF_REASONS_SIZE = 16;
+static constexpr const char *OFF_REASONS[OFF_REASONS_SIZE] = {
     "No input power",                       // 0000 0000 0000 0001
     "Switched off (power switch)",          // 0000 0000 0000 0010
     "Switched off (device mode register)",  // 0000 0000 0000 0100

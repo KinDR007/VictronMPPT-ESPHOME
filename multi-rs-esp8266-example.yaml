@@ -4,7 +4,7 @@ substitutions:
 
 esphome:
   name: ${name}
-  min_version: 2024.6.0
+  friendly_name: ${name}
 
 esp8266:
   board: d1_mini
@@ -16,6 +16,7 @@ external_components:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+  min_auth_mode: WPA2
 
 ota:
   platform: esphome
@@ -37,7 +38,7 @@ mqtt:
 uart:
   id: uart_0
   tx_pin: D8  # Not connected! The communication is read-only
-  rx_pin: D7  # Connect this this GPIO and GND to the MPPT charger
+  rx_pin: D7  # Connect this GPIO and GND to the MPPT charger
   baud_rate: 19200
   rx_buffer_size: 256
 
@@ -50,38 +51,38 @@ sensor:
   - platform: victron
     victron_id: victron0
     charging_mode_id:
-      name: "${name} charging mode id"
+      name: "charging mode id"
     error_code:
-      name: "${name} error code"
+      name: "error code"
     ac_out_current:
-      name: "${name} ac out current"
+      name: "ac out current"
       id: ac_current
     ac_out_voltage:
-      name: "${name} ac out voltage"
+      name: "ac out voltage"
       id: ac_voltage
     yield_total:
-      name: "${name} yield total"
+      name: "yield total"
     yield_today:
-      name: "${name} yield today"
+      name: "yield today"
     max_power_today:
-      name: "${name} max power today"
+      name: "max power today"
     yield_yesterday:
-      name: "${name} yield yesterday"
+      name: "yield yesterday"
     max_power_yesterday:
-      name: "${name} max power yesterday"
+      name: "max power yesterday"
     day_number:
-      name: "${name} day number"
+      name: "day number"
     battery_current:
-      name: "${name} battery current"
+      name: "battery current"
     panel_power:
-      name: "${name} panel power"
+      name: "panel power"
     battery_voltage:
-      name: "${name} battery voltage"
+      name: "battery voltage"
     panel_voltage:
-      name: "${name} panel voltage"
+      name: "panel voltage"
 
   - platform: template
-    name: "${name} ac out power"
+    name: "ac out power"
     # https://github.com/esphome/issues/issues/2793#issuecomment-988257209
     lambda: |-
        auto val = id(ac_voltage).state * id(ac_current).state;
@@ -94,14 +95,14 @@ text_sensor:
   - platform: victron
     victron_id: victron0
     device_type:
-      name: "${name} device type"
+      name: "device type"
     serial_number:
-      name: "${name} serial number"
+      name: "serial number"
     firmware_version_24bit:
-      name: "${name} firmware version 24bit"
+      name: "firmware version 24bit"
     charging_mode:
-      name: "${name} charging mode"
+      name: "charging mode"
     error:
-      name: "${name} error"
+      name: "error"
     device_mode:
-      name: "${name} device mode"
+      name: "device mode"

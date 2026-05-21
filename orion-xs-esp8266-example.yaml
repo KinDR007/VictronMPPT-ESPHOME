@@ -1,5 +1,5 @@
 substitutions:
-  name: victron-mppt
+  name: orion-xs
   external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
 
 esphome:
@@ -16,13 +16,11 @@ external_components:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  min_auth_mode: WPA2
 
 ota:
   platform: esphome
 
 logger:
-  baud_rate: 0
   esp8266_store_log_strings_in_flash: false
 
 # If you use Home Assistant please remove this `mqtt` section and uncomment the `api` component!
@@ -50,55 +48,37 @@ victron:
 sensor:
   - platform: victron
     victron_id: victron0
-    max_power_yesterday:
-      name: "max power yesterday"
-    max_power_today:
-      name: "max power today"
-    yield_total:
-      name: "yield total"
-    yield_yesterday:
-      name: "yield yesterday"
-    yield_today:
-      name: "yield today"
-    panel_voltage:
-      name: "panel voltage"
-    panel_power:
-      name: "panel power"
-    battery_current:
-      name: "panel current"
     battery_voltage:
-      name: "battery voltage"
-    day_number:
-      name: "day number"
+      name: "output voltage"
+    battery_current:
+      name: "output current"
+    instantaneous_power:
+      name: "output power"
+    dc_input_voltage:
+      name: "input voltage"
+    dc_input_current:
+      name: "input current"
+    dc_input_power:
+      name: "input power"
     charging_mode_id:
       name: "charging mode id"
+    off_reason_bitmask:
+      name: "off reason bitmask"
     error_code:
       name: "error code"
-    tracking_mode_id:
-      name: "tracking mode id"
-    load_current:
-      name: "load current"
 
 text_sensor:
   - platform: victron
     victron_id: victron0
-    charging_mode:
-      name: "charging mode"
-    error:
-      name: "error"
-    tracking_mode:
-      name: "tracking mode"
-    firmware_version:
-      name: "firmware version"
     device_type:
       name: "device type"
+    firmware_version_24bit:
+      name: "firmware version"
     serial_number:
       name: "serial number"
-
-binary_sensor:
-  - platform: victron
-    victron_id: victron0
-    load_state:
-      name: "load state"
-    relay_state:
-      name: "relay state"
+    charging_mode:
+      name: "charging mode"
+    off_reason:
+      name: "off reason"
+    error:
+      name: "error"
