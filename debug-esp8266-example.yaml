@@ -6,6 +6,7 @@ substitutions:
 
 esphome:
   name: ${name}
+  friendly_name: ${name}
 
 esp8266:
   board: d1_mini
@@ -51,10 +52,10 @@ text_sensor:
   - platform: victron
     victron_id: victron0
     model_description:
-      name: "${name} model description"
+      name: "model description"
     firmware_version:
-      name: "${name} firmware version"
+      name: "firmware version"
     device_type:
-      name: "${name} device type"
+      name: "device type"
     serial_number:
-      name: "${name} serial number"
+      name: "serial number"
