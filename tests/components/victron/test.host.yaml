@@ -1,0 +1,7 @@
+uart:
+  id: uart_bus
+  baud_rate: 19200
+
+victron:
+  id: test_victron
+  uart_id: uart_bus
