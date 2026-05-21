@@ -1,13 +1,15 @@
 substitutions:
-  name: phoenix-charger
+  name: orion-xs
   external_components_source: github://KinDR007/VictronMPPT-ESPHOME@main
 
 esphome:
   name: ${name}
   min_version: 2024.6.0
 
-esp8266:
-  board: d1_mini
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
 
 external_components:
   - source: ${external_components_source}
@@ -22,7 +24,6 @@ ota:
 
 logger:
   baud_rate: 0
-  esp8266_store_log_strings_in_flash: false
 
 # If you use Home Assistant please remove this `mqtt` section and uncomment the `api` component!
 # The native API has many advantages over MQTT: https://esphome.io/components/api.html#advantages-over-mqtt
@@ -36,8 +37,8 @@ mqtt:
 
 uart:
   id: uart_0
-  tx_pin: D8  # Not connected! The communication is read-only
-  rx_pin: D7  # Connect this GPIO and GND to the MPPT charger
+  tx_pin: GPIO16  # Not connected! The communication is read-only
+  rx_pin: GPIO17  # Connect this GPIO and GND to the MPPT charger
   baud_rate: 19200
   rx_buffer_size: 256
 
@@ -50,40 +51,36 @@ sensor:
   - platform: victron
     victron_id: victron0
     battery_voltage:
-      name: "${name} battery voltage"
-    battery_voltage_2:
-      name: "${name} battery voltage 2"
-    battery_voltage_3:
-      name: "${name} battery voltage 3"
+      name: "${name} output voltage"
     battery_current:
-      name: "${name} battery current"
-    battery_current_2:
-      name: "${name} battery current 2"
-    battery_current_3:
-      name: "${name} battery current 3"
-    error_code:
-      name: "${name} error code"
+      name: "${name} output current"
+    instantaneous_power:
+      name: "${name} output power"
+    dc_input_voltage:
+      name: "${name} input voltage"
+    dc_input_current:
+      name: "${name} input current"
+    dc_input_power:
+      name: "${name} input power"
     charging_mode_id:
       name: "${name} charging mode id"
-    device_mode_id:
-      name: "${name} device mode id"
+    off_reason_bitmask:
+      name: "${name} off reason bitmask"
+    error_code:
+      name: "${name} error code"
 
 text_sensor:
   - platform: victron
     victron_id: victron0
-    error:
-      name: "${name} error"
-    charging_mode:
-      name: "${name} charging mode"
     device_type:
       name: "${name} device type"
+    firmware_version_24bit:
+      name: "${name} firmware version"
     serial_number:
       name: "${name} serial number"
-    device_mode:
-      name: "${name} device mode"
-
-binary_sensor:
-  - platform: victron
-    victron_id: victron0
-    relay_state:
-      name: "${name} relay state"
+    charging_mode:
+      name: "${name} charging mode"
+    off_reason:
+      name: "${name} off reason"
+    error:
+      name: "${name} error"
