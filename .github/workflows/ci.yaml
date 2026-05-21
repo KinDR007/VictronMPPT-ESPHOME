@@ -233,6 +233,30 @@ jobs:
         run: script/ci-suggest-changes
         if: always()
 
+  pytest:
+    name: Run pytest
+    runs-on: ubuntu-24.04
+    needs:
+      - bundle
+      - common
+    steps:
+      - name: Download prepared repository
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
+        with:
+          name: bundle
+          path: .
+
+      - name: Restore Python
+        uses: ./.github/actions/restore-python
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-key: ${{ needs.common.outputs.cache-key }}
+
+      - name: Run pytest
+        run: |
+          . venv/bin/activate
+          pytest tests/ -v
+
   ci-custom:
     name: Run script/ci-custom
     runs-on: ubuntu-24.04
