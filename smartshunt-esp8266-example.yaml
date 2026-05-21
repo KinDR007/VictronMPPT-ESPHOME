@@ -4,6 +4,7 @@ substitutions:
 
 esphome:
   name: ${name}
+  friendly_name: ${name}
 
 esp8266:
   board: d1_mini
@@ -50,84 +51,84 @@ sensor:
   - platform: victron
     victron_id: victron0
     battery_voltage:
-      name: "${name} battery voltage"
+      name: "battery voltage"
     auxiliary_battery_voltage:
-      name: "${name} auxiliary battery voltage"
+      name: "auxiliary battery voltage"
     midpoint_voltage_of_the_battery_bank:
-      name: "${name} midpoint voltage of the battery bank"
+      name: "midpoint voltage of the battery bank"
     midpoint_deviation_of_the_battery_bank:
-      name: "${name} midpoint deviation of the battery bank"
+      name: "midpoint deviation of the battery bank"
     battery_current:
-      name: "${name} battery current"
+      name: "battery current"
     battery_temperature:
-      name: "${name} battery temperature"
+      name: "battery temperature"
     instantaneous_power:
-      name: "${name} instantaneous power"
+      name: "instantaneous power"
     consumed_amp_hours:
-      name: "${name} consumed amp hours"
+      name: "consumed amp hours"
     state_of_charge:
-      name: "${name} state of charge"
+      name: "state of charge"
     time_to_go:
-      name: "${name} time to go"
+      name: "time to go"
     depth_of_the_deepest_discharge:
-      name: "${name} depth of the deepest discharge"
+      name: "depth of the deepest discharge"
     depth_of_the_last_discharge:
-      name: "${name} depth of the last discharge"
+      name: "depth of the last discharge"
     depth_of_the_average_discharge:
-      name: "${name} depth of the average discharge"
+      name: "depth of the average discharge"
     number_of_charge_cycles:
-      name: "${name} number of charge cycles"
+      name: "number of charge cycles"
     number_of_full_discharges:
-      name: "${name} number of full discharges"
+      name: "number of full discharges"
     cumulative_amp_hours_drawn:
-      name: "${name} cumulative amp hours drawn"
+      name: "cumulative amp hours drawn"
     min_battery_voltage:
-      name: "${name} min battery voltage"
+      name: "min battery voltage"
     max_battery_voltage:
-      name: "${name} max battery voltage"
+      name: "max battery voltage"
     last_full_charge:
-      name: "${name} last full charge"
+      name: "last full charge"
     number_of_automatic_synchronizations:
-      name: "${name} number of automatic synchronizations"
+      name: "number of automatic synchronizations"
     number_of_low_main_voltage_alarms:
-      name: "${name} number of low main voltage alarms"
+      name: "number of low main voltage alarms"
     number_of_high_main_voltage_alarms:
-      name: "${name} number of high main voltage alarms"
+      name: "number of high main voltage alarms"
     number_of_low_auxiliary_voltage_alarms:
-      name: "${name} number of low auxiliary voltage alarms"
+      name: "number of low auxiliary voltage alarms"
     number_of_high_auxiliary_voltage_alarms:
-      name: "${name} number of high auxiliary voltage alarms"
+      name: "number of high auxiliary voltage alarms"
     min_auxiliary_battery_voltage:
-      name: "${name} min auxiliary battery voltage"
+      name: "min auxiliary battery voltage"
     max_auxiliary_battery_voltage:
-      name: "${name} max auxiliary battery voltage"
+      name: "max auxiliary battery voltage"
     amount_of_discharged_energy:
-      name: "${name} amount of discharged energy"
+      name: "amount of discharged energy"
     amount_of_charged_energy:
-      name: "${name} amount of charged energy"
+      name: "amount of charged energy"
     dc_monitor_mode_id:
-      name: "${name} dc monitor mode id"
+      name: "dc monitor mode id"
 
 text_sensor:
   - platform: victron
     victron_id: victron0
     alarm_condition_active:
-      name: "${name} alarm condition active"
+      name: "alarm condition active"
     alarm_reason:
-      name: "${name} alarm reason"
+      name: "alarm reason"
     model_description:
-      name: "${name} model description"
+      name: "model description"
     firmware_version:
-      name: "${name} firmware version"
+      name: "firmware version"
     device_type:
-      name: "${name} device type"
+      name: "device type"
     serial_number:
-      name: "${name} serial number"
+      name: "serial number"
     dc_monitor_mode:
-      name: "${name} dc monitor mode"
+      name: "dc monitor mode"
 
 binary_sensor:
   - platform: victron
     victron_id: victron0
     relay_state:
-      name: "${name} relay state"
+      name: "relay state"

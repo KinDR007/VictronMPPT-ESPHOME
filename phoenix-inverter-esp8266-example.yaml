@@ -4,6 +4,7 @@ substitutions:
 
 esphome:
   name: ${name}
+  friendly_name: ${name}
 
 esp8266:
   board: d1_mini
@@ -50,47 +51,47 @@ sensor:
   - platform: victron
     victron_id: victron0
     battery_voltage:
-      name: "${name} battery voltage"
+      name: "battery voltage"
     battery_current:
-      name: "${name} battery current"
+      name: "battery current"
     charging_mode_id:
-      name: "${name} charging mode id"
+      name: "charging mode id"
     device_mode_id:
-      name: "${name} device mode id"
+      name: "device mode id"
     ac_out_voltage:
-      name: "${name} ac out voltage"
+      name: "ac out voltage"
     ac_out_current:
-      name: "${name} ac out current"
+      name: "ac out current"
     ac_out_apparent_power:
-      name: "${name} ac out apparent power"
+      name: "ac out apparent power"
     warning_code:
-      name: "${name} warning code"
+      name: "warning code"
     off_reason_bitmask:
-      name: "${name} off reason bitmask"
+      name: "off reason bitmask"
 
 text_sensor:
   - platform: victron
     victron_id: victron0
     alarm_reason:
-      name: "${name} alarm reason"
+      name: "alarm reason"
     # TODO: "OR"
     charging_mode:
-      name: "${name} charging mode"
+      name: "charging mode"
     firmware_version:
-      name: "${name} firmware version"
+      name: "firmware version"
     device_type:
-      name: "${name} device type"
+      name: "device type"
     serial_number:
-      name: "${name} serial number"
+      name: "serial number"
     device_mode:
-      name: "${name} device mode"
+      name: "device mode"
     warning:
-      name: "${name} warning"
+      name: "warning"
     off_reason:
-      name: "${name} off reason"
+      name: "off reason"
 
 binary_sensor:
   - platform: victron
     victron_id: victron0
     relay_state:
-      name: "${name} relay state"
+      name: "relay state"

@@ -4,7 +4,7 @@ substitutions:
 
 esphome:
   name: ${name}
-  min_version: 2024.6.0
+  friendly_name: ${name}
 
 esp8266:
   board: d1_mini
@@ -49,36 +49,36 @@ sensor:
   - platform: victron
     victron_id: victron0
     battery_voltage:
-      name: "${name} output voltage"
+      name: "output voltage"
     battery_current:
-      name: "${name} output current"
+      name: "output current"
     instantaneous_power:
-      name: "${name} output power"
+      name: "output power"
     dc_input_voltage:
-      name: "${name} input voltage"
+      name: "input voltage"
     dc_input_current:
-      name: "${name} input current"
+      name: "input current"
     dc_input_power:
-      name: "${name} input power"
+      name: "input power"
     charging_mode_id:
-      name: "${name} charging mode id"
+      name: "charging mode id"
     off_reason_bitmask:
-      name: "${name} off reason bitmask"
+      name: "off reason bitmask"
     error_code:
-      name: "${name} error code"
+      name: "error code"
 
 text_sensor:
   - platform: victron
     victron_id: victron0
     device_type:
-      name: "${name} device type"
+      name: "device type"
     firmware_version_24bit:
-      name: "${name} firmware version"
+      name: "firmware version"
     serial_number:
-      name: "${name} serial number"
+      name: "serial number"
     charging_mode:
-      name: "${name} charging mode"
+      name: "charging mode"
     off_reason:
-      name: "${name} off reason"
+      name: "off reason"
     error:
-      name: "${name} error"
+      name: "error"

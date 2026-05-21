@@ -4,6 +4,7 @@ substitutions:
 
 esphome:
   name: ${name}
+  friendly_name: ${name}
 
 esp8266:
   board: d1_mini
@@ -50,54 +51,54 @@ sensor:
   - platform: victron
     victron_id: victron0
     max_power_yesterday:
-      name: "${name} max power yesterday"
+      name: "max power yesterday"
     max_power_today:
-      name: "${name} max power today"
+      name: "max power today"
     yield_total:
-      name: "${name} yield total"
+      name: "yield total"
     yield_yesterday:
-      name: "${name} yield yesterday"
+      name: "yield yesterday"
     yield_today:
-      name: "${name} yield today"
+      name: "yield today"
     panel_voltage:
-      name: "${name} panel voltage"
+      name: "panel voltage"
     panel_power:
-      name: "${name} panel power"
+      name: "panel power"
     battery_current:
-      name: "${name} panel current"
+      name: "panel current"
     battery_voltage:
-      name: "${name} battery voltage"
+      name: "battery voltage"
     day_number:
-      name: "${name} day number"
+      name: "day number"
     charging_mode_id:
-      name: "${name} charging mode id"
+      name: "charging mode id"
     error_code:
-      name: "${name} error code"
+      name: "error code"
     tracking_mode_id:
-      name: "${name} tracking mode id"
+      name: "tracking mode id"
     load_current:
-      name: "${name} load current"
+      name: "load current"
 
 text_sensor:
   - platform: victron
     victron_id: victron0
     charging_mode:
-      name: "${name} charging mode"
+      name: "charging mode"
     error:
-      name: "${name} error"
+      name: "error"
     tracking_mode:
-      name: "${name} tracking mode"
+      name: "tracking mode"
     firmware_version:
-      name: "${name} firmware version"
+      name: "firmware version"
     device_type:
-      name: "${name} device type"
+      name: "device type"
     serial_number:
-      name: "${name} serial number"
+      name: "serial number"
 
 binary_sensor:
   - platform: victron
     victron_id: victron0
     load_state:
-      name: "${name} load state"
+      name: "load state"
     relay_state:
-      name: "${name} relay state"
+      name: "relay state"
