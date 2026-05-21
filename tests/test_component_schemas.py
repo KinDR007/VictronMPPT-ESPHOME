@@ -1,5 +1,10 @@
 """Component schema tests."""
 
+import os
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
 
 class TestSensorDefs:
     def test_sensor_defs_completeness(self):
