@@ -1,0 +1,191 @@
+substitutions:
+  name: esp32c6-compatibility-test
+  external_components_source: components
+
+esphome:
+  name: ${name}
+
+esp32:
+  board: esp32-c6-devkitc-1
+  variant: esp32c6
+  framework:
+    type: esp-idf
+
+external_components:
+  - source: ${external_components_source}
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  min_auth_mode: WPA2
+
+ota:
+  platform: esphome
+
+logger:
+
+api:
+
+uart:
+  id: uart_bus
+  tx_pin: GPIO16
+  rx_pin: GPIO17
+  baud_rate: 19200
+
+victron:
+  id: victron_id
+  uart_id: uart_bus
+
+binary_sensor:
+  - platform: victron
+    victron_id: victron_id
+    load_state:
+      name: "Load state"
+    relay_state:
+      name: "Relay state"
+
+sensor:
+  - platform: victron
+    victron_id: victron_id
+    max_power_yesterday:
+      name: "Max power yesterday"
+    max_power_today:
+      name: "Max power today"
+    yield_total:
+      name: "Yield total"
+    yield_yesterday:
+      name: "Yield yesterday"
+    yield_today:
+      name: "Yield today"
+    panel_voltage:
+      name: "Panel voltage"
+    panel_power:
+      name: "Panel power"
+    battery_voltage:
+      name: "Battery voltage"
+    battery_voltage_2:
+      name: "Battery voltage 2"
+    battery_voltage_3:
+      name: "Battery voltage 3"
+    auxiliary_battery_voltage:
+      name: "Auxiliary battery voltage"
+    midpoint_voltage_of_the_battery_bank:
+      name: "Midpoint voltage of the battery bank"
+    midpoint_deviation_of_the_battery_bank:
+      name: "Midpoint deviation of the battery bank"
+    battery_current:
+      name: "Battery current"
+    battery_current_2:
+      name: "Battery current 2"
+    battery_current_3:
+      name: "Battery current 3"
+    ac_out_voltage:
+      name: "AC out voltage"
+    ac_out_current:
+      name: "AC out current"
+    ac_out_apparent_power:
+      name: "AC out apparent power"
+    day_number:
+      name: "Day number"
+    charging_mode_id:
+      name: "Charging mode id"
+    error_code:
+      name: "Error code"
+    warning_code:
+      name: "Warning code"
+    tracking_mode_id:
+      name: "Tracking mode id"
+    device_mode_id:
+      name: "Device mode id"
+    load_current:
+      name: "Load current"
+    battery_temperature:
+      name: "Battery temperature"
+    instantaneous_power:
+      name: "Instantaneous power"
+    consumed_amp_hours:
+      name: "Consumed amp hours"
+    state_of_charge:
+      name: "State of charge"
+    time_to_go:
+      name: "Time to go"
+    depth_of_the_deepest_discharge:
+      name: "Depth of the deepest discharge"
+    depth_of_the_last_discharge:
+      name: "Depth of the last discharge"
+    depth_of_the_average_discharge:
+      name: "Depth of the average discharge"
+    number_of_charge_cycles:
+      name: "Number of charge cycles"
+    number_of_full_discharges:
+      name: "Number of full discharges"
+    cumulative_amp_hours_drawn:
+      name: "Cumulative amp hours drawn"
+    min_battery_voltage:
+      name: "Min battery voltage"
+    max_battery_voltage:
+      name: "Max battery voltage"
+    last_full_charge:
+      name: "Last full charge"
+    number_of_automatic_synchronizations:
+      name: "Number of automatic synchronizations"
+    number_of_low_main_voltage_alarms:
+      name: "Number of low main voltage alarms"
+    number_of_high_main_voltage_alarms:
+      name: "Number of high main voltage alarms"
+    number_of_low_auxiliary_voltage_alarms:
+      name: "Number of low auxiliary voltage alarms"
+    number_of_high_auxiliary_voltage_alarms:
+      name: "Number of high auxiliary voltage alarms"
+    min_auxiliary_battery_voltage:
+      name: "Min auxiliary battery voltage"
+    max_auxiliary_battery_voltage:
+      name: "Max auxiliary battery voltage"
+    amount_of_discharged_energy:
+      name: "Amount of discharged energy"
+    amount_of_charged_energy:
+      name: "Amount of charged energy"
+    dc_monitor_mode_id:
+      name: "DC monitor mode id"
+    off_reason_bitmask:
+      name: "Off reason bitmask"
+    dc_input_voltage:
+      name: "DC input voltage"
+    dc_input_current:
+      name: "DC input current"
+    dc_input_power:
+      name: "DC input power"
+
+text_sensor:
+  - platform: victron
+    victron_id: victron_id
+    charging_mode:
+      name: "Charging mode"
+    error:
+      name: "Error"
+    warning:
+      name: "Warning"
+    tracking_mode:
+      name: "Tracking mode"
+    device_mode:
+      name: "Device mode"
+    firmware_version:
+      name: "Firmware version"
+    firmware_version_24bit:
+      name: "Firmware version 24bit"
+    device_type:
+      name: "Device type"
+    serial_number:
+      name: "Serial number"
+    hardware_revision:
+      name: "Hardware revision"
+    alarm_condition_active:
+      name: "Alarm condition active"
+    alarm_reason:
+      name: "Alarm reason"
+    model_description:
+      name: "Model description"
+    dc_monitor_mode:
+      name: "DC monitor mode"
+    off_reason:
+      name: "Off reason"

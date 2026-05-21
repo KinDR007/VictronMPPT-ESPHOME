@@ -515,3 +515,8 @@ jobs:
           # esphome -s external_components_source components compile orion-xs-esp8266-example.yaml
         env:
           PLATFORMIO_LIBDEPS_DIR: ~/.platformio/libdeps
+      - name: Compile test configurations
+        run: |
+          . venv/bin/activate
+          echo -e "wifi_ssid: ssid\nwifi_password: password" > tests/secrets.yaml
+          esphome -s external_components_source ../components compile tests/esp32c6-compatibility-test.yaml
