@@ -3,8 +3,7 @@
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
 
-namespace esphome {
-namespace victron {
+namespace esphome::victron {
 
 static const char *const TAG = "victron";
 
@@ -1151,5 +1150,4 @@ void VictronComponent::publish_state_once_(text_sensor::TextSensor *text_sensor,
   text_sensor->publish_state(state);
 }
 
-}  // namespace victron
-}  // namespace esphome
+}  // namespace esphome::victron

@@ -6,8 +6,7 @@
 #include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/uart/uart.h"
 
-namespace esphome {
-namespace victron {
+namespace esphome::victron {
 
 class VictronComponent : public uart::UARTDevice, public Component {
  public:
@@ -308,5 +307,4 @@ class VictronComponent : public uart::UARTDevice, public Component {
   uint32_t throttle_{0};
 };
 
-}  // namespace victron
-}  // namespace esphome
+}  // namespace esphome::victron
