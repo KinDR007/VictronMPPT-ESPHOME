@@ -20,6 +20,7 @@ All Victron devices providing a ve.direct port.
   * Victron SmartSolar MPPT 250/70
   * Victron Phoenix Inverter 12/500
   * Victron Blue Smart IP65 Charger 12|25
+  * Victron Orion XS 12|12
    
   * Victron SmartShunt 500A/50mV
 
@@ -221,6 +222,9 @@ The victron device pushs one status message per second. To reduce the update int
 | H21      | `max_power_today`                         |
 | H22      | `yield_yesterday`                         |
 | H23      | `max_power_yesterday`                     |
+| DC_IN_V  | `dc_input_voltage`                        |
+| DC_IN_I  | `dc_input_current`                        |
+| DC_IN_P  | `dc_input_power`                          |
 
 ### Text sensors
 

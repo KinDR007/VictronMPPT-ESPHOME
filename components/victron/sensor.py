@@ -87,6 +87,9 @@ CONF_AMOUNT_OF_DISCHARGED_ENERGY = "amount_of_discharged_energy"
 CONF_AMOUNT_OF_CHARGED_ENERGY = "amount_of_charged_energy"
 CONF_DC_MONITOR_MODE_ID = "dc_monitor_mode_id"
 CONF_OFF_REASON_BITMASK = "off_reason_bitmask"
+CONF_DC_INPUT_VOLTAGE = "dc_input_voltage"
+CONF_DC_INPUT_CURRENT = "dc_input_current"
+CONF_DC_INPUT_POWER = "dc_input_power"
 
 UNIT_AMPERE_HOUR = "Ah"
 
@@ -143,6 +146,9 @@ SENSORS = [
     CONF_AMOUNT_OF_CHARGED_ENERGY,
     CONF_DC_MONITOR_MODE_ID,
     CONF_OFF_REASON_BITMASK,
+    CONF_DC_INPUT_VOLTAGE,
+    CONF_DC_INPUT_CURRENT,
+    CONF_DC_INPUT_POWER,
 ]
 
 
@@ -462,6 +468,24 @@ CONFIG_SCHEMA = VICTRON_COMPONENT_SCHEMA.extend(
             icon=ICON_EMPTY,
             accuracy_decimals=0,
             device_class=DEVICE_CLASS_EMPTY,
+        ),
+        cv.Optional(CONF_DC_INPUT_VOLTAGE): sensor.sensor_schema(
+            unit_of_measurement=UNIT_VOLT,
+            icon=ICON_FLASH,
+            accuracy_decimals=2,
+            device_class=DEVICE_CLASS_VOLTAGE,
+        ),
+        cv.Optional(CONF_DC_INPUT_CURRENT): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            icon=ICON_CURRENT_AC,
+            accuracy_decimals=1,
+            device_class=DEVICE_CLASS_CURRENT,
+        ),
+        cv.Optional(CONF_DC_INPUT_POWER): sensor.sensor_schema(
+            unit_of_measurement=UNIT_WATT,
+            icon=ICON_POWER,
+            accuracy_decimals=0,
+            device_class=DEVICE_CLASS_POWER,
         ),
     }
 )
