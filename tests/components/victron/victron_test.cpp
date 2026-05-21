@@ -731,4 +731,332 @@ TEST(VictronEdgeCaseTest, NullSensorsDoNotCrash) {
   process_frame(v, ORION_XS_FRAME);
 }
 
+TEST(VictronEdgeCaseTest, H6NotAvailable) {
+  TestableVictron v;
+  sensor::Sensor h6;
+  v.set_cumulative_amp_hours_drawn_sensor(&h6);
+  v.label_ = "H6";
+  v.value_ = "---";
+  v.handle_value_();
+  EXPECT_TRUE(std::isnan(h6.state));
+}
+
+TEST(VictronEdgeCaseTest, H9NotAvailable) {
+  TestableVictron v;
+  sensor::Sensor h9;
+  v.set_last_full_charge_sensor(&h9);
+  v.label_ = "H9";
+  v.value_ = "---";
+  v.handle_value_();
+  EXPECT_TRUE(std::isnan(h9.state));
+}
+
+TEST(VictronEdgeCaseTest, H10NotAvailable) {
+  TestableVictron v;
+  sensor::Sensor h10;
+  v.set_number_of_automatic_synchronizations_sensor(&h10);
+  v.label_ = "H10";
+  v.value_ = "---";
+  v.handle_value_();
+  EXPECT_TRUE(std::isnan(h10.state));
+}
+
+TEST(VictronEdgeCaseTest, LoadStateOff) {
+  TestableVictron v;
+  binary_sensor::BinarySensor load;
+  v.set_load_state_binary_sensor(&load);
+  v.label_ = "LOAD";
+  v.value_ = "OFF";
+  v.handle_value_();
+  EXPECT_FALSE(load.state);
+}
+
+TEST(VictronEdgeCaseTest, LoadStateLowercaseOn) {
+  TestableVictron v;
+  binary_sensor::BinarySensor load;
+  v.set_load_state_binary_sensor(&load);
+  v.label_ = "LOAD";
+  v.value_ = "On";
+  v.handle_value_();
+  EXPECT_TRUE(load.state);
+}
+
+TEST(VictronEdgeCaseTest, RelayStateOn) {
+  TestableVictron v;
+  binary_sensor::BinarySensor relay;
+  v.set_relay_state_binary_sensor(&relay);
+  v.label_ = "Relay";
+  v.value_ = "On";
+  v.handle_value_();
+  EXPECT_TRUE(relay.state);
+}
+
+TEST(VictronEdgeCaseTest, UnknownPid) {
+  TestableVictron v;
+  text_sensor::TextSensor device_type;
+  v.set_device_type_text_sensor(&device_type);
+  v.label_ = "PID";
+  v.value_ = "0x9999";
+  v.handle_value_();
+  EXPECT_EQ(device_type.state, "Unknown");
+}
+
+TEST(VictronEdgeCaseTest, FweVersionBetaSuffix) {
+  TestableVictron v;
+  text_sensor::TextSensor fwe;
+  v.set_firmware_version_24bit_text_sensor(&fwe);
+  v.label_ = "FWE";
+  v.value_ = "10945";
+  v.handle_value_();
+  EXPECT_EQ(fwe.state, "1.09-beta-45");
+}
+
+TEST(VictronEdgeCaseTest, FweVersionShortForm) {
+  TestableVictron v;
+  text_sensor::TextSensor fwe;
+  v.set_firmware_version_24bit_text_sensor(&fwe);
+  v.label_ = "FWE";
+  v.value_ = "1234";
+  v.handle_value_();
+  EXPECT_EQ(fwe.state, "1234");
+}
+
+TEST(VictronEdgeCaseTest, OffReasonAllBits) {
+  TestableVictron v;
+  sensor::Sensor bitmask;
+  text_sensor::TextSensor reason;
+  v.set_off_reason_bitmask_sensor(&bitmask);
+  v.set_off_reason_text_sensor(&reason);
+  v.label_ = "OR";
+  v.value_ = "0x0000FFFF";
+  v.handle_value_();
+  EXPECT_FLOAT_EQ(bitmask.state, 65535.0f);
+  EXPECT_EQ(reason.state, "No input power;Switched off (power switch);Switched off (device mode register);"
+                          "Remote input;Protection active;Paygo;BMS;Engine shutdown detection;"
+                          "Analysing input voltage;Unknown: Bit 10;Unknown: Bit 11;Unknown: Bit 12;"
+                          "Unknown: Bit 13;Unknown: Bit 14;Unknown: Bit 15;Unknown: Bit 16");
+}
+
+TEST(VictronEdgeCaseTest, BatteryVoltage2And3) {
+  TestableVictron v;
+  sensor::Sensor v2, v3;
+  v.set_battery_voltage_2_sensor(&v2);
+  v.set_battery_voltage_3_sensor(&v3);
+  v.label_ = "V2";
+  v.value_ = "13450";
+  v.handle_value_();
+  v.label_ = "V3";
+  v.value_ = "12300";
+  v.handle_value_();
+  EXPECT_NEAR(v2.state, 13.45f, 0.001f);
+  EXPECT_NEAR(v3.state, 12.30f, 0.001f);
+}
+
+TEST(VictronEdgeCaseTest, BatteryCurrent2And3) {
+  TestableVictron v;
+  sensor::Sensor i2, i3;
+  v.set_battery_current_2_sensor(&i2);
+  v.set_battery_current_3_sensor(&i3);
+  v.label_ = "I2";
+  v.value_ = "5000";
+  v.handle_value_();
+  v.label_ = "I3";
+  v.value_ = "-2500";
+  v.handle_value_();
+  EXPECT_NEAR(i2.state, 5.0f, 0.001f);
+  EXPECT_NEAR(i3.state, -2.5f, 0.001f);
+}
+
+TEST(VictronEdgeCaseTest, AcOutApparentPower) {
+  TestableVictron v;
+  sensor::Sensor ac_s;
+  v.set_ac_out_apparent_power_sensor(&ac_s);
+  v.label_ = "AC_OUT_S";
+  v.value_ = "750";
+  v.handle_value_();
+  EXPECT_FLOAT_EQ(ac_s.state, 750.0f);
+}
+
+TEST(VictronEdgeCaseTest, AuxiliaryVoltageAlarmCounters) {
+  TestableVictron v;
+  sensor::Sensor h13, h14;
+  v.set_number_of_low_auxiliary_voltage_alarms_sensor(&h13);
+  v.set_number_of_high_auxiliary_voltage_alarms_sensor(&h14);
+  v.label_ = "H13";
+  v.value_ = "3";
+  v.handle_value_();
+  v.label_ = "H14";
+  v.value_ = "7";
+  v.handle_value_();
+  EXPECT_FLOAT_EQ(h13.state, 3.0f);
+  EXPECT_FLOAT_EQ(h14.state, 7.0f);
+}
+
+// ── Lookup table exhaustive coverage ─────────────────────────────────────────
+
+TEST(VictronLookupTest, AllChargingModes) {
+  struct TestCase {
+    const char *value;
+    const char *text;
+  };
+  static const TestCase cases[] = {
+      {"0", "Off"},
+      {"1", "Low power"},
+      {"2", "Fault"},
+      {"3", "Bulk"},
+      {"4", "Absorption"},
+      {"5", "Float"},
+      {"6", "Storage"},
+      {"7", "Equalize (manual)"},
+      {"9", "Inverting"},
+      {"11", "Power supply"},
+      {"245", "Starting-up"},
+      {"246", "Repeated absorption"},
+      {"247", "Auto equalize / Recondition"},
+      {"248", "BatterySafe"},
+      {"252", "External control"},
+      {"99", "Unknown"},
+  };
+  for (const auto &tc : cases) {
+    TestableVictron v;
+    text_sensor::TextSensor cs_text;
+    v.set_charging_mode_text_sensor(&cs_text);
+    v.label_ = "CS";
+    v.value_ = tc.value;
+    v.handle_value_();
+    EXPECT_EQ(cs_text.state, tc.text) << "CS=" << tc.value;
+  }
+}
+
+TEST(VictronLookupTest, AllErrorCodes) {
+  struct TestCase {
+    const char *value;
+    const char *text;
+  };
+  static const TestCase cases[] = {
+      {"0", "No error"},
+      {"2", "Battery voltage too high"},
+      {"17", "Charger temperature too high"},
+      {"18", "Charger over current"},
+      {"19", "Charger current reversed"},
+      {"20", "Bulk time limit exceeded"},
+      {"21", "Current sensor issue"},
+      {"26", "Terminals overheated"},
+      {"28", "Converter issue"},
+      {"33", "Input voltage too high (solar panel)"},
+      {"34", "Input current too high (solar panel)"},
+      {"38", "Input shutdown (excessive battery voltage)"},
+      {"39", "Input shutdown (due to current flow during off mode)"},
+      {"65", "Lost communication with one of devices"},
+      {"66", "Synchronised charging device configuration issue"},
+      {"67", "BMS connection lost"},
+      {"68", "Network misconfigured"},
+      {"116", "Factory calibration data lost"},
+      {"117", "Invalid/incompatible firmware"},
+      {"119", "User settings invalid"},
+      {"99", "Unknown"},
+  };
+  for (const auto &tc : cases) {
+    TestableVictron v;
+    text_sensor::TextSensor err_text;
+    v.set_error_text_sensor(&err_text);
+    v.label_ = "ERR";
+    v.value_ = tc.value;
+    v.handle_value_();
+    EXPECT_EQ(err_text.state, tc.text) << "ERR=" << tc.value;
+  }
+}
+
+TEST(VictronLookupTest, AllWarningCodes) {
+  struct TestCase {
+    const char *value;
+    const char *text;
+  };
+  static const TestCase cases[] = {
+      {"0", "No warning"},       {"1", "Low Voltage"},         {"2", "High Voltage"},
+      {"4", "Low SOC"},          {"8", "Low Starter Voltage"}, {"16", "High Starter Voltage"},
+      {"32", "Low Temperature"}, {"64", "High Temperature"},   {"128", "Mid Voltage"},
+      {"256", "Overload"},       {"512", "DC-ripple"},         {"1024", "Low V AC out"},
+      {"2048", "High V AC out"}, {"3", "Multiple warnings"},
+  };
+  for (const auto &tc : cases) {
+    TestableVictron v;
+    text_sensor::TextSensor warn_text;
+    v.set_warning_text_sensor(&warn_text);
+    v.label_ = "WARN";
+    v.value_ = tc.value;
+    v.handle_value_();
+    EXPECT_EQ(warn_text.state, tc.text) << "WARN=" << tc.value;
+  }
+}
+
+TEST(VictronLookupTest, AllDcMonitorModes) {
+  struct TestCase {
+    const char *value;
+    const char *text;
+  };
+  static const TestCase cases[] = {
+      {"-9", "Solar charger"},   {"-8", "Wind turbine"},
+      {"-7", "Shaft generator"}, {"-6", "Alternator"},
+      {"-5", "Fuel cell"},       {"-4", "Water generator"},
+      {"-3", "DC/DC charger"},   {"-2", "AC charger"},
+      {"-1", "Generic source"},  {"0", "Battery monitor (BMV)"},
+      {"1", "Generic load"},     {"2", "Electric drive"},
+      {"3", "Fridge"},           {"4", "Water pump"},
+      {"5", "Bilge pump"},       {"6", "DC system"},
+      {"7", "Inverter"},         {"8", "Water heater"},
+      {"99", "Unknown"},
+  };
+  for (const auto &tc : cases) {
+    TestableVictron v;
+    text_sensor::TextSensor mon_text;
+    v.set_dc_monitor_mode_text_sensor(&mon_text);
+    v.label_ = "MON";
+    v.value_ = tc.value;
+    v.handle_value_();
+    EXPECT_EQ(mon_text.state, tc.text) << "MON=" << tc.value;
+  }
+}
+
+TEST(VictronLookupTest, AllDeviceModes) {
+  struct TestCase {
+    const char *value;
+    const char *text;
+  };
+  static const TestCase cases[] = {
+      {"0", "Off"}, {"2", "On"}, {"4", "Off"}, {"5", "Eco"}, {"9", "Unknown"},
+  };
+  for (const auto &tc : cases) {
+    TestableVictron v;
+    text_sensor::TextSensor mode_text;
+    v.set_device_mode_text_sensor(&mode_text);
+    v.label_ = "MODE";
+    v.value_ = tc.value;
+    v.handle_value_();
+    EXPECT_EQ(mode_text.state, tc.text) << "MODE=" << tc.value;
+  }
+}
+
+TEST(VictronLookupTest, AllTrackingModes) {
+  struct TestCase {
+    const char *value;
+    const char *text;
+  };
+  static const TestCase cases[] = {
+      {"0", "Off"},
+      {"1", "Limited"},
+      {"2", "Active"},
+      {"9", "Unknown"},
+  };
+  for (const auto &tc : cases) {
+    TestableVictron v;
+    text_sensor::TextSensor mppt_text;
+    v.set_tracking_mode_text_sensor(&mppt_text);
+    v.label_ = "MPPT";
+    v.value_ = tc.value;
+    v.handle_value_();
+    EXPECT_EQ(mppt_text.state, tc.text) << "MPPT=" << tc.value;
+  }
+}
+
 }  // namespace esphome::victron::testing
