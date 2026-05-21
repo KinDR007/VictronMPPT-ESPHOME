@@ -57,7 +57,7 @@ time:
 uart:
   id: uart_bus
   tx_pin: D8  # Not connected! The communication is read-only
-  rx_pin: D7  # Connect this this GPIO and GND to the MPPT charger
+  rx_pin: D7  # Connect this GPIO and GND to the MPPT charger
   baud_rate: 19200
   stop_bits: 1
   data_bits: 8

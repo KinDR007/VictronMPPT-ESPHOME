@@ -509,3 +509,9 @@ jobs:
           esphome -s external_components_source components compile debug-esp32-example.yaml
         env:
           PLATFORMIO_LIBDEPS_DIR: ~/.platformio/libdeps
+      - run: |
+          . venv/bin/activate
+          esphome -s external_components_source components compile orion-xs-esp32-example.yaml
+          # esphome -s external_components_source components compile orion-xs-esp8266-example.yaml
+        env:
+          PLATFORMIO_LIBDEPS_DIR: ~/.platformio/libdeps

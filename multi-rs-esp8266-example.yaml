@@ -37,7 +37,7 @@ mqtt:
 uart:
   id: uart_0
   tx_pin: D8  # Not connected! The communication is read-only
-  rx_pin: D7  # Connect this this GPIO and GND to the MPPT charger
+  rx_pin: D7  # Connect this GPIO and GND to the MPPT charger
   baud_rate: 19200
   rx_buffer_size: 256
 

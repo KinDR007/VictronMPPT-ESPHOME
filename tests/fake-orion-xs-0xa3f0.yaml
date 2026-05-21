@@ -1,0 +1,67 @@
+substitutions:
+  name: fake-orion-xs
+  tx_pin: GPIO4
+  rx_pin: GPIO5
+
+esphome:
+  name: ${name}
+
+esp8266:
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+ota:
+  platform: esphome
+
+logger:
+  level: DEBUG
+
+api:
+  reboot_timeout: 0s
+
+uart:
+  baud_rate: 19200
+  tx_pin: ${tx_pin}
+  rx_pin: ${rx_pin}
+  debug:
+    direction: BOTH
+    dummy_receiver: true
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
+
+interval:
+  - interval: 5s
+    then:
+      - uart.write: "\r\nPID\t0xA3F0\r\n"
+      - uart.write: "FWE\t112FF\r\n"
+      - uart.write: "SER#\tHQ2433EWGZZ\r\n"
+      - uart.write: "V\t13220\r\n"
+      - uart.write: "I\t0\r\n"
+      - uart.write: "P\t0\r\n"
+      - uart.write: "DC_IN_V\t1262\r\n"
+      - uart.write: "DC_IN_I\t0\r\n"
+      - uart.write: "DC_IN_P\t0\r\n"
+      - uart.write: "CS\t0\r\n"
+      - uart.write: "OR\t0x00000009\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "Checksum\t\x0d"
+      - delay: 1s
+
+      - uart.write: "\r\nPID\t0xA3F0\r\n"
+      - uart.write: "FWE\t112FF\r\n"
+      - uart.write: "SER#\tHQ2433EWGZZ\r\n"
+      - uart.write: "V\t13230\r\n"
+      - uart.write: "I\t0\r\n"
+      - uart.write: "P\t0\r\n"
+      - uart.write: "DC_IN_V\t1263\r\n"
+      - uart.write: "DC_IN_I\t0\r\n"
+      - uart.write: "DC_IN_P\t0\r\n"
+      - uart.write: "CS\t0\r\n"
+      - uart.write: "OR\t0x00000009\r\n"
+      - uart.write: "ERR\t0\r\n"
+      - uart.write: "Checksum\t\x0b"
