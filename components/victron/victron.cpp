@@ -740,15 +740,13 @@ void VictronComponent::handle_value_() {
 
   if (label_ == "VM") {
     // mV to V
-    this->publish_state_(midpoint_voltage_of_the_battery_bank_sensor_,
-                         strtol(value_.c_str(), nullptr, 10) / 1000.0f);
+    this->publish_state_(midpoint_voltage_of_the_battery_bank_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
     return;
   }
 
   if (label_ == "DM") {
     // Per mill to %
-    this->publish_state_(midpoint_deviation_of_the_battery_bank_sensor_,
-                         strtol(value_.c_str(), nullptr, 10) * 0.10f);
+    this->publish_state_(midpoint_deviation_of_the_battery_bank_sensor_, strtol(value_.c_str(), nullptr, 10) * 0.10f);
     return;
   }
 
@@ -849,8 +847,7 @@ void VictronComponent::handle_value_() {
 
   if (label_ == "H1") {
     // mAh -> Ah
-    this->publish_state_(depth_of_the_deepest_discharge_sensor_,
-                         strtol(value_.c_str(), nullptr, 10) / 1000.0);
+    this->publish_state_(depth_of_the_deepest_discharge_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0);
     return;
   }
 
@@ -862,8 +859,7 @@ void VictronComponent::handle_value_() {
 
   if (label_ == "H3") {
     // mAh -> Ah
-    this->publish_state_(depth_of_the_average_discharge_sensor_,
-                         strtol(value_.c_str(), nullptr, 10) / 1000.0);
+    this->publish_state_(depth_of_the_average_discharge_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0);
     return;
   }
 
@@ -937,22 +933,19 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "H14") {
-    this->publish_state_(number_of_high_auxiliary_voltage_alarms_sensor_,
-                         strtol(value_.c_str(), nullptr, 10));
+    this->publish_state_(number_of_high_auxiliary_voltage_alarms_sensor_, strtol(value_.c_str(), nullptr, 10));
     return;
   }
 
   if (label_ == "H15") {
     // mV to V
-    this->publish_state_(min_auxiliary_battery_voltage_sensor_,
-                         strtol(value_.c_str(), nullptr, 10) / 1000.0f);
+    this->publish_state_(min_auxiliary_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
     return;
   }
 
   if (label_ == "H16") {
     // mV to V
-    this->publish_state_(max_auxiliary_battery_voltage_sensor_,
-                         strtol(value_.c_str(), nullptr, 10) / 1000.0f);
+    this->publish_state_(max_auxiliary_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
     return;
   }
 
