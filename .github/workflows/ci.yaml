@@ -27,9 +27,9 @@ jobs:
   yamllint:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
       - name: Run yamllint
-        uses: frenck/action-yamllint@v1
+        uses: frenck/action-yamllint@34b4bbcaeabedcfefad6adea8c5bbc42af0e2d47  # v1.5.0
         with:
           config: .yamllint
 
@@ -40,10 +40,10 @@ jobs:
       repo-hash: ${{ github.sha }}
     steps:
       - name: Check out this project
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
       - name: Check out code from ESPHome project
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
         with:
           repository: esphome/esphome
           ref: dev
@@ -60,7 +60,7 @@ jobs:
           ln -sf ../venv venv
 
       - name: Archive prepared repository
-        uses: pyTooling/upload-artifact@v4
+        uses: pyTooling/upload-artifact@a59f191f676112c140f4330026bbb6ac19b7a44d  # v7
         with:
           name: bundle
           path: .
@@ -75,7 +75,7 @@ jobs:
       cache-key: ${{ steps.cache-key.outputs.key }}
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -87,12 +87,12 @@ jobs:
         run: echo key="${{ hashFiles('esphome/requirements.txt', 'esphome/requirements_test.txt') }}" >> $GITHUB_OUTPUT
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: Restore Python virtual environment
         id: cache-venv
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
           path: venv
           # yamllint disable-line rule:line-length
@@ -119,7 +119,7 @@ jobs:
         working-directory: esphome
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -151,7 +151,7 @@ jobs:
         working-directory: esphome
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -182,7 +182,7 @@ jobs:
         working-directory: esphome
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -213,7 +213,7 @@ jobs:
         working-directory: esphome
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -244,7 +244,7 @@ jobs:
         working-directory: esphome
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -280,7 +280,7 @@ jobs:
         working-directory: esphome
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -333,7 +333,7 @@ jobs:
 
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -348,7 +348,7 @@ jobs:
 
       - name: Cache platformio
         if: github.ref == 'refs/heads/main'
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
           path: ~/.platformio
           key: platformio-${{ matrix.pio_cache_key }}-${{ hashFiles('esphome/platformio.ini') }}
@@ -356,7 +356,7 @@ jobs:
 
       - name: Cache platformio
         if: github.ref != 'refs/heads/main'
-        uses: actions/cache/restore@v4.2.3
+        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
           path: ~/.platformio
           key: platformio-${{ matrix.pio_cache_key }}-${{ hashFiles('esphome/platformio.ini') }}
@@ -400,7 +400,7 @@ jobs:
       - common
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -438,7 +438,7 @@ jobs:
       - common
     steps:
       - name: Download prepared repository
-        uses: pyTooling/download-artifact@v4
+        uses: pyTooling/download-artifact@dc575e4e9df4b6e3580712285f1c90f579bb8712  # v8
         with:
           name: bundle
           path: .
@@ -451,7 +451,7 @@ jobs:
 
       - name: Cache platformio
         if: github.ref == 'refs/heads/main'
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
           path: ~/.platformio
           key: platformio-compile-${{ hashFiles('esphome/platformio.ini') }}
@@ -459,7 +459,7 @@ jobs:
 
       - name: Cache platformio
         if: github.ref != 'refs/heads/main'
-        uses: actions/cache/restore@v4.2.3
+        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
           path: ~/.platformio
           key: platformio-compile-${{ hashFiles('esphome/platformio.ini') }}
