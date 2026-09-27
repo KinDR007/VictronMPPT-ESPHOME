@@ -91,7 +91,10 @@ CONF_DC_INPUT_VOLTAGE = "dc_input_voltage"
 CONF_DC_INPUT_CURRENT = "dc_input_current"
 CONF_DC_INPUT_POWER = "dc_input_power"
 
-UNIT_AMPERE_HOUR = "Ah"
+try:
+    from esphome.components.const import UNIT_AMPERE_HOUR
+except ImportError:  # ESPHome < 2026.2.0
+    UNIT_AMPERE_HOUR = "Ah"
 
 SENSOR_DEFS = {
     CONF_BATTERY_VOLTAGE: {
