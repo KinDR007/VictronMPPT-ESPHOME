@@ -81,8 +81,6 @@ void VictronComponent::dump_config() {  // NOLINT(google-readability-function-si
   LOG_TEXT_SENSOR("  ", "Alarm Condition Active", alarm_condition_active_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Alarm Reason", alarm_reason_text_sensor_);
   LOG_TEXT_SENSOR("  ", "Model Description", model_description_text_sensor_);
-
-  check_uart_settings(19200);
 }
 
 void VictronComponent::loop() {

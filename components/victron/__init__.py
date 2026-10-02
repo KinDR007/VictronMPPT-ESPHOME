@@ -41,3 +41,11 @@ def to_code(config):
     yield uart.register_uart_device(var, config)
 
     cg.add(var.set_throttle(config[CONF_THROTTLE]))
+
+
+if hasattr(uart, "final_validate_device_schema"):
+    FINAL_VALIDATE_SCHEMA = uart.final_validate_device_schema(
+        "victron",
+        baud_rate=19200,
+        require_rx=True,
+    )
