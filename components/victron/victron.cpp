@@ -661,6 +661,8 @@ static std::string device_type_text(int value) {
       return "Orion XS 12V/12V-50A";
     case 0xA3F1:
       return "Orion XS 1400";
+    case 0xA3F2:
+      return "Orion XS 12V/12V-70A";
     case 0xA048:
       return "BlueSolar MPPT 75|50 rev2";
     case 0xA072:
