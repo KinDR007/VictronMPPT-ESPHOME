@@ -46,7 +46,7 @@ def to_code(config):
 
 if hasattr(uart, "final_validate_device_schema"):
     FINAL_VALIDATE_SCHEMA = uart.final_validate_device_schema(
-        "victron",
+        DOMAIN,
         baud_rate=19200,
         require_rx=True,
     )
