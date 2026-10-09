@@ -3,9 +3,14 @@
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
 
+// Fallback for ESPHome < 2026.10.0
+#ifndef ESPHOME_LOG_TAG
+#define ESPHOME_LOG_TAG(name, tag) static const char *const name = tag
+#endif
+
 namespace esphome::victron {
 
-static constexpr char TAG[] = "victron";
+ESPHOME_LOG_TAG(TAG, "victron");
 
 static constexpr uint8_t OFF_REASONS_SIZE = 16;
 static constexpr const char *OFF_REASONS[OFF_REASONS_SIZE] = {
