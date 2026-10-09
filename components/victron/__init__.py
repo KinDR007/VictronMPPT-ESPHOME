@@ -8,6 +8,7 @@ AUTO_LOAD = ["binary_sensor", "sensor", "text_sensor"]
 DEPENDENCIES = ["uart"]
 
 CODEOWNERS = ["@KinDR007"]
+DOMAIN = "victron"
 
 MULTI_CONF = True
 
