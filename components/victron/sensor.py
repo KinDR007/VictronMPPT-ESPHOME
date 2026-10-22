@@ -31,6 +31,11 @@ from esphome.const import (
 
 from . import CONF_VICTRON_ID, VICTRON_COMPONENT_SCHEMA
 
+try:
+    from esphome.components.const import CONF_ERROR_CODE
+except ImportError:  # ESPHome < 2026.11.0
+    CONF_ERROR_CODE = "error_code"
+
 DEPENDENCIES = ["victron"]
 
 CODEOWNERS = ["@KinDR007"]
@@ -53,7 +58,6 @@ CONF_BATTERY_CURRENT_2 = "battery_current_2"
 CONF_BATTERY_CURRENT_3 = "battery_current_3"
 CONF_DAY_NUMBER = "day_number"
 CONF_CHARGING_MODE_ID = "charging_mode_id"
-CONF_ERROR_CODE = "error_code"
 CONF_WARNING_CODE = "warning_code"
 CONF_TRACKING_MODE_ID = "tracking_mode_id"
 CONF_DEVICE_MODE_ID = "device_mode_id"
