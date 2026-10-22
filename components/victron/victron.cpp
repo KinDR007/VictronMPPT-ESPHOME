@@ -154,7 +154,7 @@ void VictronComponent::loop() {
   }
 }
 
-static std::string charging_mode_text(int value) {
+static const char *charging_mode_text(int value) {
   switch (value) {
     case 0:
       return "Off";
@@ -191,7 +191,7 @@ static std::string charging_mode_text(int value) {
   }
 }
 
-static std::string error_code_text(int value) {
+static const char *error_code_text(int value) {
   switch (value) {
     case 0:
       return "No error";
@@ -238,7 +238,7 @@ static std::string error_code_text(int value) {
   }
 }
 
-static std::string warning_code_text(int value) {
+static const char *warning_code_text(int value) {
   switch (value) {
     case 0:
       return "No warning";
@@ -271,7 +271,7 @@ static std::string warning_code_text(int value) {
   }
 }
 
-static std::string tracking_mode_text(int value) {
+static const char *tracking_mode_text(int value) {
   switch (value) {
     case 0:
       return "Off";
@@ -284,7 +284,7 @@ static std::string tracking_mode_text(int value) {
   }
 }
 
-static std::string device_mode_text(int value) {
+static const char *device_mode_text(int value) {
   switch (value) {
     case 0:
       return "Off";
@@ -299,7 +299,7 @@ static std::string device_mode_text(int value) {
   }
 }
 
-static std::string dc_monitor_mode_text(int value) {
+static const char *dc_monitor_mode_text(int value) {
   switch (value) {
     case -9:
       return "Solar charger";
@@ -342,7 +342,7 @@ static std::string dc_monitor_mode_text(int value) {
   }
 }
 
-static std::string device_type_text(int value) {
+static const char *device_type_text(int value) {
   switch (value) {
     case 0x203:
       return "BMV-700";
@@ -1138,7 +1138,24 @@ void VictronComponent::publish_state_(text_sensor::TextSensor *text_sensor, cons
   text_sensor->publish_state(state);
 }
 
+void VictronComponent::publish_state_(text_sensor::TextSensor *text_sensor, const char *state) {
+  if (text_sensor == nullptr)
+    return;
+
+  text_sensor->publish_state(state);
+}
+
 void VictronComponent::publish_state_once_(text_sensor::TextSensor *text_sensor, const std::string &state) {
+  if (text_sensor == nullptr)
+    return;
+
+  if (text_sensor->has_state())
+    return;
+
+  text_sensor->publish_state(state);
+}
+
+void VictronComponent::publish_state_once_(text_sensor::TextSensor *text_sensor, const char *state) {
   if (text_sensor == nullptr)
     return;
 
