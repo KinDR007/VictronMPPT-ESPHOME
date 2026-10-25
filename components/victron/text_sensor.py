@@ -5,8 +5,9 @@ import esphome.config_validation as cv
 from . import CONF_VICTRON_ID, VICTRON_COMPONENT_SCHEMA
 
 try:
-    from esphome.components.const import CONF_SERIAL_NUMBER
+    from esphome.components.const import CONF_DEVICE_TYPE, CONF_SERIAL_NUMBER
 except ImportError:  # ESPHome < 2026.11.0
+    CONF_DEVICE_TYPE = "device_type"
     CONF_SERIAL_NUMBER = "serial_number"
 
 DEPENDENCIES = ["victron"]
@@ -20,7 +21,6 @@ CONF_TRACKING_MODE = "tracking_mode"
 CONF_DEVICE_MODE = "device_mode"
 CONF_FIRMWARE_VERSION = "firmware_version"
 CONF_FIRMWARE_VERSION_24BIT = "firmware_version_24bit"
-CONF_DEVICE_TYPE = "device_type"
 CONF_HARDWARE_REVISION = "hardware_revision"
 
 CONF_ALARM_CONDITION_ACTIVE = "alarm_condition_active"
