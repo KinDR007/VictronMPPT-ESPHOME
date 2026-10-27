@@ -5,6 +5,10 @@ namespace esphome::victron::testing {
 
 class TestableVictron : public VictronComponent {
  public:
+  TestableVictron() { this->set_validate_checksum(false); }
+
+  using VictronComponent::clear_staged_;
+  using VictronComponent::commit_staged_;
   using VictronComponent::handle_value_;
   using VictronComponent::label_;
   using VictronComponent::value_;

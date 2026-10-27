@@ -26,8 +26,12 @@ CONFIG_SCHEMA = VICTRON_COMPONENT_SCHEMA.extend(
 
 def to_code(config):
     hub = yield cg.get_variable(config[CONF_VICTRON_ID])
+    count = 0
     for key in BINARY_SENSOR_DEFS:
         if key in config:
+            count += 1
             conf = config[key]
             sens = yield binary_sensor.new_binary_sensor(conf)
             cg.add(getattr(hub, f"set_{key}_binary_sensor")(sens))
+    if count > 0:
+        cg.add(hub.reserve_staged_binaries(count))
