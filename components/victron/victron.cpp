@@ -88,12 +88,33 @@ void VictronComponent::dump_config() {  // NOLINT(google-readability-function-si
   LOG_TEXT_SENSOR("  ", "Model Description", model_description_text_sensor_);
 }
 
+void VictronComponent::commit_staged_() {
+  for (const auto &item : this->staged_numerics_) {
+    item.sensor->publish_state(item.value);
+  }
+  for (const auto &item : this->staged_binaries_) {
+    item.sensor->publish_state(item.state);
+  }
+  for (const auto &item : this->staged_texts_) {
+    item.sensor->publish_state(item.state);
+  }
+  this->clear_staged_();
+}
+
+void VictronComponent::clear_staged_() {
+  this->staged_numerics_.clear();
+  this->staged_binaries_.clear();
+  this->staged_texts_.clear();
+}
+
 void VictronComponent::loop() {
   const uint32_t now = millis();
   if ((state_ > 0) && (now - last_transmission_ >= 200)) {
     // last transmission too long ago. Reset RX index.
     ESP_LOGW(TAG, "Last transmission too long ago");
     state_ = 0;
+    checksum_ = 0;
+    this->clear_staged_();
   }
 
   if (!available())
@@ -103,6 +124,7 @@ void VictronComponent::loop() {
   while (available()) {
     uint8_t c;
     read_byte(&c);
+    checksum_ = (checksum_ + c) & 0xff;
     if (state_ == 0) {
       if (c == '\r' || c == '\n') {
         continue;
@@ -115,6 +137,8 @@ void VictronComponent::loop() {
       // Start of a ve.direct hex frame
       if (c == ':') {
         state_ = 3;
+        checksum_ = 0;
+        this->clear_staged_();
         continue;
       }
       if (c == '\t') {
@@ -127,17 +151,38 @@ void VictronComponent::loop() {
     if (state_ == 2) {
       if (label_ == "Checksum") {
         state_ = 0;
-        // The checksum is used as end of frame indicator
-        if (now - this->last_publish_ >= this->throttle_) {
-          this->last_publish_ = now;
-          this->publishing_ = true;
+        // The checksum is used as end of frame indicator.
+        // The modulo-256 sum of all bytes in the frame should be 0.
+        if (this->validate_checksum_) {
+          if (checksum_ != 0) {
+            ESP_LOGW(TAG, "Dropping frame due to checksum mismatch (calculated %u)", checksum_);
+            this->clear_staged_();
+          } else if (now - this->last_publish_ >= this->throttle_) {
+            this->last_publish_ = now;
+            this->commit_staged_();
+          } else {
+            this->clear_staged_();
+          }
         } else {
-          this->publishing_ = false;
+          if (checksum_ != 0) {
+            ESP_LOGW(TAG, "Processing frame with checksum error. Consider enabling option 'validate_checksum'");
+          }
+          if (now - this->last_publish_ >= this->throttle_) {
+            this->last_publish_ = now;
+            this->publishing_ = true;
+          } else {
+            this->publishing_ = false;
+          }
         }
+        checksum_ = 0;
         continue;
       }
       if (c == '\r' || c == '\n') {
-        if (this->publishing_) {
+        if (!this->validate_checksum_) {
+          if (this->publishing_) {
+            handle_value_();
+          }
+        } else {
           handle_value_();
         }
         state_ = 0;
@@ -149,6 +194,8 @@ void VictronComponent::loop() {
     if (state_ == 3) {
       if (c == '\r' || c == '\n') {
         state_ = 0;
+        checksum_ = 0;
+        this->clear_staged_();
       }
     }
   }
@@ -1121,48 +1168,58 @@ void VictronComponent::publish_state_(binary_sensor::BinarySensor *binary_sensor
   if (binary_sensor == nullptr)
     return;
 
-  binary_sensor->publish_state(state);
+  if (!this->validate_checksum_) {
+    binary_sensor->publish_state(state);
+    return;
+  }
+  this->staged_binaries_.push_back({binary_sensor, state});
 }
 
 void VictronComponent::publish_state_(sensor::Sensor *sensor, float value) {
   if (sensor == nullptr)
     return;
 
-  sensor->publish_state(value);
+  if (!this->validate_checksum_) {
+    sensor->publish_state(value);
+    return;
+  }
+  this->staged_numerics_.push_back({sensor, value});
 }
 
 void VictronComponent::publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state) {
   if (text_sensor == nullptr)
     return;
 
-  text_sensor->publish_state(state);
+  if (!this->validate_checksum_) {
+    text_sensor->publish_state(state);
+    return;
+  }
+  this->staged_texts_.push_back({text_sensor, state});
 }
 
 void VictronComponent::publish_state_(text_sensor::TextSensor *text_sensor, const char *state) {
   if (text_sensor == nullptr)
     return;
 
-  text_sensor->publish_state(state);
+  if (!this->validate_checksum_) {
+    text_sensor->publish_state(state);
+    return;
+  }
+  this->staged_texts_.push_back({text_sensor, state});
 }
 
 void VictronComponent::publish_state_once_(text_sensor::TextSensor *text_sensor, const std::string &state) {
-  if (text_sensor == nullptr)
+  if (text_sensor == nullptr || text_sensor->has_state())
     return;
 
-  if (text_sensor->has_state())
-    return;
-
-  text_sensor->publish_state(state);
+  this->publish_state_(text_sensor, state);
 }
 
 void VictronComponent::publish_state_once_(text_sensor::TextSensor *text_sensor, const char *state) {
-  if (text_sensor == nullptr)
+  if (text_sensor == nullptr || text_sensor->has_state())
     return;
 
-  if (text_sensor->has_state())
-    return;
-
-  text_sensor->publish_state(state);
+  this->publish_state_(text_sensor, state);
 }
 
 }  // namespace esphome::victron

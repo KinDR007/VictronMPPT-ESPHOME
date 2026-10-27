@@ -1059,4 +1059,75 @@ TEST(VictronLookupTest, AllTrackingModes) {
   }
 }
 
+// ── Checksum validation & staged publishing ──────────────────────────────────
+
+TEST(VictronChecksumTest, StagedPublishingWhenEnabled) {
+  TestableVictron v;
+  v.set_validate_checksum(true);
+  sensor::Sensor bat_v;
+  binary_sensor::BinarySensor load;
+  text_sensor::TextSensor model;
+  v.set_battery_voltage_sensor(&bat_v);
+  v.set_load_state_binary_sensor(&load);
+  v.set_model_description_text_sensor(&model);
+
+  v.label_ = "V";
+  v.value_ = "12450";
+  v.handle_value_();
+
+  v.label_ = "LOAD";
+  v.value_ = "ON";
+  v.handle_value_();
+
+  v.label_ = "BMV";
+  v.value_ = "BMV-712 Smart";
+  v.handle_value_();
+
+  // Sensors should remain uncommitted while frame is in flight
+  EXPECT_FALSE(bat_v.has_state());
+  EXPECT_FALSE(load.has_state());
+  EXPECT_FALSE(model.has_state());
+
+  // Once frame passes validation, staged readings are published atomically
+  v.commit_staged_();
+  EXPECT_TRUE(bat_v.has_state());
+  EXPECT_NEAR(bat_v.state, 12.45f, 0.001f);
+  EXPECT_TRUE(load.has_state());
+  EXPECT_TRUE(load.state);
+  EXPECT_TRUE(model.has_state());
+  EXPECT_EQ(model.state, "BMV-712 Smart");
+}
+
+TEST(VictronChecksumTest, StagedDiscardOnClear) {
+  TestableVictron v;
+  v.set_validate_checksum(true);
+  sensor::Sensor bat_v;
+  v.set_battery_voltage_sensor(&bat_v);
+
+  v.label_ = "V";
+  v.value_ = "12450";
+  v.handle_value_();
+
+  EXPECT_FALSE(bat_v.has_state());
+
+  // Corrupt frame or timeout discards staged readings
+  v.clear_staged_();
+  EXPECT_FALSE(bat_v.has_state());
+}
+
+TEST(VictronChecksumTest, DirectPublishingWhenDisabled) {
+  TestableVictron v;
+  v.set_validate_checksum(false);
+  sensor::Sensor bat_v;
+  v.set_battery_voltage_sensor(&bat_v);
+
+  v.label_ = "V";
+  v.value_ = "12450";
+  v.handle_value_();
+
+  // Without checksum validation, publishes immediately for backward compatibility
+  EXPECT_TRUE(bat_v.has_state());
+  EXPECT_NEAR(bat_v.state, 12.45f, 0.001f);
+}
+
 }  // namespace esphome::victron::testing

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "esphome/core/component.h"
 #include "esphome/components/binary_sensor/binary_sensor.h"
 #include "esphome/components/sensor/sensor.h"
@@ -11,6 +12,14 @@ namespace esphome::victron {
 class VictronComponent : public uart::UARTDevice, public Component {
  public:
   void set_throttle(uint32_t throttle) { this->throttle_ = throttle; }
+  void set_validate_checksum(bool validate_checksum) { this->validate_checksum_ = validate_checksum; }
+  void reserve_staged_numerics(size_t count) {
+    this->staged_numerics_.reserve(this->staged_numerics_.capacity() + count);
+  }
+  void reserve_staged_binaries(size_t count) {
+    this->staged_binaries_.reserve(this->staged_binaries_.capacity() + count);
+  }
+  void reserve_staged_texts(size_t count) { this->staged_texts_.reserve(this->staged_texts_.capacity() + count); }
   void set_load_state_binary_sensor(binary_sensor::BinarySensor *load_state_binary_sensor) {
     load_state_binary_sensor_ = load_state_binary_sensor;
   }
@@ -218,6 +227,8 @@ class VictronComponent : public uart::UARTDevice, public Component {
 
  protected:
   void handle_value_();
+  void commit_staged_();
+  void clear_staged_();
   void publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state);
   void publish_state_(sensor::Sensor *sensor, float value);
   void publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state);
@@ -300,13 +311,33 @@ class VictronComponent : public uart::UARTDevice, public Component {
   text_sensor::TextSensor *alarm_reason_text_sensor_{nullptr};
   text_sensor::TextSensor *model_description_text_sensor_{nullptr};
 
-  bool publishing_{true};
   int state_{0};
   std::string label_;
   std::string value_;
   uint32_t last_transmission_{0};
   uint32_t last_publish_{0};
   uint32_t throttle_{0};
+
+  bool publishing_{true};
+  bool validate_checksum_{true};
+  uint8_t checksum_{0};
+
+  struct StagedNumeric {
+    sensor::Sensor *sensor;
+    float value;
+  };
+  struct StagedBinary {
+    binary_sensor::BinarySensor *sensor;
+    bool state;
+  };
+  struct StagedText {
+    text_sensor::TextSensor *sensor;
+    std::string state;
+  };
+
+  std::vector<StagedNumeric> staged_numerics_;
+  std::vector<StagedBinary> staged_binaries_;
+  std::vector<StagedText> staged_texts_;
 };
 
 }  // namespace esphome::victron
