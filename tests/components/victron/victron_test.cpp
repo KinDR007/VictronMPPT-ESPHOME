@@ -801,6 +801,22 @@ TEST(VictronEdgeCaseTest, UnknownPid) {
   EXPECT_EQ(device_type.state, "Unknown");
 }
 
+TEST(VictronEdgeCaseTest, HashCollidingLabelIsIgnored) {
+  // "4JS5CAA" has the same FNV-1a hash as "SER#" (0xd5701dc2) and must not be dispatched to it
+  static_assert(fnv1a_hash("4JS5CAA") == fnv1a_hash("SER#"));
+  TestableVictron v;
+  text_sensor::TextSensor serial;
+  v.set_serial_number_text_sensor(&serial);
+  v.label_ = "4JS5CAA";
+  v.value_ = "HQ00000000";
+  v.handle_value_();
+  EXPECT_FALSE(serial.has_state());
+
+  v.label_ = "SER#";
+  v.handle_value_();
+  EXPECT_EQ(serial.state, "HQ00000000");
+}
+
 TEST(VictronEdgeCaseTest, FweVersionBetaSuffix) {
   TestableVictron v;
   text_sensor::TextSensor fwe;

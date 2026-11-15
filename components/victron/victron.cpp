@@ -2,6 +2,7 @@
 #include "esphome/core/log.h"
 #include <algorithm>  // std::min
 #include "esphome/core/helpers.h"
+#include "esphome/core/progmem.h"
 
 // Fallback for ESPHome < 2026.10.0
 #ifndef ESPHOME_LOG_TAG
@@ -719,57 +720,87 @@ static std::string off_reason_text(uint32_t mask) {
 
 void VictronComponent::handle_value_() {
   int value;
+  const char *label = this->label_.c_str();
 
-  switch (fnv1a_hash(label_)) {
+  // The hash selects the case; strcmp rules out hash collisions with unknown or corrupted labels.
+  switch (fnv1a_hash(label)) {
     case fnv1a_hash("V"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("V")) != 0)
+        break;
       this->publish_state_(battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("V2"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("V2")) != 0)
+        break;
       // mV to V
       this->publish_state_(battery_voltage_2_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("V3"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("V3")) != 0)
+        break;
       // mV to V
       this->publish_state_(battery_voltage_3_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("VS"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("VS")) != 0)
+        break;
       // mV to V
       this->publish_state_(auxiliary_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("VM"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("VM")) != 0)
+        break;
       // mV to V
       this->publish_state_(midpoint_voltage_of_the_battery_bank_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("DM"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("DM")) != 0)
+        break;
       // Per mill to %
       this->publish_state_(midpoint_deviation_of_the_battery_bank_sensor_, strtol(value_.c_str(), nullptr, 10) * 0.10f);
       return;
     case fnv1a_hash("VPV"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("VPV")) != 0)
+        break;
       // mV to V
       this->publish_state_(panel_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("PPV"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("PPV")) != 0)
+        break;
       this->publish_state_(panel_power_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("I"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("I")) != 0)
+        break;
       // mA to A
       this->publish_state_(battery_current_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("I2"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("I2")) != 0)
+        break;
       // mA to A
       this->publish_state_(battery_current_2_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("I3"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("I3")) != 0)
+        break;
       // mA to A
       this->publish_state_(battery_current_3_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("IL"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("IL")) != 0)
+        break;
       this->publish_state_(load_current_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("LOAD"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("LOAD")) != 0)
+        break;
       this->publish_state_(load_state_binary_sensor_, value_ == "ON" || value_ == "On");
       return;
     case fnv1a_hash("T"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("T")) != 0)
+        break;
       if (value_ == "---") {
         this->publish_state_(battery_temperature_sensor_, NAN);
         return;
@@ -777,29 +808,45 @@ void VictronComponent::handle_value_() {
       this->publish_state_(battery_temperature_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("P"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("P")) != 0)
+        break;
       this->publish_state_(instantaneous_power_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("CE"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("CE")) != 0)
+        break;
       // mAh -> Ah
       this->publish_state_(consumed_amp_hours_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("SOC"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("SOC")) != 0)
+        break;
       // Per mill to %
       this->publish_state_(state_of_charge_sensor_, strtol(value_.c_str(), nullptr, 10) * 0.10f);
       return;
     case fnv1a_hash("TTG"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("TTG")) != 0)
+        break;
       this->publish_state_(time_to_go_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("Alarm"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("Alarm")) != 0)
+        break;
       this->publish_state_(alarm_condition_active_text_sensor_, value_);
       return;
     case fnv1a_hash("Relay"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("Relay")) != 0)
+        break;
       this->publish_state_(relay_state_binary_sensor_, value_ == "ON" || value_ == "On");
       return;
     case fnv1a_hash("AR"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("AR")) != 0)
+        break;
       this->publish_state_(alarm_reason_text_sensor_, error_code_text(strtol(value_.c_str(), nullptr, 10)));
       return;
     case fnv1a_hash("OR"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("OR")) != 0)
+        break;
       // Format: 0x00000001
       if (value_.size() > 2 && value_[0] == '0' && (value_[1] == 'x' || value_[1] == 'X')) {
         auto off_reason_bitmask = parse_hex<uint32_t>(value_.c_str() + 2, value_.size() - 2);
@@ -810,24 +857,36 @@ void VictronComponent::handle_value_() {
       }
       return;
     case fnv1a_hash("H1"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H1")) != 0)
+        break;
       // mAh -> Ah
       this->publish_state_(depth_of_the_deepest_discharge_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0);
       return;
     case fnv1a_hash("H2"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H2")) != 0)
+        break;
       // mAh -> Ah
       this->publish_state_(depth_of_the_last_discharge_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H3"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H3")) != 0)
+        break;
       // mAh -> Ah
       this->publish_state_(depth_of_the_average_discharge_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0);
       return;
     case fnv1a_hash("H4"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H4")) != 0)
+        break;
       this->publish_state_(number_of_charge_cycles_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H5"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H5")) != 0)
+        break;
       this->publish_state_(number_of_full_discharges_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H6"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H6")) != 0)
+        break;
       if (value_ == "---") {
         this->publish_state_(cumulative_amp_hours_drawn_sensor_, NAN);
         return;
@@ -836,14 +895,20 @@ void VictronComponent::handle_value_() {
       this->publish_state_(cumulative_amp_hours_drawn_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H7"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H7")) != 0)
+        break;
       // mV to V
       this->publish_state_(min_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H8"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H8")) != 0)
+        break;
       // mV to V
       this->publish_state_(max_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H9"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H9")) != 0)
+        break;
       if (value_ == "---") {
         this->publish_state_(last_full_charge_sensor_, NAN);
         return;
@@ -852,6 +917,8 @@ void VictronComponent::handle_value_() {
       this->publish_state_(last_full_charge_sensor_, (float) strtol(value_.c_str(), nullptr, 10) / 60.0f);
       return;
     case fnv1a_hash("H10"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H10")) != 0)
+        break;
       if (value_ == "---") {
         this->publish_state_(number_of_automatic_synchronizations_sensor_, NAN);
         return;
@@ -859,70 +926,106 @@ void VictronComponent::handle_value_() {
       this->publish_state_(number_of_automatic_synchronizations_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H11"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H11")) != 0)
+        break;
       this->publish_state_(number_of_low_main_voltage_alarms_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H12"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H12")) != 0)
+        break;
       this->publish_state_(number_of_high_main_voltage_alarms_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H13"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H13")) != 0)
+        break;
       this->publish_state_(number_of_low_auxiliary_voltage_alarms_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H14"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H14")) != 0)
+        break;
       this->publish_state_(number_of_high_auxiliary_voltage_alarms_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H15"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H15")) != 0)
+        break;
       // mV to V
       this->publish_state_(min_auxiliary_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H16"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H16")) != 0)
+        break;
       // mV to V
       this->publish_state_(max_auxiliary_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     // "H17"    0.01 kWh   Amount of discharged energy (BMV) / Amount of produced energy (DC monitor)
     case fnv1a_hash("H17"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H17")) != 0)
+        break;
       // Wh
       this->publish_state_(amount_of_discharged_energy_sensor_, strtol(value_.c_str(), nullptr, 10) * 10.0f);
       return;
     // "H18"    0.01 kWh   Amount of charged energy (BMV) / Amount of consumed energy (DC monitor)
     case fnv1a_hash("H18"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H18")) != 0)
+        break;
       // Wh
       this->publish_state_(amount_of_charged_energy_sensor_, strtol(value_.c_str(), nullptr, 10) * 10.0f);
       return;
     case fnv1a_hash("H19"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H19")) != 0)
+        break;
       this->publish_state_(yield_total_sensor_, strtol(value_.c_str(), nullptr, 10) * 10.0f);
       return;
     case fnv1a_hash("H20"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H20")) != 0)
+        break;
       this->publish_state_(yield_today_sensor_, strtol(value_.c_str(), nullptr, 10) * 10.0f);
       return;
     case fnv1a_hash("H21"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H21")) != 0)
+        break;
       this->publish_state_(max_power_today_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H22"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H22")) != 0)
+        break;
       this->publish_state_(yield_yesterday_sensor_, strtol(value_.c_str(), nullptr, 10) * 10.0f);
       return;
     case fnv1a_hash("H23"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("H23")) != 0)
+        break;
       this->publish_state_(max_power_yesterday_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("ERR"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("ERR")) != 0)
+        break;
       value = strtol(value_.c_str(), nullptr, 10);
       this->publish_state_(error_code_sensor_, value);
       this->publish_state_(error_text_sensor_, error_code_text(value));
       return;
     case fnv1a_hash("CS"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("CS")) != 0)
+        break;
       value = strtol(value_.c_str(), nullptr, 10);
       this->publish_state_(charging_mode_id_sensor_, (float) value);
       this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
       return;
     // "BMV"               Model description (deprecated)
     case fnv1a_hash("BMV"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("BMV")) != 0)
+        break;
       this->publish_state_(model_description_text_sensor_, value_);
       return;
     case fnv1a_hash("FW"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("FW")) != 0)
+        break;
       if (value_.size() > 2)
         value_.insert(value_.size() - 2, ".");
       this->publish_state_once_(firmware_version_text_sensor_, value_);
       return;
     case fnv1a_hash("FWE"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("FWE")) != 0)
+        break;
       if (this->firmware_version_24bit_text_sensor_ == nullptr ||
           this->firmware_version_24bit_text_sensor_->has_state())
         return;
@@ -940,65 +1043,94 @@ void VictronComponent::handle_value_() {
       this->publish_state_once_(firmware_version_24bit_text_sensor_, value_);
       return;
     case fnv1a_hash("PID"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("PID")) != 0)
+        break;
       if (this->device_type_text_sensor_ != nullptr && !this->device_type_text_sensor_->has_state()) {
         this->publish_state_once_(device_type_text_sensor_, device_type_text(strtol(value_.c_str(), nullptr, 0)));
       }
       return;
     case fnv1a_hash("SER#"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("SER#")) != 0)
+        break;
       if (this->serial_number_text_sensor_ != nullptr && !this->serial_number_text_sensor_->has_state()) {
         this->publish_state_once_(serial_number_text_sensor_, value_);
       }
       return;
     case fnv1a_hash("HC#"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("HC#")) != 0)
+        break;
       if (this->hardware_revision_text_sensor_ != nullptr && !this->hardware_revision_text_sensor_->has_state()) {
         this->publish_state_once_(hardware_revision_text_sensor_, value_);
       }
       return;
     case fnv1a_hash("HSDS"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("HSDS")) != 0)
+        break;
       this->publish_state_(day_number_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("MODE"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("MODE")) != 0)
+        break;
       value = strtol(value_.c_str(), nullptr, 10);
       this->publish_state_(device_mode_id_sensor_, (float) value);
       this->publish_state_(device_mode_text_sensor_, device_mode_text(value));
       return;
     case fnv1a_hash("AC_OUT_V"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("AC_OUT_V")) != 0)
+        break;
       this->publish_state_(ac_out_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 100.0f);
       return;
     case fnv1a_hash("AC_OUT_I"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("AC_OUT_I")) != 0)
+        break;
       this->publish_state_(ac_out_current_sensor_, std::max(0.0f, strtol(value_.c_str(), nullptr, 10) / 10.0f));
       return;
     case fnv1a_hash("AC_OUT_S"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("AC_OUT_S")) != 0)
+        break;
       this->publish_state_(ac_out_apparent_power_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("WARN"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("WARN")) != 0)
+        break;
       value = strtol(value_.c_str(), nullptr, 10);
       this->publish_state_(warning_code_sensor_, value);
       this->publish_state_(warning_text_sensor_, warning_code_text(value));
       return;
     case fnv1a_hash("MPPT"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("MPPT")) != 0)
+        break;
       value = strtol(value_.c_str(), nullptr, 10);
       this->publish_state_(tracking_mode_id_sensor_, (float) value);
       this->publish_state_(tracking_mode_text_sensor_, tracking_mode_text(value));
       return;
     case fnv1a_hash("MON"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("MON")) != 0)
+        break;
       value = strtol(value_.c_str(), nullptr, 10);
       this->publish_state_(dc_monitor_mode_id_sensor_, (float) value);
       this->publish_state_(dc_monitor_mode_text_sensor_, dc_monitor_mode_text(value));
       return;
     case fnv1a_hash("DC_IN_V"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("DC_IN_V")) != 0)
+        break;
       this->publish_state_(dc_input_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 100.0f);
       return;
     case fnv1a_hash("DC_IN_I"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("DC_IN_I")) != 0)
+        break;
       this->publish_state_(dc_input_current_sensor_, strtol(value_.c_str(), nullptr, 10) / 10.0f);
       return;
     case fnv1a_hash("DC_IN_P"):
+      if (ESPHOME_strcmp_P(label, ESPHOME_PSTR("DC_IN_P")) != 0)
+        break;
       this->publish_state_(dc_input_power_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     default:
-      ESP_LOGD(TAG, "Unhandled property: %s %s", label_.c_str(), value_.c_str());
-      return;
+      break;
   }
+
+  ESP_LOGD(TAG, "Unhandled property: %s %s", label, value_.c_str());
 }
 
 void VictronComponent::publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state) {
