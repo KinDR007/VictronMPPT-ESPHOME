@@ -842,10 +842,13 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "OR") {
-    auto off_reason_bitmask = parse_hex<uint32_t>(value_.substr(2, value_.size() - 2));
-    if (off_reason_bitmask) {
-      this->publish_state_(off_reason_bitmask_sensor_, *off_reason_bitmask);
-      this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
+    // Format: 0x00000001
+    if (value_.size() > 2 && value_[0] == '0' && (value_[1] == 'x' || value_[1] == 'X')) {
+      auto off_reason_bitmask = parse_hex<uint32_t>(value_.c_str() + 2, value_.size() - 2);
+      if (off_reason_bitmask) {
+        this->publish_state_(off_reason_bitmask_sensor_, *off_reason_bitmask);
+        this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
+      }
     }
     return;
   }
@@ -1014,7 +1017,9 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "FW") {
-    this->publish_state_once_(firmware_version_text_sensor_, value_.insert(value_.size() - 2, "."));
+    if (value_.size() > 2)
+      value_.insert(value_.size() - 2, ".");
+    this->publish_state_once_(firmware_version_text_sensor_, value_);
     return;
   }
 
