@@ -725,33 +725,42 @@ void VictronComponent::handle_value_() {
       this->publish_state_(battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("V2"):
+      // mV to V
       this->publish_state_(battery_voltage_2_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("V3"):
+      // mV to V
       this->publish_state_(battery_voltage_3_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("VS"):
+      // mV to V
       this->publish_state_(auxiliary_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("VM"):
+      // mV to V
       this->publish_state_(midpoint_voltage_of_the_battery_bank_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("DM"):
+      // Per mill to %
       this->publish_state_(midpoint_deviation_of_the_battery_bank_sensor_, strtol(value_.c_str(), nullptr, 10) * 0.10f);
       return;
     case fnv1a_hash("VPV"):
+      // mV to V
       this->publish_state_(panel_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("PPV"):
       this->publish_state_(panel_power_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("I"):
+      // mA to A
       this->publish_state_(battery_current_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("I2"):
+      // mA to A
       this->publish_state_(battery_current_2_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("I3"):
+      // mA to A
       this->publish_state_(battery_current_3_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("IL"):
@@ -771,9 +780,11 @@ void VictronComponent::handle_value_() {
       this->publish_state_(instantaneous_power_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("CE"):
+      // mAh -> Ah
       this->publish_state_(consumed_amp_hours_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("SOC"):
+      // Per mill to %
       this->publish_state_(state_of_charge_sensor_, strtol(value_.c_str(), nullptr, 10) * 0.10f);
       return;
     case fnv1a_hash("TTG"):
@@ -799,12 +810,15 @@ void VictronComponent::handle_value_() {
       }
       return;
     case fnv1a_hash("H1"):
+      // mAh -> Ah
       this->publish_state_(depth_of_the_deepest_discharge_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0);
       return;
     case fnv1a_hash("H2"):
+      // mAh -> Ah
       this->publish_state_(depth_of_the_last_discharge_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H3"):
+      // mAh -> Ah
       this->publish_state_(depth_of_the_average_discharge_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0);
       return;
     case fnv1a_hash("H4"):
@@ -818,12 +832,15 @@ void VictronComponent::handle_value_() {
         this->publish_state_(cumulative_amp_hours_drawn_sensor_, NAN);
         return;
       }
+      // mAh -> Ah
       this->publish_state_(cumulative_amp_hours_drawn_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H7"):
+      // mV to V
       this->publish_state_(min_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H8"):
+      // mV to V
       this->publish_state_(max_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H9"):
@@ -831,6 +848,7 @@ void VictronComponent::handle_value_() {
         this->publish_state_(last_full_charge_sensor_, NAN);
         return;
       }
+      // sec -> min
       this->publish_state_(last_full_charge_sensor_, (float) strtol(value_.c_str(), nullptr, 10) / 60.0f);
       return;
     case fnv1a_hash("H10"):
@@ -853,15 +871,21 @@ void VictronComponent::handle_value_() {
       this->publish_state_(number_of_high_auxiliary_voltage_alarms_sensor_, strtol(value_.c_str(), nullptr, 10));
       return;
     case fnv1a_hash("H15"):
+      // mV to V
       this->publish_state_(min_auxiliary_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
     case fnv1a_hash("H16"):
+      // mV to V
       this->publish_state_(max_auxiliary_battery_voltage_sensor_, strtol(value_.c_str(), nullptr, 10) / 1000.0f);
       return;
+    // "H17"    0.01 kWh   Amount of discharged energy (BMV) / Amount of produced energy (DC monitor)
     case fnv1a_hash("H17"):
+      // Wh
       this->publish_state_(amount_of_discharged_energy_sensor_, strtol(value_.c_str(), nullptr, 10) * 10.0f);
       return;
+    // "H18"    0.01 kWh   Amount of charged energy (BMV) / Amount of consumed energy (DC monitor)
     case fnv1a_hash("H18"):
+      // Wh
       this->publish_state_(amount_of_charged_energy_sensor_, strtol(value_.c_str(), nullptr, 10) * 10.0f);
       return;
     case fnv1a_hash("H19"):
@@ -889,6 +913,7 @@ void VictronComponent::handle_value_() {
       this->publish_state_(charging_mode_id_sensor_, (float) value);
       this->publish_state_(charging_mode_text_sensor_, charging_mode_text(value));
       return;
+    // "BMV"               Model description (deprecated)
     case fnv1a_hash("BMV"):
       this->publish_state_(model_description_text_sensor_, value_);
       return;
