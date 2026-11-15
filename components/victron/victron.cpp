@@ -842,16 +842,13 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "OR") {
-    const char *hex_str = value_.c_str();
-    size_t len = value_.size();
-    if (len >= 2 && hex_str[0] == '0' && (hex_str[1] == 'x' || hex_str[1] == 'X')) {
-      hex_str += 2;
-      len -= 2;
-    }
-    auto off_reason_bitmask = parse_hex<uint32_t>(hex_str, len);
-    if (off_reason_bitmask) {
-      this->publish_state_(off_reason_bitmask_sensor_, *off_reason_bitmask);
-      this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
+    // Format: 0x00000001
+    if (value_.size() > 2 && value_[0] == '0' && (value_[1] == 'x' || value_[1] == 'X')) {
+      auto off_reason_bitmask = parse_hex<uint32_t>(value_.c_str() + 2, value_.size() - 2);
+      if (off_reason_bitmask) {
+        this->publish_state_(off_reason_bitmask_sensor_, *off_reason_bitmask);
+        this->publish_state_(off_reason_text_sensor_, off_reason_text(*off_reason_bitmask));
+      }
     }
     return;
   }
@@ -1020,11 +1017,9 @@ void VictronComponent::handle_value_() {
   }
 
   if (label_ == "FW") {
-    if (value_.size() >= 2) {
-      this->publish_state_once_(firmware_version_text_sensor_, value_.insert(value_.size() - 2, "."));
-    } else {
-      this->publish_state_once_(firmware_version_text_sensor_, value_);
-    }
+    if (value_.size() > 2)
+      value_.insert(value_.size() - 2, ".");
+    this->publish_state_once_(firmware_version_text_sensor_, value_);
     return;
   }
 
@@ -1035,9 +1030,7 @@ void VictronComponent::handle_value_() {
     if (value_.size() > 4) {
       std::string release_type = value_.substr(value_.size() - 2, 2);
       std::string version_number = value_.substr(0, value_.size() - 2);
-      if (version_number.size() >= 2) {
-        version_number = version_number.insert(version_number.size() - 2, ".");
-      }
+      version_number = version_number.insert(version_number.size() - 2, ".");
       release_type = (release_type == "FF") ? "-official" : "-beta-" + release_type;
 
       this->publish_state_once_(firmware_version_24bit_text_sensor_, version_number + release_type);
