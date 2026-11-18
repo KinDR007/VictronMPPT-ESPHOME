@@ -12,6 +12,9 @@ namespace esphome::victron {
 
 ESPHOME_LOG_TAG(TAG, "victron");
 
+// Max. UART bytes per loop() call to avoid starving other components
+static constexpr size_t MAX_BYTES_PER_LOOP = 128;
+
 static constexpr uint8_t OFF_REASONS_SIZE = 16;
 static constexpr const char *OFF_REASONS[OFF_REASONS_SIZE] = {
     "No input power",                       // 0000 0000 0000 0001
@@ -101,7 +104,6 @@ void VictronComponent::loop() {
 
   last_transmission_ = now;
   size_t bytes_read = 0;
-  static constexpr size_t MAX_BYTES_PER_LOOP = 128;
   while (available() && bytes_read < MAX_BYTES_PER_LOOP) {
     uint8_t c;
     read_byte(&c);
