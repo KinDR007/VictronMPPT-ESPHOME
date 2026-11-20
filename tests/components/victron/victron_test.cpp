@@ -1020,7 +1020,7 @@ class VictronChecksumTest : public ::testing::Test {
     this->bat_v_.add_on_state_callback([this](float state) { this->bat_v_history_.push_back(state); });
   }
 
-  bool bat_v_was_published(float value) const {
+  bool bat_v_was_published_(float value) const {
     return std::any_of(this->bat_v_history_.begin(), this->bat_v_history_.end(),
                        [value](float state) { return std::fabs(state - value) < 0.001f; });
   }
@@ -1145,7 +1145,7 @@ TEST_F(VictronChecksumTest, DroppedFrameDoesNotAffectNextFrame) {
   feed(this->v_, encode_frame(mppt_frame("12460")));
 
   EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
-  EXPECT_FALSE(this->bat_v_was_published(66.6f));
+  EXPECT_FALSE(this->bat_v_was_published_(66.6f));
 }
 
 TEST_F(VictronChecksumTest, ReceiverStartingMidFrameRecovers) {
@@ -1155,7 +1155,7 @@ TEST_F(VictronChecksumTest, ReceiverStartingMidFrameRecovers) {
 
   feed(this->v_, encode_frame(mppt_frame("12460")));
   EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
-  EXPECT_FALSE(this->bat_v_was_published(77.7f));
+  EXPECT_FALSE(this->bat_v_was_published_(77.7f));
 }
 
 TEST_F(VictronChecksumTest, TruncatedFrameIsDiscardedAfterTimeout) {
@@ -1170,7 +1170,7 @@ TEST_F(VictronChecksumTest, TruncatedFrameIsDiscardedAfterTimeout) {
   feed(this->v_, encode_frame(mppt_frame("12460")));
 
   EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
-  EXPECT_FALSE(this->bat_v_was_published(77.7f));
+  EXPECT_FALSE(this->bat_v_was_published_(77.7f));
 }
 
 TEST_F(VictronChecksumTest, FrameDeliveredByteByByte) {
@@ -1254,7 +1254,7 @@ TEST_F(VictronChecksumTest, DroppedFrameDoesNotConsumeThrottleInterval) {
   feed(this->v_, encode_frame(mppt_frame("12460")));
 
   EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
-  EXPECT_FALSE(this->bat_v_was_published(66.6f));
+  EXPECT_FALSE(this->bat_v_was_published_(66.6f));
 }
 
 // ── Checksum validation disabled (legacy behaviour) ──────────────────────────
