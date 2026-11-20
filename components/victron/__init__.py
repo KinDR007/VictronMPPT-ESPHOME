@@ -16,6 +16,7 @@ victron_ns = cg.esphome_ns.namespace("victron")
 VictronComponent = victron_ns.class_("VictronComponent", uart.UARTDevice, cg.Component)
 
 CONF_VICTRON_ID = "victron_id"
+CONF_VALIDATE_CHECKSUM = "validate_checksum"
 
 VICTRON_COMPONENT_SCHEMA = cv.Schema(
     {
@@ -31,6 +32,7 @@ CONFIG_SCHEMA = cv.All(
             cv.Optional(
                 CONF_THROTTLE, default="1s"
             ): cv.positive_time_period_milliseconds,
+            cv.Optional(CONF_VALIDATE_CHECKSUM, default=True): cv.boolean,
         }
     ),
 )
@@ -42,6 +44,7 @@ def to_code(config):
     yield uart.register_uart_device(var, config)
 
     cg.add(var.set_throttle(config[CONF_THROTTLE]))
+    cg.add(var.set_validate_checksum(config[CONF_VALIDATE_CHECKSUM]))
 
 
 FINAL_VALIDATE_SCHEMA = uart.final_validate_device_schema(
