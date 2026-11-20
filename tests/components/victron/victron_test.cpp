@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+#include <algorithm>
 #include <cmath>
+#include <vector>
 #include "common.h"
 #include "smartsolar_mppt.h"
 #include "smartsolar_mppt_150_70_rev2.h"
@@ -684,9 +686,7 @@ TEST(VictronEdgeCaseTest, TemperatureNotAvailable) {
   sensor::Sensor bat_t;
   v.set_battery_temperature_sensor(&bat_t);
 
-  v.label_ = "T";
-  v.value_ = "---";
-  v.handle_value_();
+  decode(v, "T", "---");
 
   EXPECT_TRUE(std::isnan(bat_t.state));
 }
@@ -696,13 +696,10 @@ TEST(VictronEdgeCaseTest, FirmwareVersionOncePublished) {
   text_sensor::TextSensor fw;
   v.set_firmware_version_text_sensor(&fw);
 
-  v.label_ = "FW";
-  v.value_ = "156";
-  v.handle_value_();
+  decode(v, "FW", "156");
   EXPECT_EQ(fw.state, "1.56");
 
-  v.value_ = "157";
-  v.handle_value_();
+  decode(v, "FW", "157");
   EXPECT_EQ(fw.state, "1.56");
 }
 
@@ -711,9 +708,7 @@ TEST(VictronEdgeCaseTest, AcOutCurrentNegativeClampedToZero) {
   sensor::Sensor ac_i;
   v.set_ac_out_current_sensor(&ac_i);
 
-  v.label_ = "AC_OUT_I";
-  v.value_ = "-50";
-  v.handle_value_();
+  decode(v, "AC_OUT_I", "-50");
 
   EXPECT_FLOAT_EQ(ac_i.state, 0.0f);
 }
@@ -735,9 +730,7 @@ TEST(VictronEdgeCaseTest, H6NotAvailable) {
   TestableVictron v;
   sensor::Sensor h6;
   v.set_cumulative_amp_hours_drawn_sensor(&h6);
-  v.label_ = "H6";
-  v.value_ = "---";
-  v.handle_value_();
+  decode(v, "H6", "---");
   EXPECT_TRUE(std::isnan(h6.state));
 }
 
@@ -745,9 +738,7 @@ TEST(VictronEdgeCaseTest, H9NotAvailable) {
   TestableVictron v;
   sensor::Sensor h9;
   v.set_last_full_charge_sensor(&h9);
-  v.label_ = "H9";
-  v.value_ = "---";
-  v.handle_value_();
+  decode(v, "H9", "---");
   EXPECT_TRUE(std::isnan(h9.state));
 }
 
@@ -755,9 +746,7 @@ TEST(VictronEdgeCaseTest, H10NotAvailable) {
   TestableVictron v;
   sensor::Sensor h10;
   v.set_number_of_automatic_synchronizations_sensor(&h10);
-  v.label_ = "H10";
-  v.value_ = "---";
-  v.handle_value_();
+  decode(v, "H10", "---");
   EXPECT_TRUE(std::isnan(h10.state));
 }
 
@@ -765,9 +754,7 @@ TEST(VictronEdgeCaseTest, LoadStateOff) {
   TestableVictron v;
   binary_sensor::BinarySensor load;
   v.set_load_state_binary_sensor(&load);
-  v.label_ = "LOAD";
-  v.value_ = "OFF";
-  v.handle_value_();
+  decode(v, "LOAD", "OFF");
   EXPECT_FALSE(load.state);
 }
 
@@ -775,9 +762,7 @@ TEST(VictronEdgeCaseTest, LoadStateLowercaseOn) {
   TestableVictron v;
   binary_sensor::BinarySensor load;
   v.set_load_state_binary_sensor(&load);
-  v.label_ = "LOAD";
-  v.value_ = "On";
-  v.handle_value_();
+  decode(v, "LOAD", "On");
   EXPECT_TRUE(load.state);
 }
 
@@ -785,9 +770,7 @@ TEST(VictronEdgeCaseTest, RelayStateOn) {
   TestableVictron v;
   binary_sensor::BinarySensor relay;
   v.set_relay_state_binary_sensor(&relay);
-  v.label_ = "Relay";
-  v.value_ = "On";
-  v.handle_value_();
+  decode(v, "Relay", "On");
   EXPECT_TRUE(relay.state);
 }
 
@@ -795,9 +778,7 @@ TEST(VictronEdgeCaseTest, UnknownPid) {
   TestableVictron v;
   text_sensor::TextSensor device_type;
   v.set_device_type_text_sensor(&device_type);
-  v.label_ = "PID";
-  v.value_ = "0x9999";
-  v.handle_value_();
+  decode(v, "PID", "0x9999");
   EXPECT_EQ(device_type.state, "Unknown");
 }
 
@@ -805,9 +786,7 @@ TEST(VictronEdgeCaseTest, FweVersionBetaSuffix) {
   TestableVictron v;
   text_sensor::TextSensor fwe;
   v.set_firmware_version_24bit_text_sensor(&fwe);
-  v.label_ = "FWE";
-  v.value_ = "10945";
-  v.handle_value_();
+  decode(v, "FWE", "10945");
   EXPECT_EQ(fwe.state, "1.09-beta-45");
 }
 
@@ -815,9 +794,7 @@ TEST(VictronEdgeCaseTest, FweVersionShortForm) {
   TestableVictron v;
   text_sensor::TextSensor fwe;
   v.set_firmware_version_24bit_text_sensor(&fwe);
-  v.label_ = "FWE";
-  v.value_ = "1234";
-  v.handle_value_();
+  decode(v, "FWE", "1234");
   EXPECT_EQ(fwe.state, "1234");
 }
 
@@ -827,9 +804,7 @@ TEST(VictronEdgeCaseTest, OffReasonAllBits) {
   text_sensor::TextSensor reason;
   v.set_off_reason_bitmask_sensor(&bitmask);
   v.set_off_reason_text_sensor(&reason);
-  v.label_ = "OR";
-  v.value_ = "0x0000FFFF";
-  v.handle_value_();
+  decode(v, "OR", "0x0000FFFF");
   EXPECT_FLOAT_EQ(bitmask.state, 65535.0f);
   EXPECT_EQ(reason.state, "No input power;Switched off (power switch);Switched off (device mode register);"
                           "Remote input;Protection active;Paygo;BMS;Engine shutdown detection;"
@@ -842,12 +817,8 @@ TEST(VictronEdgeCaseTest, BatteryVoltage2And3) {
   sensor::Sensor v2, v3;
   v.set_battery_voltage_2_sensor(&v2);
   v.set_battery_voltage_3_sensor(&v3);
-  v.label_ = "V2";
-  v.value_ = "13450";
-  v.handle_value_();
-  v.label_ = "V3";
-  v.value_ = "12300";
-  v.handle_value_();
+  decode(v, "V2", "13450");
+  decode(v, "V3", "12300");
   EXPECT_NEAR(v2.state, 13.45f, 0.001f);
   EXPECT_NEAR(v3.state, 12.30f, 0.001f);
 }
@@ -857,12 +828,8 @@ TEST(VictronEdgeCaseTest, BatteryCurrent2And3) {
   sensor::Sensor i2, i3;
   v.set_battery_current_2_sensor(&i2);
   v.set_battery_current_3_sensor(&i3);
-  v.label_ = "I2";
-  v.value_ = "5000";
-  v.handle_value_();
-  v.label_ = "I3";
-  v.value_ = "-2500";
-  v.handle_value_();
+  decode(v, "I2", "5000");
+  decode(v, "I3", "-2500");
   EXPECT_NEAR(i2.state, 5.0f, 0.001f);
   EXPECT_NEAR(i3.state, -2.5f, 0.001f);
 }
@@ -871,9 +838,7 @@ TEST(VictronEdgeCaseTest, AcOutApparentPower) {
   TestableVictron v;
   sensor::Sensor ac_s;
   v.set_ac_out_apparent_power_sensor(&ac_s);
-  v.label_ = "AC_OUT_S";
-  v.value_ = "750";
-  v.handle_value_();
+  decode(v, "AC_OUT_S", "750");
   EXPECT_FLOAT_EQ(ac_s.state, 750.0f);
 }
 
@@ -882,12 +847,8 @@ TEST(VictronEdgeCaseTest, AuxiliaryVoltageAlarmCounters) {
   sensor::Sensor h13, h14;
   v.set_number_of_low_auxiliary_voltage_alarms_sensor(&h13);
   v.set_number_of_high_auxiliary_voltage_alarms_sensor(&h14);
-  v.label_ = "H13";
-  v.value_ = "3";
-  v.handle_value_();
-  v.label_ = "H14";
-  v.value_ = "7";
-  v.handle_value_();
+  decode(v, "H13", "3");
+  decode(v, "H14", "7");
   EXPECT_FLOAT_EQ(h13.state, 3.0f);
   EXPECT_FLOAT_EQ(h14.state, 7.0f);
 }
@@ -921,9 +882,7 @@ TEST(VictronLookupTest, AllChargingModes) {
     TestableVictron v;
     text_sensor::TextSensor cs_text;
     v.set_charging_mode_text_sensor(&cs_text);
-    v.label_ = "CS";
-    v.value_ = tc.value;
-    v.handle_value_();
+    decode(v, "CS", tc.value);
     EXPECT_EQ(cs_text.state, tc.text) << "CS=" << tc.value;
   }
 }
@@ -960,9 +919,7 @@ TEST(VictronLookupTest, AllErrorCodes) {
     TestableVictron v;
     text_sensor::TextSensor err_text;
     v.set_error_text_sensor(&err_text);
-    v.label_ = "ERR";
-    v.value_ = tc.value;
-    v.handle_value_();
+    decode(v, "ERR", tc.value);
     EXPECT_EQ(err_text.state, tc.text) << "ERR=" << tc.value;
   }
 }
@@ -983,9 +940,7 @@ TEST(VictronLookupTest, AllWarningCodes) {
     TestableVictron v;
     text_sensor::TextSensor warn_text;
     v.set_warning_text_sensor(&warn_text);
-    v.label_ = "WARN";
-    v.value_ = tc.value;
-    v.handle_value_();
+    decode(v, "WARN", tc.value);
     EXPECT_EQ(warn_text.state, tc.text) << "WARN=" << tc.value;
   }
 }
@@ -1011,9 +966,7 @@ TEST(VictronLookupTest, AllDcMonitorModes) {
     TestableVictron v;
     text_sensor::TextSensor mon_text;
     v.set_dc_monitor_mode_text_sensor(&mon_text);
-    v.label_ = "MON";
-    v.value_ = tc.value;
-    v.handle_value_();
+    decode(v, "MON", tc.value);
     EXPECT_EQ(mon_text.state, tc.text) << "MON=" << tc.value;
   }
 }
@@ -1030,9 +983,7 @@ TEST(VictronLookupTest, AllDeviceModes) {
     TestableVictron v;
     text_sensor::TextSensor mode_text;
     v.set_device_mode_text_sensor(&mode_text);
-    v.label_ = "MODE";
-    v.value_ = tc.value;
-    v.handle_value_();
+    decode(v, "MODE", tc.value);
     EXPECT_EQ(mode_text.state, tc.text) << "MODE=" << tc.value;
   }
 }
@@ -1052,82 +1003,297 @@ TEST(VictronLookupTest, AllTrackingModes) {
     TestableVictron v;
     text_sensor::TextSensor mppt_text;
     v.set_tracking_mode_text_sensor(&mppt_text);
-    v.label_ = "MPPT";
-    v.value_ = tc.value;
-    v.handle_value_();
+    decode(v, "MPPT", tc.value);
     EXPECT_EQ(mppt_text.state, tc.text) << "MPPT=" << tc.value;
   }
 }
 
-// ── Checksum validation & staged publishing ──────────────────────────────────
+// ── Checksum validation (byte stream through loop()) ─────────────────────────
 
-TEST(VictronChecksumTest, StagedPublishingWhenEnabled) {
-  TestableVictron v;
-  v.set_validate_checksum(true);
-  sensor::Sensor bat_v;
-  binary_sensor::BinarySensor load;
-  text_sensor::TextSensor model;
-  v.set_battery_voltage_sensor(&bat_v);
-  v.set_load_state_binary_sensor(&load);
-  v.set_model_description_text_sensor(&model);
+class VictronChecksumTest : public ::testing::Test {
+ protected:
+  void SetUp() override {
+    this->v_.set_battery_voltage_sensor(&this->bat_v_);
+    this->v_.set_panel_voltage_sensor(&this->vpv_);
+    this->v_.set_load_state_binary_sensor(&this->load_);
+    this->v_.set_serial_number_text_sensor(&this->serial_);
+    this->bat_v_.add_on_state_callback([this](float state) { this->bat_v_history_.push_back(state); });
+  }
 
-  v.label_ = "V";
-  v.value_ = "12450";
-  v.handle_value_();
+  bool bat_v_was_published_(float value) const {
+    return std::any_of(this->bat_v_history_.begin(), this->bat_v_history_.end(),
+                       [value](float state) { return std::fabs(state - value) < 0.001f; });
+  }
 
-  v.label_ = "LOAD";
-  v.value_ = "ON";
-  v.handle_value_();
+  static Frame mppt_frame(const char *voltage) {
+    Frame frame = to_frame(SMARTSOLAR_MPPT_FRAME);
+    for (auto &[label, value] : frame) {
+      if (label == "V")
+        value = voltage;
+    }
+    return frame;
+  }
 
-  v.label_ = "BMV";
-  v.value_ = "BMV-712 Smart";
-  v.handle_value_();
+  static void replace(std::vector<uint8_t> &bytes, const std::string &from, const std::string &to) {
+    auto it = std::search(bytes.begin(), bytes.end(), from.begin(), from.end());
+    ASSERT_NE(it, bytes.end()) << "pattern not found: " << from;
+    it = bytes.erase(it, it + from.size());
+    bytes.insert(it, to.begin(), to.end());
+  }
 
-  // Sensors should remain uncommitted while frame is in flight
-  EXPECT_FALSE(bat_v.has_state());
-  EXPECT_FALSE(load.has_state());
-  EXPECT_FALSE(model.has_state());
+  // Appends a padding field (ignored by the parser) chosen so that the frame's
+  // checksum byte equals `checksum`.
+  static std::vector<uint8_t> frame_with_checksum_byte(uint8_t checksum) {
+    // Three printable characters cover every residue modulo 256.
+    for (char a = '!'; a <= '~'; a++) {
+      for (char b = '!'; b <= '~'; b++) {
+        Frame frame = mppt_frame("12450");
+        frame.emplace_back("PAD", std::string{a, b, b});
+        auto bytes = encode_frame(frame);
+        if (bytes.back() == checksum)
+          return bytes;
+      }
+    }
+    ADD_FAILURE() << "no padding found for checksum byte " << static_cast<int>(checksum);
+    return {};
+  }
 
-  // Once frame passes validation, staged readings are published atomically
-  v.commit_staged_();
-  EXPECT_TRUE(bat_v.has_state());
-  EXPECT_NEAR(bat_v.state, 12.45f, 0.001f);
-  EXPECT_TRUE(load.has_state());
-  EXPECT_TRUE(load.state);
-  EXPECT_TRUE(model.has_state());
-  EXPECT_EQ(model.state, "BMV-712 Smart");
+  TestableVictron v_;
+  sensor::Sensor bat_v_, vpv_;
+  std::vector<float> bat_v_history_;
+  binary_sensor::BinarySensor load_;
+  text_sensor::TextSensor serial_;
+};
+
+TEST_F(VictronChecksumTest, ValidationEnabledByDefault) {
+  auto bytes = encode_frame(mppt_frame("12450"));
+  replace(bytes, "V\t12450", "V\t66600");
+  feed(this->v_, bytes);
+
+  EXPECT_FALSE(this->bat_v_.has_state());
 }
 
-TEST(VictronChecksumTest, StagedDiscardOnClear) {
-  TestableVictron v;
-  v.set_validate_checksum(true);
-  sensor::Sensor bat_v;
-  v.set_battery_voltage_sensor(&bat_v);
+TEST_F(VictronChecksumTest, ValidFramePublishesAllValues) {
+  feed(this->v_, encode_frame(mppt_frame("12450")));
 
-  v.label_ = "V";
-  v.value_ = "12450";
-  v.handle_value_();
-
-  EXPECT_FALSE(bat_v.has_state());
-
-  // Corrupt frame or timeout discards staged readings
-  v.clear_staged_();
-  EXPECT_FALSE(bat_v.has_state());
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+  EXPECT_NEAR(this->vpv_.state, 0.01f, 0.001f);
+  EXPECT_TRUE(this->load_.state);
+  EXPECT_EQ(this->serial_.state, "HQ1942K7LJ8");
 }
 
-TEST(VictronChecksumTest, DirectPublishingWhenDisabled) {
-  TestableVictron v;
-  v.set_validate_checksum(false);
-  sensor::Sensor bat_v;
-  v.set_battery_voltage_sensor(&bat_v);
+TEST_F(VictronChecksumTest, NothingPublishedBeforeChecksumByte) {
+  auto bytes = encode_frame(mppt_frame("12450"));
+  const uint8_t checksum = bytes.back();
+  bytes.pop_back();
+  feed(this->v_, bytes);
 
-  v.label_ = "V";
-  v.value_ = "12450";
-  v.handle_value_();
+  EXPECT_FALSE(this->bat_v_.has_state());
+  EXPECT_FALSE(this->load_.has_state());
+  EXPECT_FALSE(this->serial_.has_state());
 
-  // Without checksum validation, publishes immediately for backward compatibility
-  EXPECT_TRUE(bat_v.has_state());
-  EXPECT_NEAR(bat_v.state, 12.45f, 0.001f);
+  feed(this->v_, {checksum});
+
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+  EXPECT_TRUE(this->load_.state);
+  EXPECT_EQ(this->serial_.state, "HQ1942K7LJ8");
+}
+
+TEST_F(VictronChecksumTest, ConsecutiveFramesUpdateValues) {
+  feed(this->v_, encode_frame(mppt_frame("12450")));
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+
+  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+  EXPECT_EQ(this->bat_v_history_.size(), 2u);
+}
+
+TEST_F(VictronChecksumTest, CorruptedValueIsDropped) {
+  feed(this->v_, encode_frame(mppt_frame("12450")));
+
+  auto bytes = encode_frame(mppt_frame("12460"));
+  replace(bytes, "V\t12460", "V\t66600");
+  feed(this->v_, bytes);
+
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+}
+
+TEST_F(VictronChecksumTest, WrongChecksumByteIsDropped) {
+  feed(this->v_, encode_frame(mppt_frame("12450")));
+
+  auto bytes = encode_frame(mppt_frame("55500"));
+  bytes.back()++;
+  feed(this->v_, bytes);
+
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+}
+
+TEST_F(VictronChecksumTest, MissingByteIsDropped) {
+  feed(this->v_, encode_frame(mppt_frame("12450")));
+
+  auto bytes = encode_frame(mppt_frame("44400"));
+  replace(bytes, "LOAD\tON", "LOAD\tO");
+  feed(this->v_, bytes);
+
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+  EXPECT_TRUE(this->load_.state);
+}
+
+TEST_F(VictronChecksumTest, DroppedFrameDoesNotAffectNextFrame) {
+  auto bad = encode_frame(mppt_frame("66600"));
+  bad.back()++;
+  feed(this->v_, bad);
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+
+  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+  EXPECT_FALSE(this->bat_v_was_published_(66.6f));
+}
+
+TEST_F(VictronChecksumTest, ReceiverStartingMidFrameRecovers) {
+  const auto first = encode_frame(mppt_frame("77700"));
+  feed(this->v_, std::vector<uint8_t>(first.begin() + first.size() / 2, first.end()));
+  EXPECT_FALSE(this->bat_v_.has_state());
+
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+  EXPECT_FALSE(this->bat_v_was_published_(77.7f));
+}
+
+TEST_F(VictronChecksumTest, TruncatedFrameIsDiscardedAfterTimeout) {
+  const auto truncated = encode_frame(mppt_frame("77700"));
+  // Cut inside the value of "VPV", after the complete "V" field.
+  const std::string marker = "\r\nVPV\t1";
+  auto cut = std::search(truncated.begin(), truncated.end(), marker.begin(), marker.end());
+  ASSERT_NE(cut, truncated.end());
+  feed(this->v_, std::vector<uint8_t>(truncated.begin(), cut + marker.size()));
+  expire_transmission_timeout(this->v_);
+
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+
+  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+  EXPECT_FALSE(this->bat_v_was_published_(77.7f));
+}
+
+TEST_F(VictronChecksumTest, FrameDeliveredByteByByte) {
+  for (uint8_t c : encode_frame(mppt_frame("12450")))
+    feed(this->v_, {c});
+
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+}
+
+TEST_F(VictronChecksumTest, FrameLongerThanLoopReadBudget) {
+  const auto bytes = encode_frame(to_frame(BMV712_FRAME));
+  ASSERT_GT(bytes.size(), 128u);
+
+  this->v_.uart_.inject(bytes);
+  this->v_.loop();
+  EXPECT_FALSE(this->bat_v_.has_state());
+
+  while (this->v_.uart_.available() > 0)
+    this->v_.loop();
+  EXPECT_TRUE(this->bat_v_.has_state());
+}
+
+TEST_F(VictronChecksumTest, HexFrameBetweenTextFramesIsIgnored) {
+  auto bytes = encode_frame(mppt_frame("12450"));
+  const std::string hex = ":A0922001C0004\n";
+  bytes.insert(bytes.end(), hex.begin(), hex.end());
+  feed(this->v_, bytes);
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+}
+
+TEST_F(VictronChecksumTest, HexFrameInsideTextFrameDropsTextFrame) {
+  auto bytes = encode_frame(mppt_frame("12450"));
+  replace(bytes, "\r\nLOAD", "\r\n:A0922001C0004\n\r\nLOAD");
+  feed(this->v_, bytes);
+  EXPECT_FALSE(this->bat_v_.has_state());
+
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+  EXPECT_EQ(this->bat_v_history_, std::vector<float>{12.46f});
+}
+
+TEST_F(VictronChecksumTest, ChecksumByteMayBeAControlCharacter) {
+  for (uint8_t checksum : {uint8_t('\r'), uint8_t('\n'), uint8_t('\t'), uint8_t(':'), uint8_t(0x00), uint8_t(0xFF)}) {
+    TestableVictron v;
+    sensor::Sensor bat_v;
+    v.set_battery_voltage_sensor(&bat_v);
+
+    const auto bytes = frame_with_checksum_byte(checksum);
+    ASSERT_FALSE(bytes.empty());
+    feed(v, bytes);
+    feed(v, encode_frame(mppt_frame("12460")));
+
+    EXPECT_NEAR(bat_v.state, 12.46f, 0.001f) << "checksum byte 0x" << std::hex << static_cast<int>(checksum);
+  }
+}
+
+TEST_F(VictronChecksumTest, ThrottleSkipsFramesWithinInterval) {
+  this->v_.set_throttle(1000);
+  this->v_.last_publish_ = millis() - 2000;
+
+  feed(this->v_, encode_frame(mppt_frame("12450")));
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+
+  this->v_.last_publish_ = millis() - 2000;
+  feed(this->v_, encode_frame(mppt_frame("12470")));
+  EXPECT_NEAR(this->bat_v_.state, 12.47f, 0.001f);
+}
+
+TEST_F(VictronChecksumTest, DroppedFrameDoesNotConsumeThrottleInterval) {
+  this->v_.set_throttle(1000);
+  this->v_.last_publish_ = millis() - 2000;
+
+  auto bad = encode_frame(mppt_frame("66600"));
+  bad.back()++;
+  feed(this->v_, bad);
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+
+  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+  EXPECT_FALSE(this->bat_v_was_published_(66.6f));
+}
+
+// ── Checksum validation disabled (legacy behaviour) ──────────────────────────
+
+TEST_F(VictronChecksumTest, DisabledValidationPublishesCorruptedFrame) {
+  this->v_.set_validate_checksum(false);
+
+  auto bytes = encode_frame(mppt_frame("12460"));
+  replace(bytes, "V\t12460", "V\t66600");
+  feed(this->v_, bytes);
+
+  EXPECT_NEAR(this->bat_v_.state, 66.6f, 0.001f);
+}
+
+TEST_F(VictronChecksumTest, DisabledValidationPublishesPerField) {
+  this->v_.set_validate_checksum(false);
+
+  auto bytes = encode_frame(mppt_frame("12450"));
+  bytes.pop_back();
+  feed(this->v_, bytes);
+
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+}
+
+TEST_F(VictronChecksumTest, DisabledValidationThrottle) {
+  this->v_.set_validate_checksum(false);
+  this->v_.set_throttle(1000);
+  this->v_.last_publish_ = millis() - 2000;
+
+  // Without validation, the checksum line of a frame decides whether the
+  // *next* frame is published.
+  feed(this->v_, encode_frame(mppt_frame("12450")));
+  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+
+  feed(this->v_, encode_frame(mppt_frame("12460")));
+  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+
+  feed(this->v_, encode_frame(mppt_frame("12470")));
+  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
 }
 
 }  // namespace esphome::victron::testing
