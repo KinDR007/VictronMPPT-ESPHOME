@@ -47,5 +47,7 @@ interval:
       - uart.write: "PID\t0xA201\r\n"
       - uart.write: "SER#\tHQ141112345\r\n"
       - uart.write: "WARN\t1\r\n"
-      - uart.write: "Checksum\t?\r\n"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x8F]
+      - uart.write: "\r\n"
       - uart.write: "\r\n"

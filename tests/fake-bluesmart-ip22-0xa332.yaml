@@ -47,7 +47,9 @@ interval:
       - uart.write: "ERR\t0\r\n"
       - uart.write: "CS\t3\r\n"
       - uart.write: "HC#\t57825\r\n"
-      - uart.write: "Checksum\t\x18:A0920000022\n"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x18]
+      - uart.write: ":A0920000022\n"
       - uart.write: ":A0E200021FC\n"
       - uart.write: ":A0920000022\n"
       - uart.write: ":A0E200021FC\n"

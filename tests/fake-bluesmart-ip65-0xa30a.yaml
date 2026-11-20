@@ -46,7 +46,8 @@ interval:
       - uart.write: "ERR\t0\r\n"
       - uart.write: "CS\t4\r\n"
       - uart.write: "HC#\t136663\r\n"
-      - uart.write: "Checksum\t\x13"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x13]
       - uart.write: ":A8FED000D00C2\n"
       - uart.write: ":A8CED001E050000AF\n"
       - uart.write: ":AD7ED000D007A\n"
@@ -62,7 +63,9 @@ interval:
       - uart.write: "ERR\t0\r\n"
       - uart.write: "CS\t4\r\n"
       - uart.write: "HC#\t136663\r\n"
-      - uart.write: "Checksum\t\v:A8DED008C0540\n"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x0B]
+      - uart.write: ":A8DED008C0540\n"
       - uart.write: ":A8FED000800C7\n"
       - uart.write: ":A8CED00EE020000E2\n"
       - uart.write: ":AD5ED008C05F8\n"

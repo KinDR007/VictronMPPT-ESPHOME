@@ -95,7 +95,9 @@ interval:
       - uart.write: "WARN\t1\r\n"
       - uart.write: "FWE\t109FF\r\n"
       - uart.write: "MON\t-1\r\n"
-      - uart.write: "Checksum\t⸮:A0922001C0004\r\n"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x35]
+      - uart.write: ":A0922001C0004\r\n"
       - uart.write: ":A052200EB00000039\r\n"
       - uart.write: ":A8DED00221699\r\n"
       - uart.write: ":A0422009500000090\r\n"

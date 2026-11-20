@@ -71,5 +71,7 @@ interval:
       - uart.write: "FW\t1.19\r\n"
       - uart.write: "PID\t0x204\r\n"
       - uart.write: "MON\t-1\r\n"
-      - uart.write: "Checksum\t?\r\n"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x93]
+      - uart.write: "\r\n"
       - uart.write: "\r\n"
