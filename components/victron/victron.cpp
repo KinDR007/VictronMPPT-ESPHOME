@@ -1,6 +1,7 @@
 #include "victron.h"
 #include "esphome/core/log.h"
-#include <algorithm>  // std::min
+#include <algorithm>  // std::min, std::max_element
+#include <cinttypes>
 #include "esphome/core/helpers.h"
 
 // Fallback for ESPHome < 2026.10.0
@@ -14,6 +15,11 @@ ESPHOME_LOG_TAG(TAG, "victron");
 
 // Max. UART bytes per loop() call to avoid starving other components
 static constexpr size_t MAX_BYTES_PER_LOOP = 128;
+
+// VE.Direct devices send each text block once per second. The throttle interval
+// is compared with this tolerance (half that period), so jitter does not delay
+// a due block by a whole second.
+static constexpr uint32_t THROTTLE_TOLERANCE_MS = 500;
 
 static constexpr uint8_t OFF_REASONS_SIZE = 16;
 static constexpr const char *OFF_REASONS[OFF_REASONS_SIZE] = {
@@ -36,7 +42,11 @@ static constexpr const char *OFF_REASONS[OFF_REASONS_SIZE] = {
 };
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
-  ESP_LOGCONFIG(TAG, "Victron:");
+  ESP_LOGCONFIG(TAG,
+                "Victron:\n"
+                "  Throttle: %" PRIu32 " ms\n"
+                "  Validate checksum: %s",
+                this->throttle_, YESNO(this->validate_checksum_));
   LOG_BINARY_SENSOR("  ", "Load state", load_state_binary_sensor_);
   LOG_BINARY_SENSOR("  ", "Relay state", relay_state_binary_sensor_);
   LOG_SENSOR("  ", "Max Power Yesterday", max_power_yesterday_sensor_);
@@ -104,6 +114,49 @@ void VictronComponent::commit_staged_() {
   this->clear_staged_();
 }
 
+void VictronComponent::start_block_(uint32_t now) {
+  // Devices with many fields (e.g. BMV-70x/712, SmartShunt) split their data
+  // into several blocks, each with its own checksum and sent at its own time.
+  // The throttle applies per block type, identified by the first label.
+  this->in_block_ = true;
+  this->block_start_ = now;
+  this->block_type_ = fnv1_hash(this->label_);
+
+  this->block_throttle_ = this->find_block_throttle_(this->block_type_);
+  this->publish_block_ = this->block_throttle_ == nullptr || this->throttle_ <= THROTTLE_TOLERANCE_MS ||
+                         now - this->block_throttle_->last_publish >= this->throttle_ - THROTTLE_TOLERANCE_MS;
+
+  // Without checksum validation values are published while they arrive
+  if (this->publish_block_ && !this->validate_checksum_) {
+    this->mark_published_();
+  }
+}
+
+VictronComponent::BlockThrottle *VictronComponent::find_block_throttle_(uint32_t block_type) {
+  for (auto &entry : this->block_throttles_) {
+    if (entry.used && entry.block_type == block_type)
+      return &entry;
+  }
+  return nullptr;
+}
+
+void VictronComponent::mark_published_() {
+  if (this->block_throttle_ == nullptr) {
+    // New block type: take a free slot or replace the least recently published
+    // type. Partial blocks (e.g. after boot) can register bogus types; they age out.
+    auto age = [this](const BlockThrottle &entry) {
+      return entry.used ? this->block_start_ - entry.last_publish : UINT32_MAX;
+    };
+    this->block_throttle_ =
+        &*std::max_element(this->block_throttles_.begin(), this->block_throttles_.end(),
+                           [&age](const BlockThrottle &a, const BlockThrottle &b) { return age(a) < age(b); });
+    this->block_throttle_->used = true;
+    this->block_throttle_->block_type = this->block_type_;
+  }
+  // Use the start of the block to keep the publish interval stable
+  this->block_throttle_->last_publish = this->block_start_;
+}
+
 void VictronComponent::clear_staged_() {
   this->staged_numerics_.clear();
   this->staged_binaries_.clear();
@@ -112,18 +165,20 @@ void VictronComponent::clear_staged_() {
 
 void VictronComponent::loop() {
   const uint32_t now = millis();
-  if ((state_ > 0) && (now - last_transmission_ >= 200)) {
-    // last transmission too long ago. Reset RX index.
-    ESP_LOGW(TAG, "Last transmission too long ago");
+  if ((state_ > 0) && (now - last_rx_ >= 200)) {
+    // No data in the middle of a block: discard the incomplete block
+    ESP_LOGW(TAG, "Discarding incomplete block: no data received for 200 ms");
     state_ = 0;
     checksum_ = 0;
+    this->in_block_ = false;
+    this->publish_block_ = false;
     this->clear_staged_();
   }
 
   if (!available())
     return;
 
-  last_transmission_ = now;
+  last_rx_ = now;
   size_t bytes_read = 0;
   while (available() && bytes_read < MAX_BYTES_PER_LOOP) {
     uint8_t c;
@@ -139,15 +194,21 @@ void VictronComponent::loop() {
       state_ = 1;
     }
     if (state_ == 1) {
-      // Start of a ve.direct hex frame
+      // Start of a VE.Direct HEX frame
       if (c == ':') {
         state_ = 3;
         checksum_ = 0;
+        this->in_block_ = false;
+        this->publish_block_ = false;
         this->clear_staged_();
         continue;
       }
       if (c == '\t') {
         state_ = 2;
+        // The first label of a block identifies its type
+        if (!this->in_block_ && label_ != "Checksum") {
+          this->start_block_(now);
+        }
       } else {
         label_.push_back(c);
       }
@@ -156,46 +217,36 @@ void VictronComponent::loop() {
     if (state_ == 2) {
       if (label_ == "Checksum") {
         state_ = 0;
-        // The checksum is used as end of frame indicator.
-        // The modulo-256 sum of all bytes in the frame should be 0.
+        const bool publish = this->publish_block_;
+        this->in_block_ = false;
+        this->publish_block_ = false;
+        // The checksum is used as end of block indicator.
+        // The modulo-256 sum of all bytes in the block should be 0.
         if (this->validate_checksum_) {
           if (checksum_ != 0) {
-            ESP_LOGW(TAG, "Dropping frame due to checksum mismatch (calculated %u)", checksum_);
+            ESP_LOGW(TAG, "Dropping block due to checksum mismatch (calculated %u)", checksum_);
             this->clear_staged_();
-          } else if (now - this->last_publish_ >= this->throttle_) {
-            this->last_publish_ = now;
+          } else if (publish) {
+            this->mark_published_();
             this->commit_staged_();
-          } else {
-            this->clear_staged_();
           }
-        } else {
-          if (checksum_ != 0) {
-            ESP_LOGW(TAG, "Processing frame with checksum error. Consider enabling option 'validate_checksum'");
-          }
-          if (now - this->last_publish_ >= this->throttle_) {
-            this->last_publish_ = now;
-            this->publishing_ = true;
-          } else {
-            this->publishing_ = false;
-          }
+        } else if (checksum_ != 0 && publish) {
+          ESP_LOGW(TAG, "Processing block with checksum error. Consider enabling option 'validate_checksum'");
         }
         checksum_ = 0;
         continue;
       }
       if (c == '\r' || c == '\n') {
-        if (!this->validate_checksum_) {
-          if (this->publishing_) {
-            handle_value_();
-          }
-        } else {
-          handle_value_();
+        // Values of throttled blocks are not even parsed
+        if (this->publish_block_) {
+          this->handle_value_();
         }
         state_ = 0;
       } else {
         value_.push_back(c);
       }
     }
-    // Discard ve.direct hex frame
+    // Discard VE.Direct HEX frame
     if (state_ == 3) {
       if (c == '\r' || c == '\n') {
         state_ = 0;

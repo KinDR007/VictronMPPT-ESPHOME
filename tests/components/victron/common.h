@@ -47,9 +47,9 @@ class TestableVictron : public VictronComponent {
   using VictronComponent::clear_staged_;
   using VictronComponent::commit_staged_;
   using VictronComponent::handle_value_;
+  using VictronComponent::block_throttles_;
   using VictronComponent::label_;
-  using VictronComponent::last_publish_;
-  using VictronComponent::last_transmission_;
+  using VictronComponent::last_rx_;
   using VictronComponent::value_;
 
   MockUART uart_;
@@ -98,9 +98,16 @@ inline void feed(TestableVictron &v, const std::vector<uint8_t> &bytes) {
 }
 
 // Lets the inter-byte timeout of loop() elapse without new data.
-inline void expire_transmission_timeout(TestableVictron &v) {
-  v.last_transmission_ = millis() - 1000;
+inline void expire_rx_timeout(TestableVictron &v) {
+  v.last_rx_ = millis() - 1000;
   v.loop();
+}
+
+// Simulates the passing of time between two blocks.
+inline void advance_time(TestableVictron &v, uint32_t ms) {
+  v.last_rx_ -= ms;
+  for (auto &entry : v.block_throttles_)
+    entry.last_publish -= ms;
 }
 
 // Feeds a complete, valid frame through the UART byte stream.

@@ -156,7 +156,14 @@ esphome run esp8266-example.yaml
 
 The `uart_id` and `victron_id` is optional if you use a single UART / victron device. All sensors are optional.
 
-The victron device pushs one status message per second. To reduce the update interval of the ESPHome entities please use the `throttle` parameter to discard some messages.
+The victron device sends its data once per second. Devices with many fields (e.g. BMV-70x/712, SmartShunt) split it into several blocks, each with its own checksum. To reduce the update interval of the ESPHome entities please use the `throttle` parameter to discard whole blocks:
+
+- Each block type (identified by its first field) is published at most once per interval, so all values of the device are updated once per interval.
+- The first block of each type after boot is published immediately.
+- The interval is rounded to the nearest second. `throttle: 2s` publishes every second block of a type.
+- Blocks dropped because of a checksum error do not count, the next valid block of that type is published.
+
+To throttle single entities, use the [sensor filters](https://esphome.io/components/sensor/#sensor-filters) of ESPHome instead (e.g. `throttle` or `throttle_average`).
 
 ## Entities
 

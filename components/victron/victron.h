@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <vector>
 #include "esphome/core/component.h"
 #include "esphome/components/binary_sensor/binary_sensor.h"
@@ -227,6 +228,14 @@ class VictronComponent : public uart::UARTDevice, public Component {
 
  protected:
   void handle_value_();
+  void start_block_(uint32_t now);
+  struct BlockThrottle {
+    uint32_t block_type{0};
+    uint32_t last_publish{0};
+    bool used{false};
+  };
+  BlockThrottle *find_block_throttle_(uint32_t block_type);
+  void mark_published_();
   void commit_staged_();
   void clear_staged_();
   void publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state);
@@ -314,11 +323,19 @@ class VictronComponent : public uart::UARTDevice, public Component {
   int state_{0};
   std::string label_;
   std::string value_;
-  uint32_t last_transmission_{0};
-  uint32_t last_publish_{0};
+  uint32_t last_rx_{0};
   uint32_t throttle_{0};
 
-  bool publishing_{true};
+  // Throttling works per block type: the last publish time of each type
+  // (identified by the hash of its first label) is tracked separately.
+  static constexpr size_t MAX_BLOCK_TYPES = 4;
+  std::array<BlockThrottle, MAX_BLOCK_TYPES> block_throttles_{};
+  BlockThrottle *block_throttle_{nullptr};
+  uint32_t block_type_{0};
+  uint32_t block_start_{0};
+  bool in_block_{false};
+  bool publish_block_{false};
+
   bool validate_checksum_{true};
   uint8_t checksum_{0};
 
