@@ -69,7 +69,8 @@ interval:
       - uart.write: "H16\t38\r\n"
       - uart.write: "H17\t6066\r\n"
       - uart.write: "H18\t6117\r\n"
-      - uart.write: "Checksum\tn"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x39]
       - uart.write: "\r\n"
 
       - uart.write: "PID\t0xA381\r\n"
@@ -86,7 +87,8 @@ interval:
       - uart.write: "BMV\t712 Smart\r\n"
       - uart.write: "FW\t0408\r\n"
       - uart.write: "MON\t0\r\n"
-      - uart.write: "Checksum\t\x9E"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x9E]
       - uart.write: "\r\n"
       - uart.write: "H1\t-96470\r\n"
       - uart.write: "H2\t-6673\r\n"
@@ -104,5 +106,6 @@ interval:
       - uart.write: "H16\t38\r\n"
       - uart.write: "H17\t6066\r\n"
       - uart.write: "H18\t6117\r\n"
-      - uart.write: "Checksum\tj"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x6A]
       - uart.write: "\r\n"

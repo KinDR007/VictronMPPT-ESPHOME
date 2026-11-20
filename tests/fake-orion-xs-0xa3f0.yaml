@@ -49,7 +49,8 @@ interval:
       - uart.write: "CS\t0\r\n"
       - uart.write: "OR\t0x00000009\r\n"
       - uart.write: "ERR\t0\r\n"
-      - uart.write: "Checksum\t\x0d"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x0D]
       - delay: 1s
 
       - uart.write: "\r\nPID\t0xA3F0\r\n"
@@ -64,4 +65,5 @@ interval:
       - uart.write: "CS\t0\r\n"
       - uart.write: "OR\t0x00000009\r\n"
       - uart.write: "ERR\t0\r\n"
-      - uart.write: "Checksum\t\x0b"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x0B]

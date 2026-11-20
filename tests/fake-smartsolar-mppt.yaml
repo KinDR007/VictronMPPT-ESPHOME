@@ -57,5 +57,6 @@ interval:
       - uart.write: "H22\t1\r\n"
       - uart.write: "H23\t15\r\n"
       - uart.write: "HSDS\t3\r\n"
-      - uart.write: "Checksum\t\xE1"
+      - uart.write: "Checksum\t"
+      - uart.write: [0xE1]
       - uart.write: "\r\n"

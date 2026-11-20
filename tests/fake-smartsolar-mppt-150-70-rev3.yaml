@@ -48,7 +48,8 @@ interval:
       - uart.write: "MPPT\t2\r\n"
       - uart.write: "CS\t3\r\n"
       - uart.write: "OR\t0x00000000\r\n"
-      - uart.write: "Checksum\t\xFA"
+      - uart.write: "Checksum\t"
+      - uart.write: [0xFA]
       - uart.write: ":A2001002470030093\n"
       - uart.write: ":ADBED00BF0ABA\n"
       - uart.write: ":ABCED0045A10000BC\n"
@@ -65,7 +66,8 @@ interval:
       - uart.write: "H22\t135\r\n"
       - uart.write: "H23\t525\r\n"
       - uart.write: "HSDS\t2\r\n"
-      - uart.write: "Checksum\t\x05"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x05]
       - uart.write: "\r\n"
 
       - delay: 2s
@@ -80,7 +82,9 @@ interval:
       - uart.write: "MPPT\t2\r\n"
       - uart.write: "CS\t3\r\n"
       - uart.write: "OR\t0x00000000\r\n"
-      - uart.write: "Checksum\t\xF9:A2001002570030092\n"
+      - uart.write: "Checksum\t"
+      - uart.write: [0xF9]
+      - uart.write: ":A2001002570030092\n"
       - uart.write: ":ADBED00D10AA8\n"
       - uart.write: ":ABCED0024A10000DD\n"
       - uart.write: ":ABBED009C28DF\n"
@@ -98,5 +102,6 @@ interval:
       - uart.write: "H22\t135\r\n"
       - uart.write: "H23\t525\r\n"
       - uart.write: "HSDS\t2\r\n"
-      - uart.write: "Checksum\t\x05"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x05]
       - uart.write: "\r\n"

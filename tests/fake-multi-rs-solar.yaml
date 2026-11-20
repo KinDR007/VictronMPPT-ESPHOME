@@ -55,7 +55,9 @@ interval:
       - uart.write: "PPV\t0\r\n"
       - uart.write: "V\t56650\r\n"
       - uart.write: "VPV\t190090\r\n"
-      - uart.write: "Checksum\t⸮:A0922001C0004\r\n"
+      - uart.write: "Checksum\t"
+      - uart.write: [0x8A]
+      - uart.write: ":A0922001C0004\r\n"
       - uart.write: ":A052200EB00000039\r\n"
       - uart.write: ":A8DED00221699\r\n"
       - uart.write: ":A0422009500000090\r\n"
