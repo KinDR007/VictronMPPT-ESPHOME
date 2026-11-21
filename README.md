@@ -160,7 +160,7 @@ The victron device sends its data once per second. Devices with many fields (e.g
 
 - Each block type (identified by its first field) is published at most once per interval, so all values of the device are updated once per interval.
 - The first block of each type after boot is published immediately.
-- The interval is rounded to the nearest second. `throttle: 2s` publishes every second block of a type.
+- The interval is rounded to the nearest second (halves are rounded up). `throttle: 2s` and `throttle: 1500ms` publish every second block of a type, `throttle: 1s` (default) every block.
 - Blocks dropped because of a checksum error do not count, the next valid block of that type is published.
 
 To throttle single entities, use the [sensor filters](https://esphome.io/components/sensor/#sensor-filters) of ESPHome instead (e.g. `throttle` or `throttle_average`).

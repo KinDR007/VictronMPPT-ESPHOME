@@ -16,11 +16,6 @@ ESPHOME_LOG_TAG(TAG, "victron");
 // Max. UART bytes per loop() call to avoid starving other components
 static constexpr size_t MAX_BYTES_PER_LOOP = 128;
 
-// VE.Direct devices send each text block once per second. The throttle interval
-// is compared with this tolerance (half that period), so jitter does not delay
-// a due block by a whole second.
-static constexpr uint32_t THROTTLE_TOLERANCE_MS = 500;
-
 static constexpr uint8_t OFF_REASONS_SIZE = 16;
 static constexpr const char *OFF_REASONS[OFF_REASONS_SIZE] = {
     "No input power",                       // 0000 0000 0000 0001
@@ -42,11 +37,13 @@ static constexpr const char *OFF_REASONS[OFF_REASONS_SIZE] = {
 };
 
 void VictronComponent::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
+  // The effective interval, rounded to whole block periods
+  const uint32_t periods = (this->throttle_threshold_ + BLOCK_PERIOD_MS / 2) / BLOCK_PERIOD_MS;
   ESP_LOGCONFIG(TAG,
                 "Victron:\n"
-                "  Throttle: %" PRIu32 " ms\n"
+                "  Throttle: %" PRIu32 " ms (effective: %" PRIu32 " ms per block type)\n"
                 "  Validate checksum: %s",
-                this->throttle_, YESNO(this->validate_checksum_));
+                this->throttle_, std::max<uint32_t>(periods, 1) * BLOCK_PERIOD_MS, YESNO(this->validate_checksum_));
   LOG_BINARY_SENSOR("  ", "Load state", load_state_binary_sensor_);
   LOG_BINARY_SENSOR("  ", "Relay state", relay_state_binary_sensor_);
   LOG_SENSOR("  ", "Max Power Yesterday", max_power_yesterday_sensor_);
@@ -123,8 +120,8 @@ void VictronComponent::start_block_(uint32_t now) {
   this->block_type_ = fnv1_hash(this->label_);
 
   this->block_throttle_ = this->find_block_throttle_(this->block_type_);
-  this->publish_block_ = this->block_throttle_ == nullptr || this->throttle_ <= THROTTLE_TOLERANCE_MS ||
-                         now - this->block_throttle_->last_publish >= this->throttle_ - THROTTLE_TOLERANCE_MS;
+  this->publish_block_ =
+      this->block_throttle_ == nullptr || now - this->block_throttle_->last_publish >= this->throttle_threshold_;
 
   // Without checksum validation values are published while they arrive
   if (this->publish_block_ && !this->validate_checksum_) {

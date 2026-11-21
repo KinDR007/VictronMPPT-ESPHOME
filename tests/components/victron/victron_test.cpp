@@ -1370,6 +1370,42 @@ TEST_F(VictronThrottleTest, ThrottleBelowOneSecondPublishesEveryBlock) {
   EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.46f}));
 }
 
+TEST_F(VictronThrottleTest, FractionalThrottleIsRoundedDeterministically) {
+  // 1500 ms is rounded up to two periods: jitter around the one second period
+  // must not decide whether a block is published.
+  this->v_.set_throttle(1500);
+  feed(this->v_, mppt("12450"));
+  advance_time(this->v_, 1001);
+  feed(this->v_, mppt("12460"));
+  advance_time(this->v_, 999);
+  feed(this->v_, mppt("12470"));
+  advance_time(this->v_, 1001);
+  feed(this->v_, mppt("12480"));
+  advance_time(this->v_, 999);
+  feed(this->v_, mppt("12490"));
+
+  // Published at 0 s, 2 s and 4 s
+  EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.47f, 12.49f}));
+}
+
+TEST_F(VictronThrottleTest, ThrottleIsRoundedToNearestSecond) {
+  // 2499 ms is rounded down to two periods, 2500 ms up to three.
+  for (auto [throttle, expected] : {std::pair{2499u, 4u}, std::pair{2500u, 3u}}) {
+    TestableVictron v;
+    sensor::Sensor bat_v;
+    size_t published = 0;
+    v.set_battery_voltage_sensor(&bat_v);
+    bat_v.add_on_state_callback([&published](float) { published++; });
+    v.set_throttle(throttle);
+    for (int second = 0; second < 7; second++) {
+      feed(v, mppt("12450"));
+      advance_time(v, second % 2 ? 1001 : 999);
+    }
+
+    EXPECT_EQ(published, expected) << "throttle " << throttle;
+  }
+}
+
 TEST_F(VictronThrottleTest, DroppedBlockDoesNotConsumeInterval) {
   this->v_.set_throttle(3000);
   feed(this->v_, mppt("12450"));

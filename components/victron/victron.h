@@ -12,7 +12,14 @@ namespace esphome::victron {
 
 class VictronComponent : public uart::UARTDevice, public Component {
  public:
-  void set_throttle(uint32_t throttle) { this->throttle_ = throttle; }
+  void set_throttle(uint32_t throttle) {
+    this->throttle_ = throttle;
+    // VE.Direct devices send each block type once per period. Round the interval
+    // to whole periods and put the threshold halfway between two blocks, so
+    // jitter never decides whether a block is published.
+    const uint32_t periods = (throttle + BLOCK_PERIOD_MS / 2) / BLOCK_PERIOD_MS;
+    this->throttle_threshold_ = periods == 0 ? 0 : periods * BLOCK_PERIOD_MS - BLOCK_PERIOD_MS / 2;
+  }
   void set_validate_checksum(bool validate_checksum) { this->validate_checksum_ = validate_checksum; }
   void reserve_staged_numerics(size_t count) {
     this->staged_numerics_.reserve(this->staged_numerics_.capacity() + count);
@@ -325,10 +332,13 @@ class VictronComponent : public uart::UARTDevice, public Component {
   std::string value_;
   uint32_t last_rx_{0};
   uint32_t throttle_{0};
+  uint32_t throttle_threshold_{0};
 
   // Throttling works per block type: the last publish time of each type
   // (identified by the hash of its first label) is tracked separately.
   static constexpr size_t MAX_BLOCK_TYPES = 4;
+  // VE.Direct devices send each text block once per second
+  static constexpr uint32_t BLOCK_PERIOD_MS = 1000;
   std::array<BlockThrottle, MAX_BLOCK_TYPES> block_throttles_{};
   BlockThrottle *block_throttle_{nullptr};
   uint32_t block_type_{0};
