@@ -5,6 +5,9 @@ substitutions:
 
 esphome:
   name: ${name}
+  project:
+    name: "KinDR007.VictronMPPT-ESPHOME"
+    version: 2.0.0
 
 esp8266:
   board: d1_mini
