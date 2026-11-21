@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <vector>
 #include "esphome/core/component.h"
 #include "esphome/components/binary_sensor/binary_sensor.h"
@@ -11,7 +12,14 @@ namespace esphome::victron {
 
 class VictronComponent : public uart::UARTDevice, public Component {
  public:
-  void set_throttle(uint32_t throttle) { this->throttle_ = throttle; }
+  void set_throttle(uint32_t throttle) {
+    this->throttle_ = throttle;
+    // VE.Direct devices send each block type once per period. Round the interval
+    // to whole periods and put the threshold halfway between two blocks, so
+    // jitter never decides whether a block is published.
+    const uint32_t periods = (throttle + BLOCK_PERIOD_MS / 2) / BLOCK_PERIOD_MS;
+    this->throttle_threshold_ = periods == 0 ? 0 : periods * BLOCK_PERIOD_MS - BLOCK_PERIOD_MS / 2;
+  }
   void set_validate_checksum(bool validate_checksum) { this->validate_checksum_ = validate_checksum; }
   void reserve_staged_numerics(size_t count) {
     this->staged_numerics_.reserve(this->staged_numerics_.capacity() + count);
@@ -227,6 +235,14 @@ class VictronComponent : public uart::UARTDevice, public Component {
 
  protected:
   void handle_value_();
+  void start_block_(uint32_t now);
+  struct BlockThrottle {
+    uint32_t block_type{0};
+    uint32_t last_publish{0};
+    bool used{false};
+  };
+  BlockThrottle *find_block_throttle_(uint32_t block_type);
+  void mark_published_();
   void commit_staged_();
   void clear_staged_();
   void publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state);
@@ -314,11 +330,22 @@ class VictronComponent : public uart::UARTDevice, public Component {
   int state_{0};
   std::string label_;
   std::string value_;
-  uint32_t last_transmission_{0};
-  uint32_t last_publish_{0};
+  uint32_t last_rx_{0};
   uint32_t throttle_{0};
+  uint32_t throttle_threshold_{0};
 
-  bool publishing_{true};
+  // Throttling works per block type: the last publish time of each type
+  // (identified by the hash of its first label) is tracked separately.
+  static constexpr size_t MAX_BLOCK_TYPES = 4;
+  // VE.Direct devices send each text block once per second
+  static constexpr uint32_t BLOCK_PERIOD_MS = 1000;
+  std::array<BlockThrottle, MAX_BLOCK_TYPES> block_throttles_{};
+  BlockThrottle *block_throttle_{nullptr};
+  uint32_t block_type_{0};
+  uint32_t block_start_{0};
+  bool in_block_{false};
+  bool publish_block_{false};
+
   bool validate_checksum_{true};
   uint8_t checksum_{0};
 

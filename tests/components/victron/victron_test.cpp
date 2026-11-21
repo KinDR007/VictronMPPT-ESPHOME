@@ -1165,7 +1165,7 @@ TEST_F(VictronChecksumTest, TruncatedFrameIsDiscardedAfterTimeout) {
   auto cut = std::search(truncated.begin(), truncated.end(), marker.begin(), marker.end());
   ASSERT_NE(cut, truncated.end());
   feed(this->v_, std::vector<uint8_t>(truncated.begin(), cut + marker.size()));
-  expire_transmission_timeout(this->v_);
+  expire_rx_timeout(this->v_);
 
   feed(this->v_, encode_frame(mppt_frame("12460")));
 
@@ -1229,34 +1229,6 @@ TEST_F(VictronChecksumTest, ChecksumByteMayBeAControlCharacter) {
   }
 }
 
-TEST_F(VictronChecksumTest, ThrottleSkipsFramesWithinInterval) {
-  this->v_.set_throttle(1000);
-  this->v_.last_publish_ = millis() - 2000;
-
-  feed(this->v_, encode_frame(mppt_frame("12450")));
-  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
-
-  feed(this->v_, encode_frame(mppt_frame("12460")));
-  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
-
-  this->v_.last_publish_ = millis() - 2000;
-  feed(this->v_, encode_frame(mppt_frame("12470")));
-  EXPECT_NEAR(this->bat_v_.state, 12.47f, 0.001f);
-}
-
-TEST_F(VictronChecksumTest, DroppedFrameDoesNotConsumeThrottleInterval) {
-  this->v_.set_throttle(1000);
-  this->v_.last_publish_ = millis() - 2000;
-
-  auto bad = encode_frame(mppt_frame("66600"));
-  bad.back()++;
-  feed(this->v_, bad);
-  feed(this->v_, encode_frame(mppt_frame("12460")));
-
-  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
-  EXPECT_FALSE(this->bat_v_was_published_(66.6f));
-}
-
 // ── Checksum validation disabled (legacy behaviour) ──────────────────────────
 
 TEST_F(VictronChecksumTest, DisabledValidationPublishesCorruptedFrame) {
@@ -1279,21 +1251,258 @@ TEST_F(VictronChecksumTest, DisabledValidationPublishesPerField) {
   EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
 }
 
-TEST_F(VictronChecksumTest, DisabledValidationThrottle) {
+// ── Throttle ─────────────────────────────────────────────────────────────────
+
+class VictronThrottleTest : public ::testing::Test {
+ protected:
+  void SetUp() override {
+    this->v_.set_battery_voltage_sensor(&this->bat_v_);
+    this->v_.set_cumulative_amp_hours_drawn_sensor(&this->h6_);
+    this->bat_v_.add_on_state_callback([this](float state) { this->bat_v_history_.push_back(state); });
+    this->h6_.add_on_state_callback([this](float state) { this->h6_history_.push_back(state); });
+  }
+
+  static std::vector<uint8_t> mppt(const char *voltage) {
+    Frame frame = to_frame(SMARTSOLAR_MPPT_FRAME);
+    for (auto &[label, value] : frame) {
+      if (label == "V")
+        value = voltage;
+    }
+    return encode_frame(frame);
+  }
+
+  // Devices with many fields (e.g. BMV-70x/712, SmartShunt) split their data
+  // into several blocks, each terminated by its own checksum.
+  static std::vector<uint8_t> bmv712_block(bool history) {
+    Frame frame;
+    for (const auto &kv : BMV712_FRAME) {
+      if (std::string(kv.label).starts_with('H') == history)
+        frame.emplace_back(kv.label, kv.value);
+    }
+    return encode_frame(frame);
+  }
+
+  static std::vector<uint8_t> bmv712_blocks() {
+    auto bytes = bmv712_block(false);
+    auto tail = bmv712_block(true);
+    bytes.insert(bytes.end(), tail.begin(), tail.end());
+    return bytes;
+  }
+
+  TestableVictron v_;
+  sensor::Sensor bat_v_, h6_;
+  std::vector<float> bat_v_history_, h6_history_;
+};
+
+TEST_F(VictronThrottleTest, NoThrottlePublishesEveryBlock) {
+  feed(this->v_, mppt("12450"));
+  advance_time(this->v_, 1000);
+  feed(this->v_, mppt("12460"));
+
+  EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.46f}));
+}
+
+TEST_F(VictronThrottleTest, FirstBlockIsPublishedImmediately) {
+  this->v_.set_throttle(60000);
+  feed(this->v_, mppt("12450"));
+
+  EXPECT_EQ(this->bat_v_history_, std::vector<float>{12.45f});
+}
+
+TEST_F(VictronThrottleTest, BlocksWithinIntervalAreSkipped) {
+  this->v_.set_throttle(3000);
+  feed(this->v_, mppt("12450"));
+  advance_time(this->v_, 1000);
+  feed(this->v_, mppt("12460"));
+  advance_time(this->v_, 1000);
+  feed(this->v_, mppt("12470"));
+  advance_time(this->v_, 1000);
+  feed(this->v_, mppt("12480"));
+
+  EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.48f}));
+}
+
+TEST_F(VictronThrottleTest, EveryBlockTypeIsPublishedOncePerInterval) {
+  this->v_.set_throttle(10000);
+  for (int second = 0; second < 21; second++) {
+    feed(this->v_, bmv712_blocks());
+    advance_time(this->v_, 1000);
+  }
+
+  // Published at 0 s, 10 s and 20 s
+  EXPECT_EQ(this->bat_v_history_.size(), 3u);
+  EXPECT_EQ(this->h6_history_.size(), 3u);
+}
+
+TEST_F(VictronThrottleTest, BlocksSpreadOverTheSecond) {
+  // SmartShunt timing (#220): the history block and the main block are sent
+  // about 500 ms apart.
+  this->v_.set_throttle(5000);
+  for (int second = 0; second < 11; second++) {
+    feed(this->v_, bmv712_block(true));
+    advance_time(this->v_, 510);
+    feed(this->v_, bmv712_block(false));
+    advance_time(this->v_, 490);
+  }
+
+  // Published at 0 s, 5 s and 10 s
+  EXPECT_EQ(this->bat_v_history_.size(), 3u);
+  EXPECT_EQ(this->h6_history_.size(), 3u);
+}
+
+TEST_F(VictronThrottleTest, JitterDoesNotDelayDueBlock) {
+  this->v_.set_throttle(2000);
+  feed(this->v_, mppt("12450"));
+  advance_time(this->v_, 1010);
+  feed(this->v_, mppt("12460"));
+  advance_time(this->v_, 980);
+  feed(this->v_, mppt("12470"));
+
+  EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.47f}));
+}
+
+TEST_F(VictronThrottleTest, ThrottleBelowOneSecondPublishesEveryBlock) {
+  this->v_.set_throttle(500);
+  feed(this->v_, mppt("12450"));
+  advance_time(this->v_, 1000);
+  feed(this->v_, mppt("12460"));
+
+  EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.46f}));
+}
+
+TEST_F(VictronThrottleTest, FractionalThrottleIsRoundedDeterministically) {
+  // 1500 ms is rounded up to two periods: jitter around the one second period
+  // must not decide whether a block is published.
+  this->v_.set_throttle(1500);
+  feed(this->v_, mppt("12450"));
+  advance_time(this->v_, 1001);
+  feed(this->v_, mppt("12460"));
+  advance_time(this->v_, 999);
+  feed(this->v_, mppt("12470"));
+  advance_time(this->v_, 1001);
+  feed(this->v_, mppt("12480"));
+  advance_time(this->v_, 999);
+  feed(this->v_, mppt("12490"));
+
+  // Published at 0 s, 2 s and 4 s
+  EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.47f, 12.49f}));
+}
+
+TEST_F(VictronThrottleTest, ThrottleIsRoundedToNearestSecond) {
+  // 2499 ms is rounded down to two periods, 2500 ms up to three.
+  for (auto [throttle, expected] : {std::pair{2499u, 4u}, std::pair{2500u, 3u}}) {
+    TestableVictron v;
+    sensor::Sensor bat_v;
+    size_t published = 0;
+    v.set_battery_voltage_sensor(&bat_v);
+    bat_v.add_on_state_callback([&published](float) { published++; });
+    v.set_throttle(throttle);
+    for (int second = 0; second < 7; second++) {
+      feed(v, mppt("12450"));
+      advance_time(v, second % 2 ? 1001 : 999);
+    }
+
+    EXPECT_EQ(published, expected) << "throttle " << throttle;
+  }
+}
+
+TEST_F(VictronThrottleTest, DroppedBlockDoesNotConsumeInterval) {
+  this->v_.set_throttle(3000);
+  feed(this->v_, mppt("12450"));
+  advance_time(this->v_, 3000);
+  auto bad = mppt("66600");
+  bad.back()++;
+  feed(this->v_, bad);
+  advance_time(this->v_, 1000);
+  feed(this->v_, mppt("12460"));
+
+  EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.46f}));
+}
+
+TEST_F(VictronThrottleTest, PartialBlockAfterBootDoesNotAffectThrottle) {
+  this->v_.set_throttle(3000);
+  // Receiver starts in the middle of a block: its first label is "H7"
+  const auto block = bmv712_block(true);
+  const std::string marker = "\r\nH7\t";
+  auto start = std::search(block.begin(), block.end(), marker.begin(), marker.end());
+  ASSERT_NE(start, block.end());
+  feed(this->v_, std::vector<uint8_t>(start, block.end()));
+
+  for (int second = 0; second < 4; second++) {
+    feed(this->v_, bmv712_blocks());
+    advance_time(this->v_, 1000);
+  }
+
+  // Published at 0 s and 3 s
+  EXPECT_EQ(this->bat_v_history_.size(), 2u);
+  EXPECT_EQ(this->h6_history_.size(), 2u);
+}
+
+TEST_F(VictronThrottleTest, MoreBlockTypesThanSlotsAreStillPublished) {
   this->v_.set_validate_checksum(false);
-  this->v_.set_throttle(1000);
-  this->v_.last_publish_ = millis() - 2000;
+  this->v_.set_throttle(10000);
+  // Blocks with changing first labels evict each other from the throttle table
+  for (const char *first : {"A1", "A2", "A3", "A4", "A5"}) {
+    feed(this->v_, encode_frame(Frame{{first, "0"}, {"V", "12450"}}));
+    advance_time(this->v_, 100);
+  }
 
-  // Without validation, the checksum line of a frame decides whether the
-  // *next* frame is published.
-  feed(this->v_, encode_frame(mppt_frame("12450")));
-  EXPECT_NEAR(this->bat_v_.state, 12.45f, 0.001f);
+  EXPECT_EQ(this->bat_v_history_.size(), 5u);
+}
 
-  feed(this->v_, encode_frame(mppt_frame("12460")));
-  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+TEST_F(VictronThrottleTest, LeastRecentlyPublishedBlockTypeIsEvicted) {
+  this->v_.set_throttle(10000);
+  auto block = [](const char *first) { return encode_frame(Frame{{first, "0"}, {"V", "12450"}}); };
+  // Fill all four slots
+  for (const char *first : {"A1", "A2", "A3", "A4"}) {
+    feed(this->v_, block(first));
+    advance_time(this->v_, 100);
+  }
+  advance_time(this->v_, 9600);
+  feed(this->v_, block("A1"));  // due again, A2 is now the least recently published type
+  advance_time(this->v_, 100);
+  feed(this->v_, block("A5"));  // new type, evicts A2
+  advance_time(this->v_, 100);
+  feed(this->v_, block("A1"));  // still tracked: throttled
+  advance_time(this->v_, 100);
+  feed(this->v_, block("A2"));  // evicted: published
 
-  feed(this->v_, encode_frame(mppt_frame("12470")));
-  EXPECT_NEAR(this->bat_v_.state, 12.46f, 0.001f);
+  EXPECT_EQ(this->bat_v_history_.size(), 7u);
+}
+
+TEST_F(VictronThrottleTest, LoneChecksumLineIsNotABlock) {
+  this->v_.set_throttle(10000);
+  // Receiver starts right before the checksum line of a block
+  feed(this->v_, encode_frame(Frame{}));
+
+  for (const auto &entry : this->v_.block_throttles_)
+    EXPECT_FALSE(entry.used);
+}
+
+TEST_F(VictronThrottleTest, WithoutValidationBlocksWithinIntervalAreSkipped) {
+  this->v_.set_validate_checksum(false);
+  this->v_.set_throttle(3000);
+  feed(this->v_, mppt("12450"));
+  advance_time(this->v_, 1000);
+  feed(this->v_, mppt("12460"));
+  advance_time(this->v_, 2000);
+  feed(this->v_, mppt("12470"));
+
+  EXPECT_EQ(this->bat_v_history_, (std::vector<float>{12.45f, 12.47f}));
+}
+
+TEST_F(VictronThrottleTest, WithoutValidationBlocksSpreadOverTheSecond) {
+  this->v_.set_validate_checksum(false);
+  this->v_.set_throttle(5000);
+  for (int second = 0; second < 11; second++) {
+    feed(this->v_, bmv712_block(true));
+    advance_time(this->v_, 510);
+    feed(this->v_, bmv712_block(false));
+    advance_time(this->v_, 490);
+  }
+
+  EXPECT_EQ(this->bat_v_history_.size(), 3u);
+  EXPECT_EQ(this->h6_history_.size(), 3u);
 }
 
 }  // namespace esphome::victron::testing
