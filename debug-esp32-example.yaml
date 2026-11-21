@@ -7,6 +7,9 @@ substitutions:
 esphome:
   name: ${name}
   friendly_name: ${name}
+  project:
+    name: "KinDR007.VictronMPPT-ESPHOME"
+    version: 2.0.0
 
 esp32:
   board: wemos_d1_mini32
